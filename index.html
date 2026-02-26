@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آسر كريم للسيراميك والبورسلين والأدوات الصحية</title>
+    <meta name="description"
+        content="آسر كريم للسيراميك والبورسلين والأدوات الصحية — الجودة والتميز في عالم السيراميك منذ 2015. وكيل معتمد لكبرى الشركات العالمية والمحلية في مصر.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="site-header" id="site-header">
+        <div class="header-inner">
+            <div class="header-icons">
+                <button class="icon-btn" id="whatsapp-btn" aria-label="واتساب"
+                    onclick="window.open('https://wa.me/201000539427','_blank')">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                </button>
+                <button class="icon-btn" id="cart-btn" aria-label="السلة" onclick="toggleCart()">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 01-8 0" />
+                    </svg>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </button>
+                <button class="icon-btn" id="search-toggle" aria-label="بحث" onclick="toggleSearch()">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                </button>
+                <button class="icon-btn" id="menu-btn" aria-label="القائمة" onclick="toggleMenu()">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <a href="#" class="logo">
+                <div class="logo-wrapper">
+                    <span class="logo-text">آسر <span>كريم</span></span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Mobile Menu -->
+        <nav class="mobile-menu" id="mobile-menu">
+            <a href="#hero" onclick="toggleMenu()">الرئيسية</a>
+            <a href="#categories" onclick="toggleMenu()">الأقسام</a>
+            <a href="#products" onclick="toggleMenu()">المنتجات</a>
+            <a href="#about" onclick="toggleMenu()">من نحن</a>
+            <a href="#brands" onclick="toggleMenu()">الماركات</a>
+            <a href="#contact" onclick="toggleMenu()">تواصل معنا</a>
+        </nav>
+
+        <!-- Search Bar Dropdown -->
+        <div class="search-bar-drop" id="search-bar-drop">
+            <input type="text" id="header-search" placeholder="ابحث عن منتج، ماركة، أو قسم..." autocomplete="off">
+        </div>
+    </header>
+
+    <main>
+
+        <!-- ===== HERO SECTION ===== -->
+        <section id="hero" class="hero-section">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="hero-rating">
+                    <span class="rating-stars">★★★★★</span>
+                    <span class="rating-text">4.8 (8,363 تقييم)</span>
+                </div>
+                <h1 class="hero-title">آسر كريم للسيراميك<br>والبورسلين والأدوات الصحية</h1>
+                <p class="hero-subtitle">شقتك الجديدة تستاهل الأفضل — احنا بنوفرهولك بسعر عادل</p>
+
+                <div class="hero-search">
+                    <button class="search-btn-hero">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                    </button>
+                    <input type="text" placeholder="ابحث عن منتج، ماركة، أو قسم..." autocomplete="off">
+                </div>
+
+                <div class="hero-tags">
+                    <a href="#" class="hero-tag">جروهي</a>
+                    <a href="#" class="hero-tag">خلاط مطبخ</a>
+                    <a href="#" class="hero-tag">كليوباترا</a>
+                    <a href="#" class="hero-tag">سيراميك حمام</a>
+                    <a href="#" class="hero-tag">ايديال ستاندرد</a>
+                </div>
+
+                <div class="hero-delivery">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="1" y="3" width="15" height="13" />
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+                        <circle cx="5.5" cy="18.5" r="2.5" />
+                        <circle cx="18.5" cy="18.5" r="2.5" />
+                    </svg>
+                    <span>توصيل لحد باب البيت خلال 3-5 أيام عمل لكل مصر</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FEATURES GRID ===== -->
+        <section class="features-section">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feat-icon-wrap">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </div>
+                    <div class="feat-text">
+                        <strong>منتجات أصلية 100%</strong>
+                        <span>ضمان المصنع الكامل</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feat-icon-wrap">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
+                            <rect x="1" y="3" width="15" height="13" />
+                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+                            <circle cx="5.5" cy="18.5" r="2.5" />
+                            <circle cx="18.5" cy="18.5" r="2.5" />
+                        </svg>
+                    </div>
+                    <div class="feat-text">
+                        <strong>شحن مجاني</strong>
+                        <span>للطلبات فوق 5,000 جنيه</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feat-icon-wrap">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" />
+                            <line x1="1" y1="10" x2="23" y2="10" />
+                        </svg>
+                    </div>
+                    <div class="feat-text">
+                        <strong>كاش أو تقسيط</strong>
+                        <span>فاليو بدون فوائد — فيزا وماستركارد</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feat-icon-wrap">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                    </div>
+                    <div class="feat-text">
+                        <strong>4 معارض بالقاهرة</strong>
+                        <span>37 سنة خبرة في السوق</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ABOUT SECTION ===== -->
+        <section id="about" class="about-section">
+            <h2 class="section-title">من نحن</h2>
+            <div class="about-content">
+                <div class="about-main">
+                    <h3 class="about-subtitle">آسر كريم للسيراميك والبورسلين والأدوات الصحية</h3>
+                    <p class="about-text">
+                        شركة مصرية تأسست عام 2015، رائدة في مجال السيراميك والبورسلين والأدوات الصحية. يقع مقرنا في
+                        مدينة العبور - الحي الثاني - سنتر الميسرة، ونفخر بكوننا وكيل وموزع معتمد لكبرى الشركات في مصر.
+                    </p>
+                </div>
+
+                <div class="partners-container">
+                    <div class="partner-card">
+                        <div class="partner-card-header">
+                            <span class="partner-icon">✨</span>
+                            <h4>السيراميكا والبورسلين</h4>
+                        </div>
+                        <p>كليوباترا، ليجاسي، روندي، فيردي، رويال، آرت، سيراميكا اليجنت، كراميكا، بيرويا، بورسيلوكس.</p>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-card-header">
+                            <span class="partner-icon">🚿</span>
+                            <h4>الأدوات الصحية</h4>
+                        </div>
+                        <p>جروهي (Grohe)، ايديال ستاندرد، ديورافيت، سان بيور، الطيب، بيورا.</p>
+                    </div>
+                </div>
+
+                <div class="why-us">
+                    <h3 class="section-title-sm">لماذا آسر كريم؟</h3>
+                    <div class="why-grid">
+                        <div class="why-card">
+                            <div class="card-num">01</div>
+                            <div class="why-text">
+                                <strong>تنوع الخيارات</strong>
+                                <span>تشكيلة واسعة تناسب كافة الأذواق والميزانيات.</span>
+                            </div>
+                        </div>
+                        <div class="why-card">
+                            <div class="card-num">02</div>
+                            <div class="why-text">
+                                <strong>الجودة والضمان</strong>
+                                <span>وكيل معتمد يضمن لك الحصول على المنتج الأصلي.</span>
+                            </div>
+                        </div>
+                        <div class="why-card">
+                            <div class="card-num">03</div>
+                            <div class="why-text">
+                                <strong>الخبرة</strong>
+                                <span>نضع خبرة سنوات في خدمتك لنساعدك في اختيار الأفضل لمنزلك أو مشروعك.</span>
+                            </div>
+                        </div>
+                        <div class="why-card">
+                            <div class="card-num">04</div>
+                            <div class="why-text">
+                                <strong>سرعة التنفيذ</strong>
+                                <span>نلتزم بتسليم العميل في مدة زمنية سريعة جداً لضمان سير مشروعك دون تأخير.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-footer-info">
+                    <p>سعدنا بخدمة أكثر من <strong>5000 عميل</strong> وأكثر من <strong>100 مشروع</strong> في مختلف أنحاء
+                        الجمهورية.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CATEGORIES SECTION ===== -->
+        <section id="categories" class="categories-section">
+            <h2 class="section-title">تسوق حسب القسم</h2>
+            <div class="categories-grid">
+
+                <a href="#" class="category-card">
+                    <div class="cat-icon-wrap">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8">
+                            <rect x="2" y="2" width="9" height="9" rx="1" />
+                            <rect x="13" y="2" width="9" height="9" rx="1" />
+                            <rect x="2" y="13" width="9" height="9" rx="1" />
+                            <rect x="13" y="13" width="9" height="9" rx="1" />
+                        </svg>
+                    </div>
+                    <div class="cat-name">سيراميك وبورسلين</div>
+                    <div class="cat-price">من 78 جنيه/م²</div>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="cat-icon-wrap">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8">
+                            <path d="M5 3h14v7a7 7 0 01-14 0V3z" />
+                            <path d="M9 17v2a3 3 0 006 0v-2" />
+                            <line x1="3" y1="3" x2="21" y2="3" />
+                        </svg>
+                    </div>
+                    <div class="cat-name">أدوات صحية</div>
+                    <div class="cat-price">من 616 جنيه</div>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="cat-icon-wrap">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8">
+                            <path d="M5 8h10a2 2 0 012 2v2H3v-2a2 2 0 012-2z" />
+                            <path d="M7 12v5" />
+                            <path d="M13 12v5" />
+                            <line x1="5" y1="8" x2="5" y2="5" />
+                            <line x1="3" y1="5" x2="7" y2="5" />
+                        </svg>
+                    </div>
+                    <div class="cat-name">خلاطات مياه</div>
+                    <div class="cat-price">من 490 جنيه</div>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="cat-icon-wrap">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8">
+                            <path d="M2 14h20v3a3 3 0 01-3 3H5a3 3 0 01-3-3v-3z" />
+                            <path d="M6 14V6a2 2 0 012-2h1" />
+                            <line x1="6" y1="19" x2="6" y2="22" />
+                            <line x1="18" y1="19" x2="18" y2="22" />
+                        </svg>
+                    </div>
+                    <div class="cat-name">وحدات حمام</div>
+                    <div class="cat-price">من 3,665 جنيه</div>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="cat-icon-wrap">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8">
+                            <rect x="3" y="6" width="18" height="13" rx="2" />
+                            <path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2" />
+                            <line x1="12" y1="12" x2="12" y2="15" />
+                        </svg>
+                    </div>
+                    <div class="cat-name">أحواض مطبخ</div>
+                    <div class="cat-price">من 975 جنيه</div>
+                </a>
+
+                <a href="#" class="category-card">
+                    <div class="cat-icon-wrap">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8">
+                            <path d="M3 13h18v3a4 4 0 01-4 4H7a4 4 0 01-4-4v-3z" />
+                            <path d="M5 13V7a3 3 0 013-3h.5" />
+                        </svg>
+                    </div>
+                    <div class="cat-name">بانيوهات</div>
+                    <div class="cat-price">من 1,444 جنيه</div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- ===== PRODUCTS SECTION ===== -->
+        <section id="products" class="products-section">
+            <h2 class="section-title">أسعار المحترفين - متاحة للجميع</h2>
+            <p class="section-subtitle">نفس الأسعار اللي بيحصل عليها المقاولين والمهندسين</p>
+
+            <div class="products-grid" id="products-grid">
+
+                <div class="product-card">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=600&auto=format&fit=crop"
+                            alt="طقم ديورافيت" loading="lazy">
+                        <div class="brand-cert">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="#16a34a">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="9 12 11 14 15 10" stroke="white" stroke-width="2" fill="none" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">طقم ديورافيت خزان دفن شاسية كامل...</h3>
+                        <div class="product-tags-row">
+                            <span class="ptag green">ذاتي الغلق</span>
+                            <span class="ptag white">أبيض</span>
+                        </div>
+                        <div class="product-price-row">
+                            <span class="old-price">ج.م 14,725</span>
+                            <span class="cur-price">جنيه 12,369.00</span>
+                        </div>
+                    </div>
+                    <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=600&auto=format&fit=crop"
+                            alt="حوض مطبخ" loading="lazy">
+                        <span class="discount-badge">40%-</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">حوض مطبخ استانلس الفا هاند ميد AL 4878...</h3>
+                        <p class="product-size">المقاس: 48 × 78 سم</p>
+                        <div class="product-price-row">
+                            <span class="old-price">ج.م 9,300</span>
+                            <span class="cur-price">جنيه 5,550.00</span>
+                        </div>
+                    </div>
+                    <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1615529182904-14819c35db37?q=80&w=600&auto=format&fit=crop"
+                            alt="خلاط" loading="lazy">
+                        <span class="discount-badge">41%-</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">خلاط مطبخ جروهي Eurosmart Cosmopolitan...</h3>
+                        <p class="product-size">تركيب على الحوض</p>
+                        <div class="product-price-row">
+                            <span class="old-price">ج.م 3,200</span>
+                            <span class="cur-price">جنيه 1,890.00</span>
+                        </div>
+                    </div>
+                    <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1620626011761-9963d7521476?q=80&w=600&auto=format&fit=crop"
+                            alt="سيراميك" loading="lazy">
+                        <span class="discount-badge">41%-</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">سيراميك كليوباترا مونو وايت 60×60...</h3>
+                        <p class="product-size">المقاس: 59.5 × 59.5 سم</p>
+                        <div class="product-price-row">
+                            <span class="old-price">ج.م 292</span>
+                            <span class="cur-price">جنيه 175.00</span>
+                        </div>
+                    </div>
+                    <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=600&auto=format&fit=crop"
+                            alt="مرحاض" loading="lazy">
+                        <span class="discount-badge">35%-</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">مرحاض ايديال ستاندرد كونسبتو دفن...</h3>
+                        <p class="product-size">مع مقعد سوفت كلوز</p>
+                        <div class="product-price-row">
+                            <span class="old-price">ج.م 8,500</span>
+                            <span class="cur-price">جنيه 5,525.00</span>
+                        </div>
+                    </div>
+                    <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=600&auto=format&fit=crop"
+                            alt="دوش" loading="lazy">
+                        <span class="discount-badge">30%-</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">عمود دوش جروهي Vitalio Comfort...</h3>
+                        <p class="product-size">مع خلاط حمام ثيرموستات</p>
+                        <div class="product-price-row">
+                            <span class="old-price">ج.م 7,200</span>
+                            <span class="cur-price">جنيه 5,040.00</span>
+                        </div>
+                    </div>
+                    <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+                </div>
+
+            </div>
+
+            <div class="view-more-wrap">
+                <a href="#" class="view-more-btn">عرض جميع المنتجات</a>
+            </div>
+        </section>
+
+        <!-- ===== STATS SECTION ===== -->
+        <section class="stats-section">
+            <div class="stats-inner">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-num">+5,000</div>
+                        <div class="stat-label">عميل سعيد</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num">2015</div>
+                        <div class="stat-label">سنة التأسيس</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num">+100</div>
+                        <div class="stat-label">مشروع منجز</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num">الميسرة</div>
+                        <div class="stat-label">سنتر - الحي الثاني</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== NEW ARRIVALS SECTION ===== -->
+        <section class="new-arrivals-section">
+            <div class="section-header-row">
+                <a href="#" class="view-all-link">← عرض الكل</a>
+                <h2 class="section-title-inline">وصل حديثاً</h2>
+            </div>
+
+            <div class="new-arrivals-grid">
+
+                <div class="product-card">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=600&auto=format&fit=crop"
+                            alt="حوض مع عامود" loading="lazy">
+                        <span class="new-badge yellow">طلب مسبق</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">حوض بالعامود المثلث ديورافيت نمبر واري...</h3>
+                        <div class="product-price-row">
+                            <span class="cur-price">جنيه 2,906.99</span>
+                        </div>
+                    </div>
+                    <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=600&auto=format&fit=crop"
+                            alt="سماعة BGI" loading="lazy">
+                        <span class="new-badge dark-green">جديد</span>
+                        <span class="discount-badge">28%-</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">مجموعة سماعة BGI هوفمان كوادرا 3001...</h3>
+                        <div class="product-price-row">
+                            <span class="old-price">ج.م 4,100</span>
+                            <span class="cur-price">جنيه 2,952.00</span>
+                        </div>
+                    </div>
+                    <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=600&auto=format&fit=crop"
+                            alt="منتج جديد" loading="lazy">
+                        <span class="new-badge dark-green">جديد</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">خلاط حمام أحادي الوظيفة روكا لو...</h3>
+                        <div class="product-price-row">
+                            <span class="cur-price">جنيه 1,850.00</span>
+                        </div>
+                    </div>
+                    <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1595428774754-3286392070e3?q=80&w=600&auto=format&fit=crop"
+                            alt="منتج جديد" loading="lazy">
+                        <span class="new-badge dark-green">جديد</span>
+                        <span class="discount-badge">20%-</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">طقم حمام كليوباترا سوبر ريتا أبيض...</h3>
+                        <div class="product-price-row">
+                            <span class="old-price">ج.م 3,500</span>
+                            <span class="cur-price">جنيه 2,800.00</span>
+                        </div>
+                    </div>
+                    <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ===== BRANDS SECTION ===== -->
+        <section id="brands" class="brands-section">
+            <h2 class="section-title">الماركات العالمية المتاحة</h2>
+            <div class="brands-scroll" id="brands-scroll">
+                <div class="brand-circle active"><span>A</span>
+                    <div class="brand-label">Alamir</div>
+                </div>
+                <div class="brand-circle"><span>A</span>
+                    <div class="brand-label">Akgur</div>
+                </div>
+                <div class="brand-circle"><span>2M</span>
+                    <div class="brand-label">2M Mega</div>
+                </div>
+                <div class="brand-circle"><span>2O</span>
+                    <div class="brand-label">Offers 2025</div>
+                </div>
+                <div class="brand-circle"><span>AC</span>
+                    <div class="brand-label">Alfa China</div>
+                </div>
+                <div class="brand-circle"><span>A</span>
+                    <div class="brand-label">Alfa</div>
+                </div>
+                <div class="brand-circle"><span>IS</span>
+                    <div class="brand-label">Ideal Standard</div>
+                </div>
+                <div class="brand-circle"><span>G</span>
+                    <div class="brand-label">Grohe</div>
+                </div>
+                <div class="brand-circle"><span>D</span>
+                    <div class="brand-label">Duravit</div>
+                </div>
+                <div class="brand-circle"><span>R</span>
+                    <div class="brand-label">Roca</div>
+                </div>
+                <div class="brand-circle"><span>K</span>
+                    <div class="brand-label">Cleopatra</div>
+                </div>
+                <div class="brand-circle"><span>V</span>
+                    <div class="brand-label">Villeroy</div>
+                </div>
+            </div>
+            <div class="view-more-wrap">
+                <a href="#" class="view-more-btn outline">عرض كل الماركات</a>
+            </div>
+        </section>
+
+        <!-- ===== SERVICES CARDS ===== -->
+        <section class="services-section">
+            <div class="services-list">
+
+                <div class="service-card">
+                    <div class="service-icon-box">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <rect x="1" y="3" width="15" height="13" />
+                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+                            <circle cx="5.5" cy="18.5" r="2.5" />
+                            <circle cx="18.5" cy="18.5" r="2.5" />
+                        </svg>
+                    </div>
+                    <div class="service-text">
+                        <strong>شحن مجاني</strong>
+                        <span>للطلبات أكثر من 3,000 جنيه</span>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon-box">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg>
+                    </div>
+                    <div class="service-text">
+                        <strong>4 معارض في القاهرة</strong>
+                        <span>زور أقرب فرع واستلم فوراً</span>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon-box">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" />
+                            <line x1="1" y1="10" x2="23" y2="10" />
+                        </svg>
+                    </div>
+                    <div class="service-text">
+                        <strong>تقسيط بدون فوائد</strong>
+                        <span>عبر فاليو وكونتكت وفيزا</span>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon-box">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                    </div>
+                    <div class="service-text">
+                        <strong>ضمان المصنع الكامل</strong>
+                        <span>منتجات أصلية 100% معتمدة</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ===== CONTACT CTA SECTION ===== -->
+        <section id="contact" class="contact-section">
+            <div class="contact-inner">
+                <span class="cta-pill">أسعار الجملة للجميع</span>
+                <h2 class="contact-title">نفس سعر المقاول -<br>بدون وسيط</h2>
+                <p class="contact-sub">لما المقاولين يشتروا من عندنا بكميات كبيرة،<br>معنى كده إن أسعارنا الأفضل</p>
+                <a href="https://wa.me/201000539427" target="_blank" class="wa-cta-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#16a34a">
+                        <path
+                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    اطلب عرض سعر الآن
+                </a>
+                <a href="#about" class="visit-btn">زيارة أقرب معرض</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-logo">آسر <span>كريم</span></div>
+            <p class="footer-tagline">وكيل وموزع معتمد لكبرى شركات السيراميك والبورسلين والأدوات الصحية في مصر منذ 2015
+            </p>
+            <div class="footer-badges">
+                <span class="footer-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="color:var(--gold-light)">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    تأسست 2015
+                </span>
+                <span class="footer-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="color:var(--gold-light)">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    مقرنا العبور
+                </span>
+                <span class="footer-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="color:var(--gold-light)">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    وكيل معتمد
+                </span>
+            </div>
+            <div class="payment-methods">
+                <div class="payment-label">طرق الدفع:</div>
+                <span class="pay-badge now">now</span>
+                <span class="pay-badge valu">valu</span>
+                <span class="pay-badge mastercard">MC</span>
+                <span class="pay-badge visa">VISA</span>
+                <span class="pay-badge cash">كاش</span>
+            </div>
+        </div>
+
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="#hero">الرئيسية</a></li>
+                    <li><a href="#products">وصل حديثاً</a></li>
+                    <li><a href="#categories">جميع الأقسام</a></li>
+                    <li><a href="#about">عن آسر كريم</a></li>
+                    <li><a href="#brands">الماركات</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>خدمة العملاء</h4>
+                <ul>
+                    <li><a href="#">طلباتي</a></li>
+                    <li><a href="#">طرق الدفع</a></li>
+                    <li><a href="#">معلومات الشحن</a></li>
+                    <li><a href="#">الشروط والأحكام</a></li>
+                    <li><a href="https://wa.me/201000539427" target="_blank">الدعم عبر واتساب</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>تواصل معنا</h4>
+                <ul class="footer-contact-list">
+                    <li>
+                        <span class="contact-icon-dot">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold)"
+                                stroke-width="2">
+                                <path
+                                    d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14h.01v2.92z" />
+                            </svg>
+                        </span>
+                        <a href="tel:01000539427">01000539427</a>
+                    </li>
+                    <li>
+                        <span class="contact-icon-dot">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold)"
+                                stroke-width="2">
+                                <path
+                                    d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14h.01v2.92z" />
+                            </svg>
+                        </span>
+                        <a href="tel:0244903006">0244903006</a>
+                    </li>
+                    <li>
+                        <span class="contact-icon-dot">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold)"
+                                stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                        </span>
+                        <span>العبور، الحي الثاني، سنتر الميسرة</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-social"
+            style="padding: 16px 20px; justify-content: center; border-top: 1px solid rgba(255,255,255,0.1);">
+            <a href="https://wa.me/201000539427" aria-label="واتساب" target="_blank">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+            </a>
+            <a href="https://www.tiktok.com/@aserkarimceramic" aria-label="تيك توك" target="_blank">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.81a8.18 8.18 0 004.78 1.52V6.88a4.85 4.85 0 01-1.01-.19z" />
+                </svg>
+            </a>
+            <a href="https://www.instagram.com/aserkarimceramic?igsh=bXdnZHdzcWRuMmdo" aria-label="إنستغرام"
+                target="_blank">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" />
+                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+            </a>
+            <a href="https://www.facebook.com/share/1CEXtePGVs/" aria-label="فيسبوك" target="_blank">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="footer-secure">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
+            دفع آمن 100% - SSL مشفر
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 آسر كريم للسيراميك والأدوات الصحية. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/201000539427" target="_blank" class="floating-wa" id="floating-wa" aria-label="تواصل واتساب">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg>
+    </a>
+
+    <!-- Cart Toast -->
+    <div class="cart-toast" id="cart-toast">✓ تمت الإضافة للسلة</div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
