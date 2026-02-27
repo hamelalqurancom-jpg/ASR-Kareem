@@ -1,10 +1,13 @@
 // =====================================================
-// أسر كريم للسيراميك — script.js
+// أسر كريم للسيراميك — script.js (Firebase Module)
 // =====================================================
+import { db, collection, onSnapshot, query } from './firebase-config.js';
+
+// --- Global State ---
+let cartCount = 0;
+let userProducts = []; // Will be populated from Firebase
 
 // --- Cart State ---
-let cartCount = 0;
-
 function updateCartBadge() {
     const badge = document.getElementById('cart-count');
     if (badge) badge.textContent = cartCount;
@@ -15,8 +18,10 @@ function addToCart(btn) {
     updateCartBadge();
     showToast();
     // Animate button
-    btn.style.transform = 'scale(0.85)';
-    setTimeout(() => { btn.style.transform = ''; }, 180);
+    if (btn) {
+        btn.style.transform = 'scale(0.85)';
+        setTimeout(() => { btn.style.transform = ''; }, 180);
+    }
 }
 
 function showToast() {
@@ -54,6 +59,12 @@ function toggleSearch() {
         if (input) input.focus();
     }
 }
+
+// Expose functions to global scope (required for onclick in HTML)
+window.addToCart = addToCart;
+window.toggleCart = toggleCart;
+window.toggleMenu = toggleMenu;
+window.toggleSearch = toggleSearch;
 
 // Close menu/search when clicking outside
 document.addEventListener('click', (e) => {
@@ -108,26 +119,99 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// --- Intersection observer: fade-in on scroll ---
-const fadeElements = document.querySelectorAll(
-    '.feature-card, .category-card, .product-card, .stat-item, .service-card, .brand-circle'
-);
-const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-            fadeObserver.unobserve(entry.target);
+// --- Product Data Management (Firebase) ---
+function renderProducts(categoryFilter = 'الكل') {
+    const grid = document.getElementById('products-grid');
+    if (!grid) return;
+
+    // Clear grid
+    grid.innerHTML = '';
+
+    let filtered = userProducts;
+    if (categoryFilter !== 'الكل') {
+        filtered = userProducts.filter(p => p.category === categoryFilter);
+    }
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666; font-weight: 700;">لا توجد منتجات في هذا القسم حالياً.</p>`;
+        return;
+    }
+
+    filtered.forEach(p => {
+        const productHTML = `
+            <div class="product-card">
+                <div class="product-img-wrap">
+                    <img src="${p.image}" alt="${p.name}" loading="lazy">
+                    ${p.discount ? `<span class="discount-badge">${p.discount}</span>` : ''}
+                    ${p.status === 'limited' ? `<span class="limited-badge">الكمية محدودة</span>` : ''}
+                    ${p.status === 'new' ? `<span class="new-badge dark-green">جديد</span>` : ''}
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">${p.name}</h3>
+                    <div class="product-price-row">
+                        ${p.oldPrice ? `<span class="old-price">ج.م ${p.oldPrice}</span>` : ''}
+                        <span class="cur-price">جنيه ${p.price}</span>
+                    </div>
+                </div>
+                <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+            </div>
+        `;
+        grid.insertAdjacentHTML('beforeend', productHTML);
+    });
+
+    observeFadeElements();
+}
+
+// Initial Listener for Products
+const q = query(collection(db, "products"));
+onSnapshot(q, (querySnapshot) => {
+    userProducts = [];
+    querySnapshot.forEach((doc) => {
+        userProducts.push(doc.data());
+    });
+    renderProducts();
+});
+
+
+// --- Category Filtering ---
+document.querySelectorAll('.category-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+        e.preventDefault();
+        const catName = card.querySelector('.cat-name').textContent.trim();
+        renderProducts(catName);
+
+        const productsSection = document.getElementById('products');
+        if (productsSection) {
+            const headerH = document.getElementById('site-header')?.offsetHeight || 56;
+            const top = productsSection.getBoundingClientRect().top + window.scrollY - headerH;
+            window.scrollTo({ top, behavior: 'smooth' });
         }
     });
-}, { threshold: 0.12 });
-
-fadeElements.forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(16px)';
-    el.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
-    fadeObserver.observe(el);
 });
+
+// --- Intersection observer: fade-in on scroll ---
+function observeFadeElements() {
+    const fadeElements = document.querySelectorAll(
+        '.feature-card, .category-card, .product-card, .stat-item, .service-card, .brand-circle'
+    );
+    const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                fadeObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    fadeElements.forEach(el => {
+        if (el.style.opacity === '1') return;
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(16px)';
+        el.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+        fadeObserver.observe(el);
+    });
+}
 
 // --- Animated counter for stats ---
 function animateCounter(el, target, isDecimal = false) {
@@ -138,7 +222,7 @@ function animateCounter(el, target, isDecimal = false) {
         const progress = Math.min((timestamp - start) / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
         const value = Math.floor(eased * target);
-        el.textContent = el.dataset.prefix + value.toLocaleString('ar-EG') + (el.dataset.suffix || '');
+        el.textContent = (el.dataset.prefix || '') + value.toLocaleString('ar-EG') + (el.dataset.suffix || '');
         if (progress < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
@@ -164,6 +248,21 @@ const statsObserver = new IntersectionObserver((entries) => {
 
 statNums.forEach(el => statsObserver.observe(el));
 
+// --- Loader Handling ---
+window.addEventListener('load', () => {
+    const loader = document.getElementById('loader-wrapper');
+    if (loader) {
+        // Wait slightly for the animation to feel premium
+        setTimeout(() => {
+            loader.classList.add('hidden');
+        }, 1200);
+    }
+});
+
 // Initialize
 updateCartBadge();
-console.log('أسر كريم — initialized ✓');
+observeFadeElements();
+console.log('أسر كريم — (Firebase version) initialized ✓');
+
+
+

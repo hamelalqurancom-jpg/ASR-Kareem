@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - آسر كريم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #16a34a;
+            --bg: #f8fafc;
+        }
+
+        body {
+            background-color: var(--bg);
+            padding-bottom: 40px;
+        }
+
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .dash-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        label {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #444;
+        }
+
+        input,
+        select,
+        textarea {
+            padding: 12px 15px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #15803d;
+            transform: translateY(-2px);
+        }
+
+        .preview-area {
+            margin-top: 40px;
+        }
+
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .back-home {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #image-preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: none;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <div class="dash-header">
+            <h1 style="margin:0; font-size: 1.5rem;">إضافة منتج جديد</h1>
+            <a href="index.html" class="back-home">← العودة للموقع</a>
+        </div>
+
+        <div class="dash-card">
+            <form id="product-form">
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label>اسم المنتج</label>
+                        <input type="text" id="p-name" placeholder="مثلاً: طقم ديوراستايل ديورافيت" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>القسم</label>
+                        <select id="p-category" required>
+                            <option value="سيراميك">سيراميك</option>
+                            <option value="بورسلين">بورسلين</option>
+                            <option value="أدوات صحية">أدوات صحية</option>
+                            <option value="كليوباترا">كليوباترا</option>
+                            <option value="خلاطات">خلاطات</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>العلامة التجارية</label>
+                        <input type="text" id="p-brand" placeholder="مثلاً: ديورافيت">
+                    </div>
+
+                    <div class="form-group">
+                        <label>السعر الحالي (جنيه)</label>
+                        <input type="number" id="p-price" placeholder="13591" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>السعر قبل الخصم (اختياري)</label>
+                        <input type="number" id="p-old-price" placeholder="17650">
+                    </div>
+
+                    <div class="form-group">
+                        <label>نسبة الخصم (مثلاً: 23-%)</label>
+                        <input type="text" id="p-discount" placeholder="23%-">
+                    </div>
+
+                    <div class="form-group">
+                        <label>الحالة</label>
+                        <select id="p-status">
+                            <option value="none">عادي</option>
+                            <option value="limited">الكمية محدودة</option>
+                            <option value="new">جديد</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>صورة المنتج</label>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <input type="file" id="p-image-file" accept="image/*">
+                            <div style="font-size: 0.8rem; color: #666; text-align: center;">— أو —</div>
+                            <input type="text" id="p-image" placeholder="أدخل رابط الصورة مباشرة هنا">
+                        </div>
+                        <img id="image-preview" src="" alt="Preview">
+                        <div id="upload-status"
+                            style="font-size: 0.85rem; color: var(--primary); margin-top: 5px; font-weight: 700; display: none;">
+                            جاري رفع الصورة...</div>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn-submit full">إضافة المنتج للموقع</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="preview-area">
+            <h2 class="section-title">المنتجات المضافة حالياً</h2>
+            <div class="product-list" id="dash-product-list">
+                <!-- Products will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { db, collection, addDoc, onSnapshot, query, deleteDoc, doc } from './firebase-config.js';
+
+        // إعدادات Cloudinary - تمت إضافتها بناءً على حسابك
+        const CLOUDINARY_CLOUD_NAME = "dwrhl6gjf";
+        const CLOUDINARY_UPLOAD_PRESET = "asr-kareem";
+
+        const form = document.getElementById('product-form');
+        const productList = document.getElementById('dash-product-list');
+        const imgInput = document.getElementById('p-image');
+        const fileInput = document.getElementById('p-image-file');
+        const imgPreview = document.getElementById('image-preview');
+        const uploadStatus = document.getElementById('upload-status');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // Show image preview (from URL or local file)
+        imgInput.addEventListener('input', () => {
+            if (imgInput.value) {
+                imgPreview.src = imgInput.value;
+                imgPreview.style.display = 'block';
+            } else {
+                imgPreview.style.display = 'none';
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imgPreview.src = e.target.result;
+                    imgPreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function uploadImage(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+            const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) throw new Error('فشل رفع الصورة');
+            const data = await response.json();
+            return data.secure_url;
+        }
+
+        // Load existing products with real-time listener
+        function loadProducts() {
+            const q = query(collection(db, "products"));
+            onSnapshot(q, (querySnapshot) => {
+                productList.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const p = doc.data();
+                    const id = doc.id;
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    card.innerHTML = `
+                        <div class="product-img-wrap">
+                            <img src="${p.image}" alt="${p.name}">
+                            ${p.discount ? `<span class="discount-badge">${p.discount}</span>` : ''}
+                            ${p.status === 'limited' ? `<span class="limited-badge">الكمية محدودة</span>` : ''}
+                            ${p.status === 'new' ? `<span class="new-badge dark-green">جديد</span>` : ''}
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">${p.name}</h3>
+                            <div class="product-price-row">
+                                ${p.oldPrice ? `<span class="old-price">ج.م ${p.oldPrice}</span>` : ''}
+                                <span class="cur-price">جنيه ${p.price}</span>
+                            </div>
+                            <button class="delete-btn" onclick="deleteProduct('${id}')">حذف المنتج</button>
+                        </div>
+                    `;
+                    productList.appendChild(card);
+                });
+            });
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            let imageUrl = imgInput.value;
+            const file = fileInput.files[0];
+
+            // If a file is selected, upload it first
+            if (file) {
+                try {
+                    submitBtn.disabled = true;
+                    uploadStatus.style.display = 'block';
+                    imageUrl = await uploadImage(file);
+                    uploadStatus.style.display = 'none';
+                } catch (error) {
+                    console.error(error);
+                    alert('خطأ في رفع الصورة، تأكد من إعدادات Cloudinary');
+                    submitBtn.disabled = false;
+                    uploadStatus.style.display = 'none';
+                    return;
+                }
+            }
+
+            if (!imageUrl) {
+                alert('يرجى اختيار صورة أو وضع رابط');
+                return;
+            }
+
+            const newProduct = {
+                name: document.getElementById('p-name').value,
+                category: document.getElementById('p-category').value,
+                brand: document.getElementById('p-brand').value,
+                price: document.getElementById('p-price').value,
+                oldPrice: document.getElementById('p-old-price').value,
+                discount: document.getElementById('p-discount').value,
+                status: document.getElementById('p-status').value,
+                image: imageUrl,
+                createdAt: new Date()
+            };
+
+            try {
+                await addDoc(collection(db, "products"), newProduct);
+                form.reset();
+                imgPreview.style.display = 'none';
+                submitBtn.disabled = false;
+                alert('تمت إضافة المنتج بنجاح!');
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert('حدث خطأ أثناء إضافة المنتج.');
+                submitBtn.disabled = false;
+            }
+        });
+
+        window.deleteProduct = async (id) => {
+            if (confirm('هل أنت متأكد من حذف هذا المنتج؟')) {
+                try {
+                    await deleteDoc(doc(db, "products", id));
+                } catch (error) {
+                    console.error("Error deleting document: ", error);
+                    alert('حدث خطأ أثناء الحذف.');
+                }
+            }
+        };
+
+        loadProducts();
+    </script>
+</body>
+
+</html>
