@@ -4,28 +4,24 @@
 
 /* ---- Variables ---- */
 :root {
-    --gold: #d4af37;
+    --primary: #c5a059;
+    --primary-dark: #a68541;
+    --primary-light: #fdf6e7;
+    --logo-brown: #3d341f;
+    --dark-bg: #1a150c;
+    --gold: #c5a059;
     --gold-light: #fde047;
     --gold-dark: #8a6d3b;
-    --gold-bg: #fefce8;
+    --gold-bg: #fdf6e7;
     --dark: #1f2937;
-    --dark-brown: #4a412a;
-    --dark2: #374151;
-    --dark3: #4b5563;
-    --text: #1a1a1a;
-    --text-muted: #555555;
-    --text-light: #888888;
-    --white: #ffffff;
-    --border: #f1f1f1;
-    --radius: 12px;
-    --radius-sm: 8px;
-    --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.12);
-    --transition: all 0.25s ease;
-    --font: 'Cairo', sans-serif;
-    --green: #16a34a;
-    --green-dark: #15803d;
-    --green-light: #dcfce7;
+    --dark-brown: #3d341f;
+    --green: #c5a059;
+    --green-dark: #a68541;
+    --green-light: #fdf6e7;
+    --primary: #c5a059;
+    --primary-dark: #a68541;
+    --primary-light: #fdf6e7;
+    --logo-brown: #3d341f;
 }
 
 /* ---- Reset ---- */
@@ -67,6 +63,60 @@ button {
     font-family: var(--font);
 }
 
+/* Filter Controls */
+.filter-controls {
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+}
+
+.filter-row::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-pill {
+    padding: 6px 16px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4b5563;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.filter-pill:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.filter-pill.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(197, 160, 89, 0.25);
+}
+
+.filter-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    display: block;
+}
+
 /* =====================================================
    HEADER
    ===================================================== */
@@ -85,14 +135,14 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 56px;
+    height: 64px;
     padding: 0 16px;
 }
 
 .logo {
     font-size: 1.6rem;
     font-weight: 900;
-    color: var(--green);
+    color: var(--primary);
     letter-spacing: -0.5px;
 }
 
@@ -105,7 +155,11 @@ button {
 }
 
 .logo span {
-    color: var(--gold-dark);
+    color: var(--gold);
+}
+
+.logo img {
+    max-height: 100%;
 }
 
 .header-icons {
@@ -132,7 +186,7 @@ button {
 }
 
 #whatsapp-btn:hover {
-    background: #dcfce7;
+    background: #e8f5e9;
     color: #25d366;
 }
 
@@ -305,7 +359,7 @@ button {
 }
 
 .search-btn-hero:hover {
-    background: var(--green-dark);
+    background: var(--primary-dark);
 }
 
 /* Tag pills */
@@ -349,6 +403,91 @@ button {
 /* =====================================================
    FEATURES GRID
    ===================================================== */
+.loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--dark-brown);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loader-wrapper.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-content {
+    text-align: center;
+}
+
+.loader-logo-wrap {
+    margin-bottom: 20px;
+}
+
+.loader-logo-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 24px;
+    background: #3d341f;
+    /* Logo matching brown */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 2px solid var(--primary);
+}
+
+.loader-logo-circle img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+}
+
+.loader-text {
+    color: var(--primary);
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 12px;
+}
+
+.loader-bar {
+    width: 140px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.loader-progress {
+    width: 0;
+    height: 100%;
+    background: var(--primary);
+    animation: loading 2.5s ease infinite;
+}
+
+@keyframes loading {
+    0% {
+        width: 0;
+    }
+
+    50% {
+        width: 70%;
+    }
+
+    100% {
+        width: 100%;
+    }
+}
+
 .features-section {
     background: #fff;
     padding: 0 16px;
@@ -489,7 +628,7 @@ button {
 .partner-card h4 {
     font-size: 1.1rem;
     font-weight: 800;
-    color: var(--green);
+    color: var(--primary);
 }
 
 .partner-card p {
@@ -529,14 +668,14 @@ button {
 }
 
 .why-card:hover {
-    border-color: var(--green);
+    border-color: var(--primary);
     box-shadow: var(--shadow);
 }
 
 .card-num {
     font-size: 1.8rem;
     font-weight: 900;
-    color: rgba(22, 163, 74, 0.15);
+    color: rgba(197, 160, 89, 0.15);
     line-height: 1;
 }
 
@@ -556,14 +695,14 @@ button {
 .about-footer-info {
     text-align: center;
     padding: 20px;
-    background: var(--green-bg);
+    background: var(--gold-bg);
     border-radius: var(--radius);
     font-size: 1rem;
     color: var(--dark2);
 }
 
 .about-footer-info strong {
-    color: var(--green);
+    color: var(--primary);
 }
 
 /* =====================================================
@@ -622,7 +761,7 @@ button {
 
 .cat-price {
     font-size: 0.7rem;
-    color: var(--green);
+    color: var(--primary);
     font-weight: 600;
 }
 
@@ -681,13 +820,14 @@ button {
     position: absolute;
     top: 15px;
     right: 15px;
-    background: #ea2e2e;
+    background: var(--primary);
     color: white;
     font-size: 0.9rem;
     font-weight: 800;
     padding: 8px 14px;
     border-radius: 12px;
     z-index: 2;
+    box-shadow: 0 4px 10px rgba(197, 160, 89, 0.3);
 }
 
 .limited-badge {
@@ -708,7 +848,17 @@ button {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
+}
+
+.product-type {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 2px 8px;
+    border-radius: 4px;
+    align-self: flex-start;
 }
 
 .product-name {

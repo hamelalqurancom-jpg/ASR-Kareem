@@ -127,10 +127,30 @@ function renderProducts(categoryFilter = 'الكل') {
     // Clear grid
     grid.innerHTML = '';
 
+    // Track filters
+    if (categoryFilter !== undefined) window.currentCategory = categoryFilter;
+    if (window.currentCategory === undefined) window.currentCategory = 'الكل';
+
     let filtered = userProducts;
-    if (categoryFilter !== 'الكل') {
-        filtered = userProducts.filter(p => p.category === categoryFilter);
+
+    // 1. Category Filter
+    if (window.currentCategory !== 'الكل') {
+        filtered = filtered.filter(p => p.category === window.currentCategory);
     }
+
+    // 2. Type Filter
+    if (window.currentType && window.currentType !== 'الكل') {
+        filtered = filtered.filter(p => p.type === window.currentType);
+    }
+
+    // 3. PriceTag Filter
+    if (window.currentPriceTag && window.currentPriceTag !== 'الكل') {
+        filtered = filtered.filter(p => p.priceTag === window.currentPriceTag);
+    }
+
+    // Update Section Title
+    const titleEl = document.querySelector('#products .section-title');
+    if (titleEl) titleEl.textContent = (window.currentCategory === 'الكل') ? 'الأكثر مبيعاً' : 'منتجات ' + window.currentCategory;
 
     if (filtered.length === 0) {
         grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666; font-weight: 700;">لا توجد منتجات في هذا القسم حالياً.</p>`;
@@ -147,6 +167,7 @@ function renderProducts(categoryFilter = 'الكل') {
                     ${p.status === 'new' ? `<span class="new-badge dark-green">جديد</span>` : ''}
                 </div>
                 <div class="product-info">
+                    ${p.type ? `<span class="product-type">${p.type}</span>` : ''}
                     <h3 class="product-name">${p.name}</h3>
                     <div class="product-price-row">
                         ${p.oldPrice ? `<span class="old-price">ج.م ${p.oldPrice}</span>` : ''}
@@ -159,8 +180,45 @@ function renderProducts(categoryFilter = 'الكل') {
         grid.insertAdjacentHTML('beforeend', productHTML);
     });
 
+    populateFilters(filtered);
     observeFadeElements();
 }
+
+function populateFilters(products) {
+    const typeRow = document.getElementById('type-filters');
+    const priceRow = document.getElementById('price-filters');
+    if (!typeRow || !priceRow) return;
+
+    if (window.currentType === undefined) window.currentType = 'الكل';
+    if (window.currentPriceTag === undefined) window.currentPriceTag = 'الكل';
+
+    // Get unique types and price tags from the WHOLE set of products IN THIS CATEGORY
+    const categoryProducts = window.currentCategory === 'الكل' ? userProducts : userProducts.filter(p => p.category === window.currentCategory);
+
+    const types = [...new Set(categoryProducts.filter(p => p.type).map(p => p.type))];
+    const priceTags = [...new Set(categoryProducts.filter(p => p.priceTag).map(p => p.priceTag))];
+
+    if (types.length > 0) {
+        typeRow.innerHTML = `<span class="filter-label">النوع:</span>` +
+            `<span class="filter-pill ${window.currentType === 'الكل' ? 'active' : ''}" onclick="filterByAttr('type', 'الكل', this)">الكل</span>` +
+            types.map(t => `<span class="filter-pill ${window.currentType === t ? 'active' : ''}" onclick="filterByAttr('type', '${t}', this)">${t}</span>`).join('');
+    } else { typeRow.innerHTML = ''; }
+
+    if (priceTags.length > 0) {
+        priceRow.innerHTML = `<span class="filter-label">السعر:</span>` +
+            `<span class="filter-pill ${window.currentPriceTag === 'الكل' ? 'active' : ''}" onclick="filterByAttr('priceTag', 'الكل', this)">الكل</span>` +
+            priceTags.map(pt => `<span class="filter-pill ${window.currentPriceTag === pt ? 'active' : ''}" onclick="filterByAttr('priceTag', '${pt}', this)">${pt}</span>`).join('');
+    } else { priceRow.innerHTML = ''; }
+}
+
+function filterByAttr(attr, value, el) {
+    if (attr === 'type') window.currentType = value;
+    if (attr === 'priceTag') window.currentPriceTag = value;
+
+    renderProducts();
+}
+
+window.filterByAttr = filterByAttr;
 
 // Initial Listener for Products
 const q = query(collection(db, "products"));
@@ -178,6 +236,11 @@ document.querySelectorAll('.category-card').forEach(card => {
     card.addEventListener('click', (e) => {
         e.preventDefault();
         const catName = card.querySelector('.cat-name').textContent.trim();
+
+        // Reset sub-filters
+        window.currentType = 'الكل';
+        window.currentPriceTag = 'الكل';
+
         renderProducts(catName);
 
         const productsSection = document.getElementById('products');
@@ -249,15 +312,20 @@ const statsObserver = new IntersectionObserver((entries) => {
 statNums.forEach(el => statsObserver.observe(el));
 
 // --- Loader Handling ---
-window.addEventListener('load', () => {
+function hideLoader() {
     const loader = document.getElementById('loader-wrapper');
-    if (loader) {
-        // Wait slightly for the animation to feel premium
-        setTimeout(() => {
-            loader.classList.add('hidden');
-        }, 1200);
+    if (loader && !loader.classList.contains('hidden')) {
+        loader.classList.add('hidden');
     }
+}
+
+// Hide on load
+window.addEventListener('load', () => {
+    setTimeout(hideLoader, 800);
 });
+
+// Fallback: Hide after 3.5s anyway to prevent getting stuck
+setTimeout(hideLoader, 3500);
 
 // Initialize
 updateCartBadge();

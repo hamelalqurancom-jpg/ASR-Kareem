@@ -165,8 +165,14 @@
                             <option value="سيراميك">سيراميك</option>
                             <option value="بورسلين">بورسلين</option>
                             <option value="أدوات صحية">أدوات صحية</option>
-                            <option value="كليوباترا">كليوباترا</option>
                             <option value="خلاطات">خلاطات</option>
+                            <option value="وحدات حمام">وحدات حمام</option>
+                            <option value="أحواض مطبخ">أحواض مطبخ</option>
+                            <option value="بانيوهات">بانيوهات</option>
+                            <option value="أبواب مصفحة">أبواب مصفحة</option>
+                            <option value="باركيه">باركيه</option>
+                            <option value="إكسسوارات">إكسسوارات</option>
+                            <option value="ديكورات المنزل">ديكورات المنزل</option>
                         </select>
                     </div>
 
@@ -197,6 +203,71 @@
                             <option value="limited">الكمية محدودة</option>
                             <option value="new">جديد</option>
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>نوع المنتج (النوع/الماركة الفرعية)</label>
+                        <input type="text" id="p-type" list="type-suggestions" placeholder="مثلاً: سيراميكا كليوباترا">
+                        <datalist id="type-suggestions">
+                            <!-- Ceramic -->
+                            <option value="سيراميكا كليوباترا">
+                            <option value="سيراميكا لي جلاس">
+                            <option value="سيراميكا اليجانس">
+                            <option value="سيراميكا رويال">
+                            <option value="سيراميكا أرت">
+                            <option value="سيراميكا ديماس">
+                            <option value="سيراميكا فيردي">
+                            <option value="سيراميكا سيسيل">
+                                <!-- Porcelain -->
+                            <option value="بورسلين صيني">
+                            <option value="بورسلين هندي">
+                            <option value="بورسلين إسباني">
+                            <option value="بورسلين كليوباترا">
+                                <!-- Sanitary -->
+                            <option value="ايديال ستاندرد">
+                            <option value="ديورافيت">
+                            <option value="جروهي">
+                            <option value="روكا">
+                                <!-- Kitchen Sinks -->
+                            <option value="حوض مطبخ تركي">
+                            <option value="حوض مطبخ كوري">
+                            <option value="حوض مطبخ صيني">
+                            <option value="حوض مطبخ ماليزي">
+                            <option value="حوض مطبخ سيفين سيسيل">
+                            <option value="حوض مطبخ الأصيل">
+                            <option value="حوض مطبخ بلاتزا">
+                                <!-- Doors & Parquet -->
+                            <option value="مستورد تركي">
+                            <option value="مستورد صيني">
+                            <option value="مصري">
+                            <option value="HDF تركي">
+                            <option value="HDF ألماني">
+                            <option value="SPC">
+                                <!-- Accessories -->
+                            <option value="إكسسوارات حمام">
+                            <option value="إكسسوارات مطبخ">
+                            <option value="مرايات حمام">
+                                <!-- Decor -->
+                            <option value="بديل خشب">
+                            <option value="بديل رخام">
+                            <option value="بديل حجري">
+                            <option value="نجيلة صناعي">
+                            <option value="ورق حائط">
+                                <!-- Others -->
+                            <option value="متنوع">
+                        </datalist>
+                    </div>
+
+                    <div class="form-group">
+                        <label>تاج السعر أو فلتر إضافي</label>
+                        <input type="text" id="p-price-tag" list="tag-suggestions" placeholder="مثلاً: أقل من 5000">
+                        <datalist id="tag-suggestions">
+                            <option value="أقل من 2000">
+                            <option value="من 2000 إلى 5000">
+                            <option value="أكثر من 5000">
+                            <option value="عرض خاص">
+                            <option value="وصل حديثاً">
+                        </datalist>
                     </div>
 
                     <div class="form-group full">
@@ -343,6 +414,8 @@
                 oldPrice: document.getElementById('p-old-price').value,
                 discount: document.getElementById('p-discount').value,
                 status: document.getElementById('p-status').value,
+                type: document.getElementById('p-type').value,
+                priceTag: document.getElementById('p-price-tag').value,
                 image: imageUrl,
                 createdAt: new Date()
             };
