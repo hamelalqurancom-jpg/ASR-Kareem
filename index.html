@@ -12,6 +12,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .site-header .icon-btn {
+            color: white !important;
+        }
+
+        .site-header .icon-btn svg {
+            stroke: white !important;
+        }
+
+        #site-header {
+            background: #3d341f !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,7 +34,7 @@
         <div class="loader-content">
             <div class="loader-logo-wrap">
                 <div class="loader-logo-circle">
-                    <img src="logo.png" alt="آسر كريم">
+                    <img src="Screenshot 2026-03-01 232204.png" alt="آسر كريم">
                 </div>
             </div>
             <h1 class="loader-text">آسر كريم</h1>
@@ -33,8 +46,8 @@
 
 
     <!-- ===== HEADER ===== -->
-    <header class="site-header" id="site-header">
-        <div class="header-inner">
+    <header class="site-header" id="site-header" style="background: #3d341f !important;">
+        <div class="header-inner" style="background: transparent;">
             <div class="header-icons">
                 <button class="icon-btn" id="whatsapp-btn" aria-label="واتساب"
                     onclick="window.open('https://wa.me/201000539427','_blank')">
@@ -66,7 +79,7 @@
                 </button>
             </div>
             <a href="#" class="logo">
-                <img src="logo.png" alt="آسر كريم" style="height: 48px; object-fit: contain;">
+                <img src="Screenshot 2026-03-01 232204.png" alt="آسر كريم" style="height: 48px; object-fit: contain;">
             </a>
         </div>
 
@@ -106,15 +119,18 @@
                             <line x1="21" y1="21" x2="16.65" y2="16.65" />
                         </svg>
                     </button>
-                    <input type="text" placeholder="ابحث عن منتج، ماركة، أو قسم..." autocomplete="off">
+                    <input type="text" id="hero-search-input" placeholder="ابحث عن منتج، ماركة، أو قسم..."
+                        autocomplete="off">
                 </div>
 
                 <div class="hero-tags">
-                    <a href="#" class="hero-tag">جروهي</a>
-                    <a href="#" class="hero-tag">خلاط مطبخ</a>
-                    <a href="#" class="hero-tag">كليوباترا</a>
-                    <a href="#" class="hero-tag">سيراميك حمام</a>
-                    <a href="#" class="hero-tag">ايديال ستاندرد</a>
+                    <a href="#" class="hero-tag" onclick="handleHeroTag('جروهي')">جروهي</a>
+                    <a href="#" class="hero-tag" onclick="handleHeroTag('ايديال ستاندرد')">ايديال ستاندرد</a>
+                    <a href="#" class="hero-tag" onclick="handleHeroTag('وحدات حمام')">وحدات حمام</a>
+                    <a href="#" class="hero-tag" onclick="handleHeroTag('سيراميكا كليوباترا')">سيراميكا كليوباترا</a>
+                    <a href="#" class="hero-tag" onclick="handleHeroTag('بانيوهات')">بانيوهات</a>
+                    <a href="#" class="hero-tag" onclick="handleHeroTag('اكسسوارات')">اكسسوارات</a>
+                    <a href="#" class="hero-tag" onclick="handleHeroTag('مرحاض معلق')">مرحاض معلق</a>
                 </div>
 
                 <div class="hero-delivery">
@@ -386,6 +402,9 @@
 
             </div>
         </section>
+
+        <!-- Dynamic Category Hero -->
+        <div id="category-hero-wrap"></div>
 
         <!-- ===== PRODUCTS SECTION ===== -->
         <section id="products" class="products-section">
@@ -739,7 +758,7 @@
     <footer class="site-footer">
         <div class="footer-top">
             <div class="footer-logo">
-                <img src="logo.png" alt="آسر كريم"
+                <img src="Screenshot 2026-03-01 232204.png" alt="آسر كريم"
                     style="height: 60px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));">
             </div>
             <p class="footer-tagline">وكيل وموزع معتمد لكبرى شركات السيراميك والبورسلين والأدوات الصحية في مصر منذ 2015
@@ -886,6 +905,19 @@
     <!-- Cart Toast -->
     <div class="cart-toast" id="cart-toast">✓ تمت الإضافة للسلة</div>
 
+    <script>
+        // --- Loader Handling (Separate from Module for reliability) ---
+        function hideLoader() {
+            const loader = document.getElementById('loader-wrapper');
+            if (loader && !loader.classList.contains('hidden')) {
+                loader.classList.add('hidden');
+            }
+        }
+        // Force hide loader if site fails to load module or hits error
+        window.addEventListener('load', () => setTimeout(hideLoader, 1000));
+        window.onerror = hideLoader;
+        setTimeout(hideLoader, 4000); // Absolute safety fallback
+    </script>
     <script type="module" src="script.js"></script>
 </body>
 

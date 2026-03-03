@@ -66,6 +66,94 @@ window.toggleCart = toggleCart;
 window.toggleMenu = toggleMenu;
 window.toggleSearch = toggleSearch;
 
+// --- Functional Search Logic ---
+function initSearch() {
+    const searchInputs = ['header-search', 'hero-search-input'];
+    searchInputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase().trim();
+                if (term === '') {
+                    renderProducts(window.currentCategory || 'الكل');
+                    return;
+                }
+
+                // Filter all products by name, category or brand
+                const results = userProducts.filter(p =>
+                    p.name.toLowerCase().includes(term) ||
+                    (p.category && p.category.toLowerCase().includes(term)) ||
+                    (p.type && p.type.toLowerCase().includes(term))
+                );
+
+                displaySearchResults(results);
+            });
+        }
+    });
+}
+
+function displaySearchResults(results) {
+    const grid = document.getElementById('products-grid');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+
+    if (results.length === 0) {
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666; font-weight: 700;">لا توجد نتائج مطابقة لبحثك.</p>`;
+        return;
+    }
+
+    results.forEach(p => {
+        const productHTML = `
+            <div class="product-card">
+                <div class="product-img-wrap">
+                    <img src="${p.image}" alt="${p.name}" loading="lazy">
+                    ${p.discount ? `<span class="discount-badge">${p.discount}</span>` : ''}
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">${p.name}</h3>
+                    <div class="product-price-row">
+                        ${p.oldPrice ? `<span class="old-price">ج.م ${p.oldPrice}</span>` : ''}
+                        <span class="cur-price">جنيه ${p.price}</span>
+                    </div>
+                </div>
+                <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+            </div>
+        `;
+        grid.insertAdjacentHTML('beforeend', productHTML);
+    });
+
+    // Scroll to products if search was from hero
+    const productsSection = document.getElementById('products');
+    if (productsSection && document.activeElement.id === 'hero-search-input') {
+        const headerH = document.getElementById('site-header')?.offsetHeight || 56;
+        const top = productsSection.getBoundingClientRect().top + window.scrollY - headerH;
+        window.scrollTo({ top, behavior: 'smooth' });
+    }
+}
+
+// --- Hero Tags Handler ---
+function handleHeroTag(tagName) {
+    // Treat tags like direct category or brand filters
+    const categoryExists = userProducts.some(p => p.category === tagName);
+    if (categoryExists) {
+        renderProducts(tagName);
+    } else {
+        // Filter by brand (type) if not a category
+        window.currentCategory = 'الكل';
+        window.currentType = tagName;
+        renderProducts('الكل');
+    }
+
+    const productsSection = document.getElementById('products');
+    if (productsSection) {
+        const headerH = document.getElementById('site-header')?.offsetHeight || 56;
+        const top = productsSection.getBoundingClientRect().top + window.scrollY - headerH;
+        window.scrollTo({ top, behavior: 'smooth' });
+    }
+}
+window.handleHeroTag = handleHeroTag;
+
 // Close menu/search when clicking outside
 document.addEventListener('click', (e) => {
     const menu = document.getElementById('mobile-menu');
@@ -148,9 +236,24 @@ function renderProducts(categoryFilter = 'الكل') {
         filtered = filtered.filter(p => p.priceTag === window.currentPriceTag);
     }
 
-    // Update Section Title
+    // Update Section Title & Add Hero if Category
     const titleEl = document.querySelector('#products .section-title');
-    if (titleEl) titleEl.textContent = (window.currentCategory === 'الكل') ? 'الأكثر مبيعاً' : 'منتجات ' + window.currentCategory;
+    const heroWrap = document.getElementById('category-hero-wrap');
+
+    if (window.currentCategory === 'الكل') {
+        if (titleEl) titleEl.textContent = 'الأكثر مبيعاً';
+        if (heroWrap) heroWrap.innerHTML = '';
+        document.getElementById('about')?.style.setProperty('display', 'block');
+        document.getElementById('hero')?.style.setProperty('display', 'flex');
+    } else {
+        if (titleEl) titleEl.textContent = 'منتجات ' + window.currentCategory;
+        renderCategoryHero(window.currentCategory);
+        // On mobile, maybe hide hero to focus on products
+        if (window.innerWidth < 1024) {
+            document.getElementById('hero')?.style.setProperty('display', 'none');
+            document.getElementById('about')?.style.setProperty('display', 'none');
+        }
+    }
 
     if (filtered.length === 0) {
         grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666; font-weight: 700;">لا توجد منتجات في هذا القسم حالياً.</p>`;
@@ -184,6 +287,51 @@ function renderProducts(categoryFilter = 'الكل') {
     observeFadeElements();
 }
 
+function renderCategoryHero(catName) {
+    const wrap = document.getElementById('category-hero-wrap');
+    if (!wrap) return;
+
+    const descriptions = {
+        'سيراميك': 'تسوق أفضل منتجات السيراميك بأسعار تنافسية من آسر كريم. أكثر من 1000 موديل متوفر من أفضل الماركات مع الشحن لجميع المحافظات.',
+        'بورسلين': 'اكتشف روعة البورسلين بتصاميم عصرية تتناسب مع ذوقك الرفيع. متانة وجودة لا تضاهى.',
+        'أدوات صحية': 'كل ما يحتاجه حمامك في مكان واحد. أطقم حمامات، دش، ومستلزمات صحية بأفضل الأسعار.',
+        'خلاطات مياه': 'خلاطات مياه عالمية بجودة فائقة وضمان حقيقي. جروهي، ايديال ستاندرد، والمزيد.',
+        'بانيوهات': 'تسوق أفضل منتجات البانيوهات بأسعار تنافسية من آسر كريم. أكثر من 3000 منتج متوفر من أفضل الماركات مع الشحن لجميع المحافظات.',
+        'وحدات حمام': 'وحدات حمام فاخرة تجمع بين الأناقة والاستخدام العملي، متوفرة بمقاسات وألوان متنوعة.'
+    };
+
+    const desc = descriptions[catName] || 'تسوق أفضل المنتجات بأعلى جودة وأفضل الأسعار من آسر كريم.';
+
+    wrap.innerHTML = `
+        <div class="category-hero">
+            <h1>${catName}</h1>
+            <p>${desc}</p>
+            <div class="category-rating">
+                <span style="color:#f59e0b">★★★★★</span>
+                <span style="font-weight:700">4.8</span>
+                <span style="color:#64748b; font-size:0.9rem">8,374+ تقييم ✅ منتجات أصلية 100%</span>
+            </div>
+        </div>
+        <div class="sub-categories-section">
+            <h2 class="sub-categories-title">تصفح الأقسام الفرعية</h2>
+            <div class="sub-categories-scroll">
+                <div class="sub-cat-card">
+                    <div class="sub-cat-name">${catName} مودرن</div>
+                    <div class="sub-cat-count">413 منتج</div>
+                </div>
+                <div class="sub-cat-card">
+                    <div class="sub-cat-name">${catName} كلاسيك</div>
+                    <div class="sub-cat-count">165 منتج</div>
+                </div>
+                <div class="sub-cat-card">
+                    <div class="sub-cat-name">أحدث الموديلات</div>
+                    <div class="sub-cat-count">812 منتج</div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
 function populateFilters(products) {
     const typeRow = document.getElementById('type-filters');
     const priceRow = document.getElementById('price-filters');
@@ -199,7 +347,7 @@ function populateFilters(products) {
     const priceTags = [...new Set(categoryProducts.filter(p => p.priceTag).map(p => p.priceTag))];
 
     if (types.length > 0) {
-        typeRow.innerHTML = `<span class="filter-label">النوع:</span>` +
+        typeRow.innerHTML = `<span class="filter-label">الماركة:</span>` +
             `<span class="filter-pill ${window.currentType === 'الكل' ? 'active' : ''}" onclick="filterByAttr('type', 'الكل', this)">الكل</span>` +
             types.map(t => `<span class="filter-pill ${window.currentType === t ? 'active' : ''}" onclick="filterByAttr('type', '${t}', this)">${t}</span>`).join('');
     } else { typeRow.innerHTML = ''; }
@@ -297,11 +445,11 @@ const statsObserver = new IntersectionObserver((entries) => {
         if (entry.isIntersecting) {
             const el = entry.target;
             const rawText = el.textContent.trim();
-            const prefix = rawText.startsWith('+') ? '+' : '';
+            const suffix = rawText.includes('+') ? '+' : '';
             const num = parseInt(rawText.replace(/[^0-9]/g, ''), 10);
 
             if (!isNaN(num)) {
-                el.dataset.prefix = prefix;
+                el.dataset.suffix = suffix;
                 animateCounter(el, num);
             }
             statsObserver.unobserve(el);
@@ -311,25 +459,10 @@ const statsObserver = new IntersectionObserver((entries) => {
 
 statNums.forEach(el => statsObserver.observe(el));
 
-// --- Loader Handling ---
-function hideLoader() {
-    const loader = document.getElementById('loader-wrapper');
-    if (loader && !loader.classList.contains('hidden')) {
-        loader.classList.add('hidden');
-    }
-}
-
-// Hide on load
-window.addEventListener('load', () => {
-    setTimeout(hideLoader, 800);
-});
-
-// Fallback: Hide after 3.5s anyway to prevent getting stuck
-setTimeout(hideLoader, 3500);
-
 // Initialize
 updateCartBadge();
 observeFadeElements();
+initSearch();
 console.log('أسر كريم — (Firebase version) initialized ✓');
 
 

@@ -1717,3 +1717,123 @@ button {
         width: 100%;
     }
 }
+/* --- Category Detail View --- */
+.category-hero {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 60px 4% 40px;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+    margin-top: 10px;
+    border-radius: 24px;
+    margin-inline: 4%;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-hero h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #1e293b;
+    margin-bottom: 15px;
+}
+
+.category-hero p {
+    font-size: 1.15rem;
+    color: #64748b;
+    max-width: 700px;
+    margin: 0 auto 25px;
+    line-height: 1.8;
+}
+
+.category-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    width: fit-content;
+    margin: 0 auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.sub-categories-section {
+    padding: 40px 5%;
+}
+
+.sub-categories-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.sub-categories-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 10px 5px 25px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.sub-cat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    min-width: 180px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    border: 1px solid #f1f5f9;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.sub-cat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    border-color: var(--primary);
+}
+
+.sub-cat-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.sub-cat-count {
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+/* Fix for stat numbers visibility */
+.stat-num {
+    direction: ltr;
+    display: inline-block;
+}
+
+.hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.hero-tag {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.hero-tag:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+}
