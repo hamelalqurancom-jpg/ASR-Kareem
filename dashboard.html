@@ -392,6 +392,18 @@
         const previewsContainer = document.getElementById('image-previews-container');
         const addMoreBtn = document.getElementById('add-more-images');
 
+        function bindRowListeners(row) {
+            row.querySelector('.p-image-url').addEventListener('input', updatePreviews);
+            row.querySelector('.p-image-file').addEventListener('change', updatePreviews);
+            const removeBtn = row.querySelector('.btn-remove-img');
+            if (removeBtn) {
+                removeBtn.onclick = () => {
+                    row.remove();
+                    updatePreviews();
+                };
+            }
+        }
+
         addMoreBtn.addEventListener('click', () => {
             const row = document.createElement('div');
             row.className = 'image-input-row';
@@ -404,14 +416,7 @@
                 <button type="button" class="btn-remove-img" style="color:#ef4444; font-size:1.5rem; border:none; background:none; cursor:pointer;">&times;</button>
             `;
             imageInputsContainer.appendChild(row);
-            row.querySelector('.btn-remove-img').onclick = () => {
-                row.remove();
-                updatePreviews();
-            };
-
-            // Re-bind listeners for new inputs
-            row.querySelector('.p-image-url').oninput = updatePreviews;
-            row.querySelector('.p-image-file').onchange = updatePreviews;
+            bindRowListeners(row);
         });
 
         function updatePreviews() {
@@ -427,10 +432,12 @@
 
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = (e) => { img.src = e.target.result; };
+                    reader.onload = (e) => {
+                        img.src = e.target.result;
+                        preview.appendChild(img);
+                        previewsContainer.appendChild(preview);
+                    };
                     reader.readAsDataURL(file);
-                    preview.appendChild(img);
-                    previewsContainer.appendChild(preview);
                 } else if (url) {
                     img.src = url;
                     preview.appendChild(img);
@@ -439,21 +446,20 @@
             });
         }
 
-        // Apply initial listeners
-        document.querySelector('.p-image-url').oninput = updatePreviews;
-        document.querySelector('.p-image-file').onchange = updatePreviews;
+        // Apply initial listener
+        bindRowListeners(document.querySelector('.image-input-row'));
 
         async function uploadImages() {
             const urls = [];
             const rows = document.querySelectorAll('.image-input-row');
-            let uploaded = 0;
-            const total = [...rows].filter(r => r.querySelector('.p-image-file').files[0]).length;
+            const fileRows = [...rows].filter(r => r.querySelector('.p-image-file').files[0]);
 
-            if (total > 0) {
+            if (fileRows.length > 0) {
                 uploadStatus.style.display = 'block';
-                document.getElementById('upload-progress').textContent = `0/${total}`;
+                document.getElementById('upload-progress').textContent = `0/${fileRows.length}`;
             }
 
+            let uploadedCount = 0;
             for (const row of rows) {
                 const file = row.querySelector('.p-image-file').files[0];
                 const manualUrl = row.querySelector('.p-image-url').value;
@@ -463,14 +469,16 @@
                     formData.append('file', file);
                     formData.append('upload_preset', "asr-kareem");
 
-                    const res = await fetch(`https://api.cloudinary.com/v1_1/dwrhl6gjf/image/upload`, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    const data = await res.json();
-                    urls.push(data.secure_url);
-                    uploaded++;
-                    document.getElementById('upload-progress').textContent = `${uploaded}/${total}`;
+                    try {
+                        const res = await fetch(`https://api.cloudinary.com/v1_1/dwrhl6gjf/image/upload`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                        const data = await res.json();
+                        urls.push(data.secure_url);
+                        uploadedCount++;
+                        document.getElementById('upload-progress').textContent = `${uploadedCount}/${fileRows.length}`;
+                    } catch (e) { console.error("Upload failed", e); }
                 } else if (manualUrl) {
                     urls.push(manualUrl);
                 }
@@ -486,7 +494,7 @@
                 querySnapshot.forEach((doc) => {
                     const p = doc.data();
                     const id = doc.id;
-                    const mainImg = (p.images && p.images.length > 0) ? p.images[0] : p.image;
+                    const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || '');
                     const card = document.createElement('div');
                     card.className = 'product-card';
                     card.innerHTML = `
@@ -542,14 +550,12 @@
                 row.innerHTML = `
                     <div style="flex: 1;">
                         <input type="file" class="p-image-file" accept="image/*" style="width: 100%;">
-                        <input type="text" class="p-image-url" placeholder="أدخل رابط الصورة" style="width: 100%; margin-top: 5px;" value="${url}">
+                        <input type="text" class="p-image-url" placeholder="أدخل رابط الصورة" style="width: 100%; margin-top: 5px;" value="${url || ''}">
                     </div>
-                    <button type="button" class="btn-remove-img" style="color:#ef4444; font-size:1.5rem; border:none; background:none; cursor:pointer;">&times;</button>
+                    <button type="button" class="btn-remove-img" style="${idx === 0 ? 'display:none;' : ''} color:#ef4444; font-size:1.5rem; border:none; background:none; cursor:pointer;">&times;</button>
                 `;
                 imageInputsContainer.appendChild(row);
-                row.querySelector('.btn-remove-img').onclick = () => { row.remove(); updatePreviews(); };
-                row.querySelector('.p-image-url').oninput = updatePreviews;
-                row.querySelector('.p-image-file').onchange = updatePreviews;
+                bindRowListeners(row);
             });
             updatePreviews();
 
@@ -572,6 +578,8 @@
                     <button type="button" class="btn-remove-img" style="display:none; color:#ef4444; font-size:1.5rem; border:none; background:none;">&times;</button>
                 </div>
             `;
+            const firstRow = imageInputsContainer.querySelector('.image-input-row');
+            bindRowListeners(firstRow);
             updatePreviews();
             document.getElementById('edit-controls').style.display = 'none';
             document.getElementById('submit-btn').style.display = 'block';

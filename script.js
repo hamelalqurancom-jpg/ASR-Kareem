@@ -7,6 +7,18 @@ import { db, collection, addDoc, onSnapshot, query } from './firebase-config.js'
 let userProducts = [];
 let cart = JSON.parse(localStorage.getItem('aser_cart')) || [];
 
+// --- Firebase Real-time Products ---
+function loadProductsFromFirebase() {
+    onSnapshot(query(collection(db, "products")), (snapshot) => {
+        userProducts = [];
+        snapshot.forEach(doc => {
+            userProducts.push({ id: doc.id, ...doc.data() });
+        });
+        renderProducts(window.currentCategory || 'الكل');
+    });
+}
+window.loadProductsFromFirebase = loadProductsFromFirebase;
+
 // --- Cart Logic ---
 function updateCartUI() {
     const badge = document.getElementById('cart-count');
@@ -487,7 +499,7 @@ function renderProducts(categoryFilter = 'الكل') {
     filtered.forEach(p => {
         const productHTML = `
             <div class="product-card">
-                <div class="product-img-wrap">
+                <div class="product-img-wrap" onclick="openProductModal(${JSON.stringify(p).replace(/"/g, '&quot;')})">
                     <img src="${p.image}" alt="${p.name}" loading="lazy">
                     ${p.discount ? `<span class="discount-badge">${p.discount}</span>` : ''}
                     ${p.status === 'limited' ? `<span class="limited-badge">الكمية محدودة</span>` : ''}
@@ -501,7 +513,7 @@ function renderProducts(categoryFilter = 'الكل') {
                         <span class="cur-price">جنيه ${p.price}</span>
                     </div>
                 </div>
-                <button class="plus-btn" onclick="addToCart(this)" aria-label="أضف للسلة">+</button>
+                <button class="plus-btn" onclick="addToCart(${JSON.stringify(p).replace(/"/g, '&quot;')})" aria-label="أضف للسلة">+</button>
             </div>
         `;
         grid.insertAdjacentHTML('beforeend', productHTML);
@@ -753,9 +765,10 @@ statNums.forEach(el => statsObserver.observe(el));
 // Initialize
 updateCartUI();
 loadHeroTags();
+loadProductsFromFirebase(); // Start loading data
 observeFadeElements();
 initSearch();
-console.log('أسر كريم — (Search & Tags) initialized ✓');
+console.log('أسر كريم — (Firebase Sync) initialized ✓');
 
 
 

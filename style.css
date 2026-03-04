@@ -22,6 +22,82 @@
     --font: 'Cairo', sans-serif;
     --text: #374151;
     --text-muted: #6b7280;
+    --green: #16a34a;
+    /* Added green variable */
+}
+
+/* ... existing styles ... */
+
+.loader-logo-circle {
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    /* White background for logo circle */
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    /* Circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 10px 30px rgba(197, 160, 89, 0.2);
+    animation: pulseLogo 2s infinite ease-in-out;
+}
+
+.loader-logo-circle img {
+    width: 60px;
+    height: auto;
+}
+
+.loader-text {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--dark-brown);
+    margin: 0;
+    display: flex;
+    gap: 8px;
+    direction: rtl;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards 0.5s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.loader-bar {
+    width: 200px;
+    height: 4px;
+    background: #f1f5f9;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.loader-progress {
+    width: 0%;
+    height: 100%;
+    background: var(--gold);
+    animation: progressLoad 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes progressLoad {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 100%;
+    }
 }
 
 /* ---- Reset ---- */
