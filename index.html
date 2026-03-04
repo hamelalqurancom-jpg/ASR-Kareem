@@ -34,10 +34,10 @@
         <div class="loader-content">
             <div class="loader-logo-wrap">
                 <div class="loader-logo-circle">
-                    <img src="Screenshot 2026-03-01 232204.png" alt="آسر كريم">
+                    <img src="logo.png" alt="آسر كريم">
                 </div>
             </div>
-            <h1 class="loader-text">آسر كريم</h1>
+            <h1 class="loader-text"><span>آسر</span> <span>كريم</span></h1>
             <div class="loader-bar">
                 <div class="loader-progress"></div>
             </div>
@@ -79,7 +79,7 @@
                 </button>
             </div>
             <a href="#" class="logo">
-                <img src="Screenshot 2026-03-01 232204.png" alt="آسر كريم" style="height: 48px; object-fit: contain;">
+                <img src="logo.png" alt="آسر كريم" style="height: 52px; object-fit: contain;">
             </a>
         </div>
 
@@ -90,6 +90,8 @@
             <a href="#products" onclick="toggleMenu()">المنتجات</a>
             <a href="#about" onclick="toggleMenu()">من نحن</a>
             <a href="#brands" onclick="toggleMenu()">الماركات</a>
+            <a href="shipping.html" onclick="toggleMenu()">معلومات الشحن</a>
+            <a href="terms.html" onclick="toggleMenu()">الشروط والأحكام</a>
             <a href="#contact" onclick="toggleMenu()">تواصل معنا</a>
         </nav>
 
@@ -107,7 +109,7 @@
             <div class="hero-content">
                 <div class="hero-rating">
                     <span class="rating-stars">★★★★★</span>
-                    <span class="rating-text">4.8 (8,363 تقييم)</span>
+                    <span class="rating-text">5.0 (5,000+)</span>
                 </div>
                 <h1 class="hero-title">آسر كريم للسيراميك<br>والبورسلين والأدوات الصحية</h1>
                 <p class="hero-subtitle">شقتك الجديدة تستاهل الأفضل — احنا بنوفرهولك بسعر عادل</p>
@@ -123,14 +125,8 @@
                         autocomplete="off">
                 </div>
 
-                <div class="hero-tags">
-                    <a href="#" class="hero-tag" onclick="handleHeroTag('جروهي')">جروهي</a>
-                    <a href="#" class="hero-tag" onclick="handleHeroTag('ايديال ستاندرد')">ايديال ستاندرد</a>
-                    <a href="#" class="hero-tag" onclick="handleHeroTag('وحدات حمام')">وحدات حمام</a>
-                    <a href="#" class="hero-tag" onclick="handleHeroTag('سيراميكا كليوباترا')">سيراميكا كليوباترا</a>
-                    <a href="#" class="hero-tag" onclick="handleHeroTag('بانيوهات')">بانيوهات</a>
-                    <a href="#" class="hero-tag" onclick="handleHeroTag('اكسسوارات')">اكسسوارات</a>
-                    <a href="#" class="hero-tag" onclick="handleHeroTag('مرحاض معلق')">مرحاض معلق</a>
+                <div class="hero-tags" id="hero-tags-container">
+                    <!-- Dynamic tags loaded via JS -->
                 </div>
 
                 <div class="hero-delivery">
@@ -159,7 +155,7 @@
                         <span>ضمان المصنع الكامل</span>
                     </div>
                 </div>
-                <div class="feature-card">
+                <a href="shipping.html" class="feature-card">
                     <div class="feat-icon-wrap">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
                             <rect x="1" y="3" width="15" height="13" />
@@ -170,9 +166,9 @@
                     </div>
                     <div class="feat-text">
                         <strong>شحن مجاني</strong>
-                        <span>للطلبات أكثر من 10,000 جنيه</span>
+                        <span>داخل القاهرة (تطبق الشروط)</span>
                     </div>
-                </div>
+                </a>
                 <div class="feature-card">
                     <div class="feat-icon-wrap">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
@@ -192,10 +188,10 @@
                             <circle cx="12" cy="10" r="3" />
                         </svg>
                     </div>
-                    <div class="feat-text">
+                    <a href="https://maps.app.goo.gl/NfkrzL563XjGtdUn6" target="_blank" class="feat-text">
                         <strong>معرضنا في مدينة العبور</strong>
                         <span>العبور، الحي الثاني، سنتر الميسرة</span>
-                    </div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -555,10 +551,10 @@
                         <div class="stat-num">2015</div>
                         <div class="stat-label">سنة التأسيس</div>
                     </div>
-                    <div class="stat-item">
+                    <a href="https://maps.app.goo.gl/NfkrzL563XjGtdUn6" target="_blank" class="stat-item">
                         <div class="stat-num">مدينة العبور</div>
                         <div class="stat-label">الحي الثاني، سنتر الميسرة</div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -678,7 +674,7 @@
         <section class="services-section">
             <div class="services-list">
 
-                <div class="service-card">
+                <a href="shipping.html" class="service-card">
                     <div class="service-icon-box">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                             <rect x="1" y="3" width="15" height="13" />
@@ -689,11 +685,11 @@
                     </div>
                     <div class="service-text">
                         <strong>شحن مجاني</strong>
-                        <span>للطلبات أكثر من 10,000 جنيه</span>
+                        <span>داخل القاهرة (تطبق الشروط)</span>
                     </div>
-                </div>
+                </a>
 
-                <div class="service-card">
+                <a href="https://maps.app.goo.gl/NfkrzL563XjGtdUn6" target="_blank" class="service-card">
                     <div class="service-icon-box">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                             <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
@@ -704,7 +700,7 @@
                         <strong>معرضنا في مدينة العبور</strong>
                         <span>العبور، الحي الثاني، سنتر الميسرة</span>
                     </div>
-                </div>
+                </a>
 
                 <div class="service-card">
                     <div class="service-icon-box">
@@ -748,7 +744,48 @@
                     </svg>
                     اطلب عرض سعر الآن
                 </a>
-                <a href="#about" class="visit-btn">زيارة أقرب معرض</a>
+                <a href="https://maps.app.goo.gl/NfkrzL563XjGtdUn6" target="_blank" class="visit-btn">زيارة أقرب
+                    معرض</a>
+            </div>
+        </section>
+
+        <!-- ===== PAYMENT METHODS SECTION ===== -->
+        <section class="payment-methods-section" id="payment-methods">
+            <h2 class="section-title">طرق الدفع المتاحة</h2>
+            <div class="payment-grid">
+                <div class="payment-card" onclick="showPaymentInfo('كاش')">
+                    <img src="https://img.icons8.com/color/96/money-bag-euro.png" alt="كاش">
+                    <span>كاش</span>
+                </div>
+                <div class="payment-card" onclick="showPaymentInfo('فيزا')">
+                    <img src="https://img.icons8.com/color/96/visa.png" alt="فيزا">
+                    <span>فيزا</span>
+                </div>
+                <div class="payment-card" onclick="showPaymentInfo('انستا باي')">
+                    <img src="https://img.icons8.com/color/96/bank-cards.png" alt="انستا باي">
+                    <span>انستا باي</span>
+                </div>
+                <div class="payment-card" onclick="showPaymentInfo('فودافون كاش')">
+                    <img src="https://img.icons8.com/color/96/vodafone.png" alt="فودافون كاش">
+                    <span>فودافون كاش</span>
+                </div>
+                <div class="payment-card" onclick="showPaymentInfo('فاليو')">
+                    <img src="https://img.icons8.com/external-flat-icons-inmotus-design/67/external-V-alphabet-flat-icons-inmotus-design.png"
+                        alt="فاليو">
+                    <span>فاليو</span>
+                </div>
+                <div class="payment-card" onclick="showPaymentInfo('كونتكت')">
+                    <img src="https://img.icons8.com/color/96/contactless-payment.png" alt="كونتكت">
+                    <span>كونتكت</span>
+                </div>
+                <div class="payment-card" onclick="showPaymentInfo('امان')">
+                    <img src="https://img.icons8.com/color/96/shield.png" alt="امان">
+                    <span>امان</span>
+                </div>
+                <div class="payment-card" onclick="showPaymentInfo('سهوله')">
+                    <img src="https://img.icons8.com/color/96/lightning-bolt--v1.png" alt="سهوله">
+                    <span>سهوله</span>
+                </div>
             </div>
         </section>
 
@@ -758,8 +795,8 @@
     <footer class="site-footer">
         <div class="footer-top">
             <div class="footer-logo">
-                <img src="Screenshot 2026-03-01 232204.png" alt="آسر كريم"
-                    style="height: 60px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));">
+                <img src="logo.png" alt="آسر كريم"
+                    style="height: 70px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));">
             </div>
             <p class="footer-tagline">وكيل وموزع معتمد لكبرى شركات السيراميك والبورسلين والأدوات الصحية في مصر منذ 2015
             </p>
@@ -810,8 +847,8 @@
                 <ul>
                     <li><a href="#">طلباتي</a></li>
                     <li><a href="#">طرق الدفع</a></li>
-                    <li><a href="#">معلومات الشحن</a></li>
-                    <li><a href="#">الشروط والأحكام</a></li>
+                    <li><a href="shipping.html">معلومات الشحن</a></li>
+                    <li><a href="terms.html">الشروط والأحكام</a></li>
                     <li><a href="https://wa.me/201000539427" target="_blank">الدعم عبر واتساب</a></li>
                 </ul>
             </div>
@@ -846,7 +883,8 @@
                                 <circle cx="12" cy="10" r="3" />
                             </svg>
                         </span>
-                        <span>العبور، الحي الثاني، سنتر الميسرة</span>
+                        <a href="https://maps.app.goo.gl/NfkrzL563XjGtdUn6" target="_blank">العبور، الحي الثاني، سنتر
+                            الميسرة</a>
                     </li>
                 </ul>
             </div>
@@ -905,6 +943,159 @@
     <!-- Cart Toast -->
     <div class="cart-toast" id="cart-toast">✓ تمت الإضافة للسلة</div>
 
+    <!-- Cart Drawer -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h3>سلة المشتريات</h3>
+            <button class="close-cart" onclick="toggleCart()">✕</button>
+        </div>
+        <div class="cart-items" id="cart-items-container">
+            <!-- Items injected here -->
+            <div class="empty-cart-msg">السلة فارغة حالياً</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>الإجمالي:</span>
+                <span id="cart-total-amount">0 جنيه</span>
+            </div>
+            <button class="checkout-btn" onclick="checkoutWhatsApp()">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+                اطلب الآن عبر واتساب
+            </button>
+        </div>
+    </div>
+
+    <!-- Payment info Modal -->
+    <div class="payment-overlay cart-overlay" onclick="closePaymentModal()" id="payment-overlay"></div>
+    <div class="payment-number-modal" id="payment-modal">
+        <h3 id="payment-method-title">عبر فودافون كاش</h3>
+        <p>الرجاء تحويل المبلغ على الرقم التالي:</p>
+        <div class="number-display" id="payment-number">01000539888</div>
+        <p style="font-size: 0.8rem; color: #666;">بعد التحويل، يرجى إرسال لقطة شاشة للعملية عبر واتساب.</p>
+        <button class="btn-submit" onclick="closePaymentModal()" style="width: 100%; margin-top: 15px;">شكراً</button>
+    </div>
+
+    <!-- Product Details Modal (Gallery) -->
+    <div class="payment-overlay cart-overlay" id="product-modal-overlay" onclick="closeProductModal()"></div>
+    <div class="product-details-modal" id="product-modal">
+        <button class="close-modal" onclick="closeProductModal()">&times;</button>
+        <div class="product-modal-content">
+            <div class="product-modal-gallery">
+                <div class="main-img-container">
+                    <img id="modal-main-img" src="" alt="Product Image">
+                </div>
+                <div class="thumbs-container" id="modal-thumbs">
+                    <!-- Thumbnails will be injected here -->
+                </div>
+            </div>
+            <div class="product-modal-info">
+                <span class="modal-type" id="modal-type"></span>
+                <h2 id="modal-name"></h2>
+                <div class="modal-price-row">
+                    <span class="modal-old-price" id="modal-old-price"></span>
+                    <span class="modal-cur-price" id="modal-cur-price"></span>
+                </div>
+                <div class="modal-specs">
+                    <div class="spec-item" id="spec-brand-box">
+                        <strong>الماركة:</strong> <span id="modal-brand"></span>
+                    </div>
+                    <div class="spec-item" id="spec-grade-box">
+                        <strong>الفرز:</strong> <span id="modal-grade"></span>
+                    </div>
+                    <div class="spec-item" id="spec-size-box">
+                        <strong>المقاس:</strong> <span id="modal-size"></span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-add-btn" id="modal-add-btn">أضف إلى السلة</button>
+                    <a href="#" class="modal-wa-btn" id="modal-wa-link" target="_blank">طلب عبر واتساب</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h3>تأكيد الطلب</h3>
+    <form id="checkout-form" onsubmit="confirmOrder(event)">
+        <div class="form-group">
+            <label>الاسم بالكامل</label>
+            <input type="text" id="cust-name" placeholder="أدخل اسمك بالكامل" required>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>المحافظة</label>
+                <select id="cust-gov" required>
+                    <option value="">اختر المحافظة</option>
+                    <option value="القاهرة">القاهرة</option>
+                    <option value="الجيزة">الجيزة</option>
+                    <option value="الإسكندرية">الإسكندرية</option>
+                    <option value="القليوبية">القليوبية</option>
+                    <option value="الدقهلية">الدقهلية</option>
+                    <option value="الشرقية">الشرقية</option>
+                    <option value="المنوفية">المنوفية</option>
+                    <option value="الغربية">الغربية</option>
+                    <option value="البحيرة">البحيرة</option>
+                    <option value="كفر الشيخ">كفر الشيخ</option>
+                    <option value="دمياط">دمياط</option>
+                    <option value="بورسعيد">بورسعيد</option>
+                    <option value="الإسماعيلية">الإسماعيلية</option>
+                    <option value="السويس">السويس</option>
+                    <option value="الفيوم">الفيوم</option>
+                    <option value="بني سويف">بني سويف</option>
+                    <option value="المنيا">المنيا</option>
+                    <option value="أسيوط">أسيوط</option>
+                    <option value="سوهاج">سوهاج</option>
+                    <option value="قنا">قنا</option>
+                    <option value="الأقصر">الأقصر</option>
+                    <option value="أسوان">أسوان</option>
+                    <option value="البحر الأحمر">البحر الأحمر</option>
+                    <option value="الوادي الجديد">الوادي الجديد</option>
+                    <option value="مطروح">مطروح</option>
+                    <option value="شمال سيناء">شمال سيناء</option>
+                    <option value="جنوب سيناء">جنوب سيناء</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>المدينة</label>
+                <input type="text" id="cust-city" placeholder="اسم المدينة" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>العنوان بالتفصيل</label>
+            <textarea id="cust-address" placeholder="اسم الشارع، رقم العمارة، علامة مميزة..." required></textarea>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>رقم الهاتف الأول</label>
+                <input type="tel" id="cust-phone1" placeholder="01xxxxxxxxx" pattern="[0-9]{11}" required>
+            </div>
+            <div class="form-group">
+                <label>رقم الهاتف الثاني</label>
+                <input type="tel" id="cust-phone2" placeholder="رقم مختلف" pattern="[0-9]{11}" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>طريقة الدفع المفضلة</label>
+            <select id="cust-payment" required>
+                <option value="كاش">كاش عند الاستلام</option>
+                <option value="انستا باي">انستا باي</option>
+                <option value="فودافون كاش">فودافون كاش</option>
+                <option value="فاليو">فاليو</option>
+                <option value="كونتكت">كونتكت</option>
+                <option value="امان">أمان</option>
+                <option value="سهوله">سهولة</option>
+                <option value="فيزا">فيزا / كارت بنكي</option>
+            </select>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-cancel" onclick="closeCheckoutModal()">إلغاء</button>
+            <button type="submit" class="btn-confirm" id="confirm-order-btn">تأكيد وإرسال عبر واتساب</button>
+        </div>
+    </form>
+    </div>
+
     <script>
         // --- Loader Handling (Separate from Module for reliability) ---
         function hideLoader() {
@@ -913,10 +1104,10 @@
                 loader.classList.add('hidden');
             }
         }
-        // Force hide loader if site fails to load module or hits error
-        window.addEventListener('load', () => setTimeout(hideLoader, 1000));
+        // User requested 4 seconds loading duration
+        window.addEventListener('load', () => setTimeout(hideLoader, 4000));
         window.onerror = hideLoader;
-        setTimeout(hideLoader, 4000); // Absolute safety fallback
+        setTimeout(hideLoader, 6000); // Safety fallback
     </script>
     <script type="module" src="script.js"></script>
 </body>
