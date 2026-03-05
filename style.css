@@ -2083,8 +2083,8 @@ button {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(5px);
     z-index: 10000;
     opacity: 0;
     visibility: hidden;
@@ -2375,7 +2375,13 @@ button {
     max-width: 500px;
     text-align: right;
     max-height: 90vh;
+    padding: 30px;
+    background: #ffffff !important;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
     overflow-y: auto;
+    z-index: 10002;
+    border: 1px solid #eee;
 }
 
 .checkout-modal h3 {
@@ -2398,21 +2404,24 @@ button {
 }
 
 .form-group label {
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: #4b5563;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: #111;
+    margin-bottom: 5px;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-    padding: 12px;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 10px;
+    padding: 14px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 12px;
     font-family: var(--font);
-    font-size: 0.95rem;
+    font-size: 1rem;
+    color: #000;
     outline: none;
     transition: var(--transition);
+    background: #fdfdfd;
 }
 
 .form-group textarea {
