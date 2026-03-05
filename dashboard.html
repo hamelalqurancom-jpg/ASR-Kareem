@@ -7,7 +7,7 @@
     <title>لوحة التحكم - آسر كريم</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.3">
     <style>
         :root {
             --primary: #16a34a;
@@ -111,7 +111,7 @@
         label {
             font-weight: 800;
             font-size: 0.9rem;
-            color: #000;
+            color: #000 !important;
         }
 
         input,
@@ -200,8 +200,10 @@
         </div>
 
         <div class="dash-tabs">
-            <button class="tab-btn active" onclick="switchTab('products-section')">المنتجات</button>
-            <button class="tab-btn" onclick="switchTab('orders-section')">رسائل الصفحة</button>
+            <button class="tab-btn active" id="tab-products" onclick="switchTab('products-section')">المنتجات</button>
+            <button class="tab-btn" id="tab-orders" onclick="switchTab('orders-section')">رسائل الصفحة</button>
+            <button class="tab-btn" style="background:#f1f5f9; color:#64748b; margin-right:auto;"
+                onclick="location.reload()">تحديث الصفحة ↻</button>
         </div>
 
         <div id="products-section">
@@ -393,183 +395,196 @@
                     </div>
                 </div>
             </div>
+        </div> <!-- End products-section -->
 
-            <div id="orders-section" style="display: none;">
-                <h2 class="section-title">رسائل الصفحة - طلبات الشراء</h2>
-                <div id="orders-list">
-                    <p style="text-align: center; color: #666; padding: 40px;">جاري تحميل الرسائل...</p>
-                </div>
+        <div id="orders-section" style="display: none;">
+            <h2 class="section-title">رسائل الصفحة</h2>
+            <div id="orders-list">
+                <p style="text-align: center; color: #666; padding: 40px;">جاري تحميل الرسائل...</p>
             </div>
         </div>
+    </div> <!-- End dashboard-container -->
 
-        <script type="module">
-            import { db, collection, addDoc, onSnapshot, query, deleteDoc, doc, updateDoc } from './firebase-config.js';
+    <script type="module">
+        import { db, collection, addDoc, onSnapshot, query, deleteDoc, doc, updateDoc } from './firebase-config.js';
 
-            let editingProductId = null;
+        let editingProductId = null;
 
-            window.switchTab = (tabId) => {
-                document.getElementById('products-section').style.display = tabId === 'products-section' ? 'block' : 'none';
-                document.getElementById('orders-section').style.display = tabId === 'orders-section' ? 'block' : 'none';
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.classList.toggle('active', btn.getAttribute('onclick').includes(tabId));
-                });
+        window.switchTab = (tabId) => {
+            console.log("Switching to tab:", tabId);
+            const products = document.getElementById('products-section');
+            const orders = document.getElementById('orders-section');
+            const tabProducts = document.getElementById('tab-products');
+            const tabOrders = document.getElementById('tab-orders');
+
+            if (tabId === 'products-section') {
+                if (products) products.style.display = 'block';
+                if (orders) orders.style.display = 'none';
+                if (tabProducts) tabProducts.classList.add('active');
+                if (tabOrders) tabOrders.classList.remove('active');
+            } else {
+                if (products) products.style.display = 'none';
+                if (orders) orders.style.display = 'block';
+                if (tabProducts) tabProducts.classList.remove('active');
+                if (tabOrders) tabOrders.classList.add('active');
             }
+        }
 
-            // --- Tag Management ---
-            const tagForm = document.getElementById('tag-form');
-            const tagsList = document.getElementById('tags-list');
-            const tagLabelInput = document.getElementById('tag-label');
+        // --- Tag Management ---
+        const tagForm = document.getElementById('tag-form');
+        const tagsList = document.getElementById('tags-list');
+        const tagLabelInput = document.getElementById('tag-label');
 
-            function loadTags() {
-                onSnapshot(query(collection(db, "hero_tags")), (snapshot) => {
-                    tagsList.innerHTML = '';
-                    snapshot.forEach(doc => {
-                        const tag = doc.data();
-                        const id = doc.id;
-                        const tagEl = document.createElement('div');
-                        tagEl.style.cssText = 'background: #f1f5f9; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 8px;';
-                        tagEl.innerHTML = `
+        function loadTags() {
+            onSnapshot(query(collection(db, "hero_tags")), (snapshot) => {
+                tagsList.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const tag = doc.data();
+                    const id = doc.id;
+                    const tagEl = document.createElement('div');
+                    tagEl.style.cssText = 'background: #f1f5f9; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 8px;';
+                    tagEl.innerHTML = `
                         <span>${tag.label}</span>
                         <button onclick="deleteTag('${id}')" style="color: #ef4444; border: none; background: none; font-size: 1.1rem; cursor: pointer;">&times;</button>
                     `;
-                        tagsList.appendChild(tagEl);
-                    });
+                    tagsList.appendChild(tagEl);
                 });
-            }
-
-            tagForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const label = tagLabelInput.value.trim();
-                if (!label) return;
-                try {
-                    await addDoc(collection(db, "hero_tags"), { label, createdAt: new Date() });
-                    tagLabelInput.value = '';
-                } catch (err) { alert('خطأ في الإضافة'); }
             });
+        }
 
-            window.deleteTag = async (id) => {
-                if (confirm('حذف الكلمة؟')) {
-                    await deleteDoc(doc(db, "hero_tags", id));
-                }
-            };
+        tagForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const label = tagLabelInput.value.trim();
+            if (!label) return;
+            try {
+                await addDoc(collection(db, "hero_tags"), { label, createdAt: new Date() });
+                tagLabelInput.value = '';
+            } catch (err) { alert('خطأ في الإضافة'); }
+        });
 
-            // --- Product Management ---
-            const form = document.getElementById('product-form');
-            const productList = document.getElementById('dash-product-list');
-            const uploadStatus = document.getElementById('upload-status');
-            const submitBtn = document.getElementById('submit-btn');
-
-            // Show image preview logic
-            const imageInputsContainer = document.getElementById('image-inputs-container');
-            const previewsContainer = document.getElementById('image-previews-container');
-            const addMoreBtn = document.getElementById('add-more-images');
-
-            function bindRowListeners(row) {
-                row.querySelector('.p-image-url').addEventListener('input', updatePreviews);
-                row.querySelector('.p-image-file').addEventListener('change', updatePreviews);
-                const removeBtn = row.querySelector('.btn-remove-img');
-                if (removeBtn) {
-                    removeBtn.onclick = () => {
-                        row.remove();
-                        updatePreviews();
-                    };
-                }
+        window.deleteTag = async (id) => {
+            if (confirm('حذف الكلمة؟')) {
+                await deleteDoc(doc(db, "hero_tags", id));
             }
+        };
 
-            addMoreBtn.addEventListener('click', () => {
-                const row = document.createElement('div');
-                row.className = 'image-input-row';
-                row.style.cssText = 'display: flex; gap: 10px; align-items: start; margin-top: 10px;';
-                row.innerHTML = `
+        // --- Product Management ---
+        const form = document.getElementById('product-form');
+        const productList = document.getElementById('dash-product-list');
+        const uploadStatus = document.getElementById('upload-status');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // Show image preview logic
+        const imageInputsContainer = document.getElementById('image-inputs-container');
+        const previewsContainer = document.getElementById('image-previews-container');
+        const addMoreBtn = document.getElementById('add-more-images');
+
+        function bindRowListeners(row) {
+            row.querySelector('.p-image-url').addEventListener('input', updatePreviews);
+            row.querySelector('.p-image-file').addEventListener('change', updatePreviews);
+            const removeBtn = row.querySelector('.btn-remove-img');
+            if (removeBtn) {
+                removeBtn.onclick = () => {
+                    row.remove();
+                    updatePreviews();
+                };
+            }
+        }
+
+        addMoreBtn.addEventListener('click', () => {
+            const row = document.createElement('div');
+            row.className = 'image-input-row';
+            row.style.cssText = 'display: flex; gap: 10px; align-items: start; margin-top: 10px;';
+            row.innerHTML = `
                 <div style="flex: 1;">
                     <input type="file" class="p-image-file" accept="image/*" style="width: 100%;">
                     <input type="text" class="p-image-url" placeholder="أدخل رابط الصورة" style="width: 100%; margin-top: 5px;">
                 </div>
                 <button type="button" class="btn-remove-img" style="color:#ef4444; font-size:1.5rem; border:none; background:none; cursor:pointer;">&times;</button>
             `;
-                imageInputsContainer.appendChild(row);
-                bindRowListeners(row);
-            });
+            imageInputsContainer.appendChild(row);
+            bindRowListeners(row);
+        });
 
-            function updatePreviews() {
-                previewsContainer.innerHTML = '';
-                document.querySelectorAll('.image-input-row').forEach(row => {
-                    const url = row.querySelector('.p-image-url').value;
-                    const file = row.querySelector('.p-image-file').files[0];
+        function updatePreviews() {
+            previewsContainer.innerHTML = '';
+            document.querySelectorAll('.image-input-row').forEach(row => {
+                const url = row.querySelector('.p-image-url').value;
+                const file = row.querySelector('.p-image-file').files[0];
 
-                    const preview = document.createElement('div');
-                    preview.style.cssText = 'width: 80px; height: 80px; border-radius: 8px; border: 1px solid #ddd; overflow: hidden; background: #eee;';
-                    const img = document.createElement('img');
-                    img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+                const preview = document.createElement('div');
+                preview.style.cssText = 'width: 80px; height: 80px; border-radius: 8px; border: 1px solid #ddd; overflow: hidden; background: #eee;';
+                const img = document.createElement('img');
+                img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
 
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            img.src = e.target.result;
-                            preview.appendChild(img);
-                            previewsContainer.appendChild(preview);
-                        };
-                        reader.readAsDataURL(file);
-                    } else if (url) {
-                        img.src = url;
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        img.src = e.target.result;
                         preview.appendChild(img);
                         previewsContainer.appendChild(preview);
-                    }
-                });
+                    };
+                    reader.readAsDataURL(file);
+                } else if (url) {
+                    img.src = url;
+                    preview.appendChild(img);
+                    previewsContainer.appendChild(preview);
+                }
+            });
+        }
+
+        // Apply initial listener
+        bindRowListeners(document.querySelector('.image-input-row'));
+
+        async function uploadImages() {
+            const urls = [];
+            const rows = document.querySelectorAll('.image-input-row');
+            const fileRows = [...rows].filter(r => r.querySelector('.p-image-file').files[0]);
+
+            if (fileRows.length > 0) {
+                uploadStatus.style.display = 'block';
+                document.getElementById('upload-progress').textContent = `0/${fileRows.length}`;
             }
 
-            // Apply initial listener
-            bindRowListeners(document.querySelector('.image-input-row'));
+            let uploadedCount = 0;
+            for (const row of rows) {
+                const file = row.querySelector('.p-image-file').files[0];
+                const manualUrl = row.querySelector('.p-image-url').value;
 
-            async function uploadImages() {
-                const urls = [];
-                const rows = document.querySelectorAll('.image-input-row');
-                const fileRows = [...rows].filter(r => r.querySelector('.p-image-file').files[0]);
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('upload_preset', "asr-kareem");
 
-                if (fileRows.length > 0) {
-                    uploadStatus.style.display = 'block';
-                    document.getElementById('upload-progress').textContent = `0/${fileRows.length}`;
+                    try {
+                        const res = await fetch(`https://api.cloudinary.com/v1_1/dwrhl6gjf/image/upload`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                        const data = await res.json();
+                        urls.push(data.secure_url);
+                        uploadedCount++;
+                        document.getElementById('upload-progress').textContent = `${uploadedCount}/${fileRows.length}`;
+                    } catch (e) { console.error("Upload failed", e); }
+                } else if (manualUrl) {
+                    urls.push(manualUrl);
                 }
-
-                let uploadedCount = 0;
-                for (const row of rows) {
-                    const file = row.querySelector('.p-image-file').files[0];
-                    const manualUrl = row.querySelector('.p-image-url').value;
-
-                    if (file) {
-                        const formData = new FormData();
-                        formData.append('file', file);
-                        formData.append('upload_preset', "asr-kareem");
-
-                        try {
-                            const res = await fetch(`https://api.cloudinary.com/v1_1/dwrhl6gjf/image/upload`, {
-                                method: 'POST',
-                                body: formData
-                            });
-                            const data = await res.json();
-                            urls.push(data.secure_url);
-                            uploadedCount++;
-                            document.getElementById('upload-progress').textContent = `${uploadedCount}/${fileRows.length}`;
-                        } catch (e) { console.error("Upload failed", e); }
-                    } else if (manualUrl) {
-                        urls.push(manualUrl);
-                    }
-                }
-                return urls;
             }
+            return urls;
+        }
 
-            // Load existing products with real-time listener
-            function loadProducts() {
-                const q = query(collection(db, "products"));
-                onSnapshot(q, (querySnapshot) => {
-                    productList.innerHTML = '';
-                    querySnapshot.forEach((doc) => {
-                        const p = doc.data();
-                        const id = doc.id;
-                        const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || '');
-                        const card = document.createElement('div');
-                        card.className = 'product-card';
-                        card.innerHTML = `
+        // Load existing products with real-time listener
+        function loadProducts() {
+            const q = query(collection(db, "products"));
+            onSnapshot(q, (querySnapshot) => {
+                productList.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const p = doc.data();
+                    const id = doc.id;
+                    const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || '');
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    card.innerHTML = `
                         <div class="product-img-wrap">
                             <img src="${mainImg}" alt="${p.name}">
                             ${p.discount ? `<span class="discount-badge">${p.discount}</span>` : ''}
@@ -590,58 +605,58 @@
                             </div>
                         </div>
                     `;
-                        productList.appendChild(card);
-                    });
+                    productList.appendChild(card);
                 });
-            }
+            });
+        }
 
-            window.editProduct = (id, pJson) => {
-                const p = JSON.parse(decodeURIComponent(pJson));
-                editingProductId = id;
+        window.editProduct = (id, pJson) => {
+            const p = JSON.parse(decodeURIComponent(pJson));
+            editingProductId = id;
 
-                // Fill form
-                document.getElementById('p-name').value = p.name || '';
-                document.getElementById('p-category').value = p.category || 'سيراميك';
-                document.getElementById('p-brand').value = p.brand || '';
-                document.getElementById('p-grade').value = p.grade || '';
-                document.getElementById('p-size').value = p.size || '';
-                document.getElementById('p-price').value = p.price || '';
-                document.getElementById('p-old-price').value = p.oldPrice || '';
-                document.getElementById('p-discount').value = p.discount || '';
-                document.getElementById('p-status').value = p.status || 'none';
-                document.getElementById('p-type').value = p.type || '';
-                document.getElementById('p-price-tag').value = p.priceTag || '';
+            // Fill form
+            document.getElementById('p-name').value = p.name || '';
+            document.getElementById('p-category').value = p.category || 'سيراميك';
+            document.getElementById('p-brand').value = p.brand || '';
+            document.getElementById('p-grade').value = p.grade || '';
+            document.getElementById('p-size').value = p.size || '';
+            document.getElementById('p-price').value = p.price || '';
+            document.getElementById('p-old-price').value = p.oldPrice || '';
+            document.getElementById('p-discount').value = p.discount || '';
+            document.getElementById('p-status').value = p.status || 'none';
+            document.getElementById('p-type').value = p.type || '';
+            document.getElementById('p-price-tag').value = p.priceTag || '';
 
-                // Handle image inputs reset and fill
-                imageInputsContainer.innerHTML = '';
-                const images = p.images || [p.image];
-                images.forEach((url, idx) => {
-                    const row = document.createElement('div');
-                    row.className = 'image-input-row';
-                    row.style.cssText = 'display: flex; gap: 10px; align-items: start; margin-top: 10px;';
-                    row.innerHTML = `
+            // Handle image inputs reset and fill
+            imageInputsContainer.innerHTML = '';
+            const images = p.images || [p.image];
+            images.forEach((url, idx) => {
+                const row = document.createElement('div');
+                row.className = 'image-input-row';
+                row.style.cssText = 'display: flex; gap: 10px; align-items: start; margin-top: 10px;';
+                row.innerHTML = `
                     <div style="flex: 1;">
                         <input type="file" class="p-image-file" accept="image/*" style="width: 100%;">
                         <input type="text" class="p-image-url" placeholder="أدخل رابط الصورة" style="width: 100%; margin-top: 5px;" value="${url || ''}">
                     </div>
                     <button type="button" class="btn-remove-img" style="${idx === 0 ? 'display:none;' : ''} color:#ef4444; font-size:1.5rem; border:none; background:none; cursor:pointer;">&times;</button>
                 `;
-                    imageInputsContainer.appendChild(row);
-                    bindRowListeners(row);
-                });
-                updatePreviews();
+                imageInputsContainer.appendChild(row);
+                bindRowListeners(row);
+            });
+            updatePreviews();
 
-                // Toggle UI
-                document.getElementById('edit-controls').style.display = 'flex';
-                document.getElementById('submit-btn').style.display = 'none';
-                document.querySelector('.dash-header h1').textContent = 'تعديل المنتج';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            };
+            // Toggle UI
+            document.getElementById('edit-controls').style.display = 'flex';
+            document.getElementById('submit-btn').style.display = 'none';
+            document.querySelector('.dash-header h1').textContent = 'تعديل المنتج';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
 
-            document.getElementById('cancel-edit-btn').onclick = () => {
-                editingProductId = null;
-                form.reset();
-                imageInputsContainer.innerHTML = `
+        document.getElementById('cancel-edit-btn').onclick = () => {
+            editingProductId = null;
+            form.reset();
+            imageInputsContainer.innerHTML = `
                 <div class="image-input-row" style="display: flex; gap: 10px; align-items: start;">
                     <div style="flex: 1;">
                         <input type="file" class="p-image-file" accept="image/*" style="width: 100%;">
@@ -650,100 +665,100 @@
                     <button type="button" class="btn-remove-img" style="display:none; color:#ef4444; font-size:1.5rem; border:none; background:none;">&times;</button>
                 </div>
             `;
-                const firstRow = imageInputsContainer.querySelector('.image-input-row');
-                bindRowListeners(firstRow);
-                updatePreviews();
-                document.getElementById('edit-controls').style.display = 'none';
-                document.getElementById('submit-btn').style.display = 'block';
-                document.querySelector('.dash-header h1').textContent = 'إضافة منتج جديد';
+            const firstRow = imageInputsContainer.querySelector('.image-input-row');
+            bindRowListeners(firstRow);
+            updatePreviews();
+            document.getElementById('edit-controls').style.display = 'none';
+            document.getElementById('submit-btn').style.display = 'block';
+            document.querySelector('.dash-header h1').textContent = 'إضافة منتج جديد';
 
-                // Re-bind listeners
-                document.querySelector('.p-image-url').oninput = updatePreviews;
-                document.querySelector('.p-image-file').onchange = updatePreviews;
-            };
+            // Re-bind listeners
+            document.querySelector('.p-image-url').oninput = updatePreviews;
+            document.querySelector('.p-image-file').onchange = updatePreviews;
+        };
 
-            window.deleteProduct = async (id) => {
-                if (confirm('هل أنت متأكد من حذف هذا المنتج؟')) {
-                    try {
-                        await deleteDoc(doc(db, "products", id));
-                    } catch (error) {
-                        console.error("Error deleting document: ", error);
-                        alert('حدث خطأ أثناء الحذف.');
-                    }
-                }
-            };
-
-            form.onsubmit = async (e) => {
-                e.preventDefault();
-                const btn = editingProductId ? document.getElementById('update-btn') : document.getElementById('submit-btn');
-                btn.disabled = true;
-
+        window.deleteProduct = async (id) => {
+            if (confirm('هل أنت متأكد من حذف هذا المنتج؟')) {
                 try {
-                    const urls = await uploadImages();
-                    if (urls.length === 0) {
-                        alert('يرجى اختيار صورة واحدة على الأقل');
-                        btn.disabled = false;
-                        uploadStatus.style.display = 'none';
-                        return;
-                    }
-
-                    const productData = {
-                        name: document.getElementById('p-name').value,
-                        category: document.getElementById('p-category').value,
-                        brand: document.getElementById('p-brand').value,
-                        grade: document.getElementById('p-grade').value,
-                        size: document.getElementById('p-size').value,
-                        price: document.getElementById('p-price').value,
-                        oldPrice: document.getElementById('p-old-price').value,
-                        discount: document.getElementById('p-discount').value,
-                        status: document.getElementById('p-status').value,
-                        type: document.getElementById('p-type').value,
-                        priceTag: document.getElementById('p-price-tag').value,
-                        images: urls,
-                        image: urls[0],
-                        updatedAt: new Date()
-                    };
-
-                    if (editingProductId) {
-                        await updateDoc(doc(db, "products", editingProductId), productData);
-                        alert('تم التحديث بنجاح!');
-                        document.getElementById('cancel-edit-btn').click();
-                    } else {
-                        productData.createdAt = new Date();
-                        await addDoc(collection(db, "products"), productData);
-                        alert('تمت إضافة المنتج بنجاح!');
-                        form.reset();
-                        document.getElementById('cancel-edit-btn').click(); // Reuse reset logic
-                    }
-
+                    await deleteDoc(doc(db, "products", id));
                 } catch (error) {
-                    console.error(error);
-                    alert('حدث خطأ');
-                    btn.disabled = false;
+                    console.error("Error deleting document: ", error);
+                    alert('حدث خطأ أثناء الحذف.');
                 }
-            };
+            }
+        };
 
-            loadTags();
-            loadProducts();
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = editingProductId ? document.getElementById('update-btn') : document.getElementById('submit-btn');
+            btn.disabled = true;
 
-            // --- Orders Management ---
-            function loadOrders() {
-                const list = document.getElementById('orders-list');
-                onSnapshot(query(collection(db, "orders")), (snapshot) => {
-                    list.innerHTML = '';
-                    if (snapshot.empty) {
-                        list.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">لا يوجد رسائل أو طلبات حالياً.</p>';
-                        return;
-                    }
+            try {
+                const urls = await uploadImages();
+                if (urls.length === 0) {
+                    alert('يرجى اختيار صورة واحدة على الأقل');
+                    btn.disabled = false;
+                    uploadStatus.style.display = 'none';
+                    return;
+                }
 
-                    snapshot.forEach(docSnap => {
-                        const order = docSnap.data();
-                        const orderId = docSnap.id;
-                        const date = order.createdAt ? new Date(order.createdAt.seconds * 1000).toLocaleString('ar-EG') : '-';
+                const productData = {
+                    name: document.getElementById('p-name').value,
+                    category: document.getElementById('p-category').value,
+                    brand: document.getElementById('p-brand').value,
+                    grade: document.getElementById('p-grade').value,
+                    size: document.getElementById('p-size').value,
+                    price: document.getElementById('p-price').value,
+                    oldPrice: document.getElementById('p-old-price').value,
+                    discount: document.getElementById('p-discount').value,
+                    status: document.getElementById('p-status').value,
+                    type: document.getElementById('p-type').value,
+                    priceTag: document.getElementById('p-price-tag').value,
+                    images: urls,
+                    image: urls[0],
+                    updatedAt: new Date()
+                };
 
-                        const card = document.createElement('div');
-                        card.className = 'order-card';
-                        card.innerHTML = `
+                if (editingProductId) {
+                    await updateDoc(doc(db, "products", editingProductId), productData);
+                    alert('تم التحديث بنجاح!');
+                    document.getElementById('cancel-edit-btn').click();
+                } else {
+                    productData.createdAt = new Date();
+                    await addDoc(collection(db, "products"), productData);
+                    alert('تمت إضافة المنتج بنجاح!');
+                    form.reset();
+                    document.getElementById('cancel-edit-btn').click(); // Reuse reset logic
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert('حدث خطأ');
+                btn.disabled = false;
+            }
+        };
+
+        loadTags();
+        loadProducts();
+
+        // --- Orders Management ---
+        function loadOrders() {
+            const list = document.getElementById('orders-list');
+            onSnapshot(query(collection(db, "orders")), (snapshot) => {
+                list.innerHTML = '';
+                if (snapshot.empty) {
+                    list.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">لا يوجد رسائل أو طلبات حالياً.</p>';
+                    return;
+                }
+
+                snapshot.forEach(docSnap => {
+                    const order = docSnap.data();
+                    const orderId = docSnap.id;
+                    const date = order.createdAt ? new Date(order.createdAt.seconds * 1000).toLocaleString('ar-EG') : '-';
+
+                    const card = document.createElement('div');
+                    card.className = 'order-card';
+                    card.innerHTML = `
                         <div class="order-header">
                             <div>
                                 <strong>العميل: ${order.customerName}</strong>
@@ -766,19 +781,19 @@
                             </ul>
                         </div>
                     `;
-                        list.appendChild(card);
-                    });
+                    list.appendChild(card);
                 });
+            });
+        }
+
+        window.deleteOrder = async (id) => {
+            if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+                await deleteDoc(doc(db, "orders", id));
             }
+        };
 
-            window.deleteOrder = async (id) => {
-                if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
-                    await deleteDoc(doc(db, "orders", id));
-                }
-            };
-
-            loadOrders();
-        </script>
+        loadOrders();
+    </script>
 </body>
 
 </html>
