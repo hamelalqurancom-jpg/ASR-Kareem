@@ -56,13 +56,17 @@
                             d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
                 </button>
-                <button class="icon-btn" id="cart-btn" aria-label="السلة" onclick="toggleCart()">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                        <line x1="3" y1="6" x2="21" y2="6" />
-                        <path d="M16 10a4 4 0 01-8 0" />
-                    </svg>
-                    <span class="cart-badge" id="cart-count">0</span>
+                <button class="cart-header-btn" id="cart-btn" aria-label="سلة المشتريات" onclick="toggleCart()">
+                    <div class="cart-icon-wrap">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <path d="M16 10a4 4 0 01-8 0" />
+                        </svg>
+                        <span class="cart-badge" id="cart-count">0</span>
+                    </div>
+                    <span class="cart-text">سلة المشتريات</span>
                 </button>
                 <button class="icon-btn" id="search-toggle" aria-label="بحث" onclick="toggleSearch()">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -86,6 +90,7 @@
         <!-- Mobile Menu -->
         <nav class="mobile-menu" id="mobile-menu">
             <a href="#hero" onclick="toggleMenu()">الرئيسية</a>
+            <a href="javascript:void(0)" onclick="toggleMenu(); toggleCart();">سلة المشتريات</a>
             <a href="#categories" onclick="toggleMenu()">الأقسام</a>
             <a href="#products" onclick="toggleMenu()">المنتجات</a>
             <a href="#about" onclick="toggleMenu()">من نحن</a>
@@ -702,7 +707,7 @@
                     </div>
                 </a>
 
-                <div class="service-card">
+                <a href="installments.html" class="service-card">
                     <div class="service-icon-box">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                             <rect x="1" y="4" width="22" height="16" rx="2" />
@@ -713,7 +718,7 @@
                         <strong>متاح التقسيط</strong>
                         <span>من خلال منصات التقسيط أو شركات التقسيط المعتمدة</span>
                     </div>
-                </div>
+                </a>
 
                 <div class="service-card">
                     <div class="service-icon-box">
@@ -941,10 +946,10 @@
     </a>
 
     <!-- Cart Toast -->
-    <div class="cart-toast" id="cart-toast">✓ تمت الإضافة للسلة</div>
+    <div class="cart-toast" id="cart-toast">تم إضافة المنتج لسلة المشتريات بنجاح</div>
 
     <!-- Cart Drawer -->
-    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
     <div class="cart-drawer" id="cart-drawer">
         <div class="cart-header">
             <h3>سلة المشتريات</h3>
@@ -1017,83 +1022,89 @@
             </div>
         </div>
     </div>
-    <h3>تأكيد الطلب</h3>
-    <form id="checkout-form" onsubmit="confirmOrder(event)">
-        <div class="form-group">
-            <label>الاسم بالكامل</label>
-            <input type="text" id="cust-name" placeholder="أدخل اسمك بالكامل" required>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label>المحافظة</label>
-                <select id="cust-gov" required>
-                    <option value="">اختر المحافظة</option>
-                    <option value="القاهرة">القاهرة</option>
-                    <option value="الجيزة">الجيزة</option>
-                    <option value="الإسكندرية">الإسكندرية</option>
-                    <option value="القليوبية">القليوبية</option>
-                    <option value="الدقهلية">الدقهلية</option>
-                    <option value="الشرقية">الشرقية</option>
-                    <option value="المنوفية">المنوفية</option>
-                    <option value="الغربية">الغربية</option>
-                    <option value="البحيرة">البحيرة</option>
-                    <option value="كفر الشيخ">كفر الشيخ</option>
-                    <option value="دمياط">دمياط</option>
-                    <option value="بورسعيد">بورسعيد</option>
-                    <option value="الإسماعيلية">الإسماعيلية</option>
-                    <option value="السويس">السويس</option>
-                    <option value="الفيوم">الفيوم</option>
-                    <option value="بني سويف">بني سويف</option>
-                    <option value="المنيا">المنيا</option>
-                    <option value="أسيوط">أسيوط</option>
-                    <option value="سوهاج">سوهاج</option>
-                    <option value="قنا">قنا</option>
-                    <option value="الأقصر">الأقصر</option>
-                    <option value="أسوان">أسوان</option>
-                    <option value="البحر الأحمر">البحر الأحمر</option>
-                    <option value="الوادي الجديد">الوادي الجديد</option>
-                    <option value="مطروح">مطروح</option>
-                    <option value="شمال سيناء">شمال سيناء</option>
-                    <option value="جنوب سيناء">جنوب سيناء</option>
+
+    <!-- Checkout Modal -->
+    <div class="payment-overlay cart-overlay" id="checkout-overlay" onclick="closeCheckoutModal()"></div>
+    <div class="product-details-modal checkout-modal" id="checkout-modal">
+        <button class="close-modal" onclick="closeCheckoutModal()">&times;</button>
+        <h3>تأكيد الطلب</h3>
+        <form id="checkout-form" onsubmit="confirmOrder(event)">
+            <div class="form-group" style="text-align: right;">
+                <label>الاسم بالكامل</label>
+                <input type="text" id="cust-name" placeholder="أدخل اسمك بالكامل" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="text-align: right;">
+                    <label>المحافظة</label>
+                    <select id="cust-gov" required>
+                        <option value="">اختر المحافظة</option>
+                        <option value="القاهرة">القاهرة</option>
+                        <option value="الجيزة">الجيزة</option>
+                        <option value="الإسكندرية">الإسكندرية</option>
+                        <option value="القليوبية">القليوبية</option>
+                        <option value="الدقهلية">الدقهلية</option>
+                        <option value="الشرقية">الشرقية</option>
+                        <option value="المنوفية">المنوفية</option>
+                        <option value="الغربية">الغربية</option>
+                        <option value="البحيرة">البحيرة</option>
+                        <option value="كفر الشيخ">كفر الشيخ</option>
+                        <option value="دمياط">دمياط</option>
+                        <option value="بورسعيد">بورسعيد</option>
+                        <option value="الإسماعيلية">الإسماعيلية</option>
+                        <option value="السويس">السويس</option>
+                        <option value="الفيوم">الفيوم</option>
+                        <option value="بني سويف">بني سويف</option>
+                        <option value="المنيا">المنيا</option>
+                        <option value="أسيوط">أسيوط</option>
+                        <option value="سوهاج">سوهاج</option>
+                        <option value="قنا">قنا</option>
+                        <option value="الأقصر">الأقصر</option>
+                        <option value="أسوان">أسوان</option>
+                        <option value="البحر الأحمر">البحر الأحمر</option>
+                        <option value="الوادي الجديد">الوادي الجديد</option>
+                        <option value="مطروح">مطروح</option>
+                        <option value="شمال سيناء">شمال سيناء</option>
+                        <option value="جنوب سيناء">جنوب سيناء</option>
+                    </select>
+                </div>
+                <div class="form-group" style="text-align: right;">
+                    <label>المدينة</label>
+                    <input type="text" id="cust-city" placeholder="اسم المدينة" required>
+                </div>
+            </div>
+            <div class="form-group" style="text-align: right;">
+                <label>العنوان بالتفصيل</label>
+                <textarea id="cust-address" placeholder="اسم الشارع، رقم العمارة، علامة مميزة..." required></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="text-align: right;">
+                    <label>رقم الهاتف الأول</label>
+                    <input type="tel" id="cust-phone1" placeholder="01xxxxxxxxx" pattern="[0-9]{11}" required>
+                </div>
+                <div class="form-group" style="text-align: right;">
+                    <label>رقم الهاتف الثاني</label>
+                    <input type="tel" id="cust-phone2" placeholder="رقم مختلف" pattern="[0-9]{11}" required>
+                </div>
+            </div>
+            <div class="form-group" style="text-align: right;">
+                <label>طريقة الدفع المفضلة</label>
+                <select id="cust-payment" required>
+                    <option value="كاش">كاش عند الاستلام</option>
+                    <option value="انستا باي">انستا باي</option>
+                    <option value="فودافون كاش">فودافون كاش</option>
+                    <option value="فاليو">فاليو</option>
+                    <option value="كونتكت">كونتكت</option>
+                    <option value="امان">أمان</option>
+                    <option value="سهوله">سهولة</option>
+                    <option value="فيزا">فيزا / كارت بنكي</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>المدينة</label>
-                <input type="text" id="cust-city" placeholder="اسم المدينة" required>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closeCheckoutModal()">إلغاء</button>
+                <button type="submit" class="btn-confirm" id="confirm-order-btn">تأكيد وإرسال عبر واتساب</button>
             </div>
-        </div>
-        <div class="form-group">
-            <label>العنوان بالتفصيل</label>
-            <textarea id="cust-address" placeholder="اسم الشارع، رقم العمارة، علامة مميزة..." required></textarea>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label>رقم الهاتف الأول</label>
-                <input type="tel" id="cust-phone1" placeholder="01xxxxxxxxx" pattern="[0-9]{11}" required>
-            </div>
-            <div class="form-group">
-                <label>رقم الهاتف الثاني</label>
-                <input type="tel" id="cust-phone2" placeholder="رقم مختلف" pattern="[0-9]{11}" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label>طريقة الدفع المفضلة</label>
-            <select id="cust-payment" required>
-                <option value="كاش">كاش عند الاستلام</option>
-                <option value="انستا باي">انستا باي</option>
-                <option value="فودافون كاش">فودافون كاش</option>
-                <option value="فاليو">فاليو</option>
-                <option value="كونتكت">كونتكت</option>
-                <option value="امان">أمان</option>
-                <option value="سهوله">سهولة</option>
-                <option value="فيزا">فيزا / كارت بنكي</option>
-            </select>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn-cancel" onclick="closeCheckoutModal()">إلغاء</button>
-            <button type="submit" class="btn-confirm" id="confirm-order-btn">تأكيد وإرسال عبر واتساب</button>
-        </div>
-    </form>
+        </form>
+    </div>
     </div>
 
     <script>
@@ -1109,7 +1120,7 @@
         window.onerror = hideLoader;
         setTimeout(hideLoader, 6000); // Safety fallback
     </script>
-    <script type="module" src="script.js"></script>
+    <script type="module" src="script.js?v=1.1"></script>
 </body>
 
 </html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شركاء التقسيط - آسر كريم للسيراميك</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding-top: 100px;
+        }
+
+        .partners-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #3d341f;
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .partner-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f1f5f9;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .partner-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(197, 160, 89, 0.12);
+        }
+
+        .partner-logo {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 25px;
+            filter: grayscale(1);
+            opacity: 0.7;
+            transition: all 0.4s ease;
+        }
+
+        .partner-card:hover .partner-logo {
+            filter: grayscale(0);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .partner-name {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .partner-desc {
+            font-size: 0.95rem;
+            color: #94a3b8;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            color: var(--gold);
+            font-weight: 800;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(8px);
+        }
+
+        .info-box {
+            background: #3d341f;
+            color: white;
+            padding: 40px;
+            border-radius: 24px;
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .info-box h2 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-weight: 900;
+        }
+
+        .info-box p {
+            opacity: 0.9;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .wa-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #16a34a;
+            color: white;
+            padding: 14px 30px;
+            border-radius: 50px;
+            margin-top: 25px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .wa-btn:hover {
+            background: #15803d;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header" style="background: #3d341f !important;">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="آسر كريم">
+            </a>
+        </div>
+    </header>
+
+    <main class="partners-container">
+        <a href="index.html" class="back-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+            </svg>
+            العودة للرئيسية
+        </a>
+
+        <div class="page-header">
+            <h1>أنظمة التقسيط المتاحة</h1>
+            <p>نوفر لك أفضل الحلول التمويلية لفرش منزلك بأرقى أنواع السيراميك والبورسلين بالتعاون مع كبرى شركات التقسيط
+                في مصر.</p>
+        </div>
+
+        <div class="partners-grid">
+            <div class="partner-card">
+                <img src="WhatsApp Image 2026-03-04 at 10.27.11 PM.jpeg" alt="Aman" class="partner-logo">
+                <div class="partner-name">شركة أمان</div>
+                <div class="partner-desc">تقسيط مريح وسريع مع خدمات أمان المتميزة.</div>
+            </div>
+
+            <div class="partner-card">
+                <img src="WhatsApp Image 2026-03-04 at 10.27.10 PM.jpeg" alt="Souhoula" class="partner-logo">
+                <div class="partner-name">سهولة</div>
+                <div class="partner-desc">أبسط إجراءات تقسيط في مصر وبأقل فائدة.</div>
+            </div>
+
+            <div class="partner-card">
+                <img src="https://img.external-flat-icons-inmotus-design/67/external-V-alphabet-flat-icons-inmotus-design.png"
+                    alt="Valu" class="partner-logo" style="filter: none; opacity: 1;">
+                <div class="partner-name">فاليو - Valu</div>
+                <div class="partner-desc">اشتري اللي نفسك فيه وقسط مع تطبيق فاليو.</div>
+            </div>
+
+            <div class="partner-card">
+                <img src="https://img.icons8.com/color/96/contactless-payment.png" alt="Contact" class="partner-logo"
+                    style="filter: none; opacity: 1;">
+                <div class="partner-name">كونتكت - Contact</div>
+                <div class="partner-desc">حلول تمويلية متكاملة لجميع احتياجاتك المنزلية.</div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h2>استفسر عن نظام التقسيط</h2>
+            <p>يمكنك التواصل معنا عبر واتساب لمعرفة الأوراق المطلوبة لكل شركة وأنسب نظام تقسيط يتوافق مع ميزانيتك.</p>
+            <a href="https://wa.me/201000539427" class="wa-btn" target="_blank">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path
+                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+                تواصل معنا للاستفسار
+            </a>
+        </div>
+    </main>
+
+    <footer class="site-footer" style="margin-top: 80px;">
+        <div class="footer-bottom">
+            <p>© 2026 آسر كريم للسيراميك والأدوات الصحية. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
