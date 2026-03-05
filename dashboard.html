@@ -479,19 +479,8 @@
         const previewsContainer = document.getElementById('image-previews-container');
         const addMoreBtn = document.getElementById('add-more-images');
 
-        function bindRowListeners(row) {
-            row.querySelector('.p-image-url').addEventListener('input', updatePreviews);
-            row.querySelector('.p-image-file').addEventListener('change', updatePreviews);
-            const removeBtn = row.querySelector('.btn-remove-img');
-            if (removeBtn) {
-                removeBtn.onclick = () => {
-                    row.remove();
-                    updatePreviews();
-                };
-            }
-        }
-
-        addMoreBtn.addEventListener('click', () => {
+        // --- Image Management ---
+        function addImageRow() {
             const row = document.createElement('div');
             row.className = 'image-input-row';
             row.style.cssText = 'display: flex; gap: 10px; align-items: start; margin-top: 10px;';
@@ -504,7 +493,36 @@
             `;
             imageInputsContainer.appendChild(row);
             bindRowListeners(row);
-        });
+        }
+
+        addMoreBtn.onclick = (e) => {
+            e.preventDefault();
+            addImageRow();
+        };
+
+        function bindRowListeners(row) {
+            const fileInput = row.querySelector('.p-image-file');
+            const urlInput = row.querySelector('.p-image-url');
+
+            if (fileInput) fileInput.addEventListener('change', updatePreviews);
+            if (urlInput) urlInput.addEventListener('input', updatePreviews);
+
+            const removeBtn = row.querySelector('.btn-remove-img');
+            if (removeBtn) {
+                removeBtn.onclick = () => {
+                    // Don't remove if it's the only row
+                    if (document.querySelectorAll('.image-input-row').length > 1) {
+                        row.remove();
+                        updatePreviews();
+                    } else {
+                        // Just clear it
+                        if (fileInput) fileInput.value = '';
+                        if (urlInput) urlInput.value = '';
+                        updatePreviews();
+                    }
+                };
+            }
+        }
 
         function updatePreviews() {
             previewsContainer.innerHTML = '';
@@ -744,13 +762,17 @@
                     form.reset();
                     // Clear previews
                     previewsContainer.innerHTML = '';
-                    // Reset to one row
-                    imageInputsContainer.innerHTML = `<div class="image-input-row" style="display: flex; gap: 10px; align-items: start;">
-                        <div style="flex: 1;">
-                            <input type="text" class="p-image-url" placeholder="رابط الصورة (Manual URL)" style="width: 100%;">
-                            <input type="file" class="p-image-file" accept="image/*" style="width: 100%; margin-top: 5px;">
-                        </div>
-                    </div>`;
+                    // Reset to one row with binding
+                    imageInputsContainer.innerHTML = `
+                        <div class="image-input-row" style="display: flex; gap: 10px; align-items: start;">
+                            <div style="flex: 1;">
+                                <input type="file" class="p-image-file" accept="image/*" style="width: 100%;">
+                                <input type="text" class="p-image-url" placeholder="أدخل رابط الصورة"
+                                    style="width: 100%; margin-top: 5px;">
+                            </div>
+                            <button type="button" class="btn-remove-img"
+                                style="color:#ef4444; font-size:1.5rem; border:none; background:none; cursor:pointer;">&times;</button>
+                        </div>`;
                     bindRowListeners(imageInputsContainer.querySelector('.image-input-row'));
                 }
 
