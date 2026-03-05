@@ -575,38 +575,40 @@
 
         // Load existing products with real-time listener
         function loadProducts() {
+            console.log("Starting loadProducts real-time listener...");
             const q = query(collection(db, "products"));
             onSnapshot(q, (querySnapshot) => {
+                console.log("New products snapshot received. Size:", querySnapshot.size);
                 productList.innerHTML = '';
-                querySnapshot.forEach((doc) => {
-                    const p = doc.data();
-                    const id = doc.id;
+                if (querySnapshot.empty) {
+                    productList.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #666; padding: 20px;">لا توجد منتجات عارضة حالياً.</p>';
+                }
+                querySnapshot.forEach((docSnap) => {
+                    const p = docSnap.data();
+                    const id = docSnap.id;
                     const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || '');
                     const card = document.createElement('div');
                     card.className = 'product-card';
                     card.innerHTML = `
                         <div class="product-img-wrap">
                             <img src="${mainImg}" alt="${p.name}">
-                            ${p.discount ? `<span class="discount-badge">${p.discount}</span>` : ''}
-                            ${p.status === 'limited' ? `<span class="limited-badge">الكمية محدودة</span>` : ''}
-                            ${p.status === 'new' ? `<span class="new-badge dark-green">جديد</span>` : ''}
                         </div>
                         <div class="product-info">
                             <h3 class="product-name">${p.name}</h3>
-                            <div style="font-size: 0.8rem; color: #666; margin-bottom: 5px;">${p.images ? p.images.length : 1} صور</div>
                             <div class="product-price-row">
-                                ${p.oldPrice ? `<span class="old-price">ج.م ${p.oldPrice}</span>` : ''}
                                 <span class="cur-price">جنيه ${p.price}</span>
                             </div>
-                            <div style="display: flex; gap: 10px;">
-                                <button class="btn-submit" style="padding: 5px 12px; font-size: 0.8rem; margin:0;" 
+                            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                <button class="btn-submit" style="padding: 6px 12px; font-size: 0.8rem; margin:0;" 
                                     onclick="editProduct('${id}', '${encodeURIComponent(JSON.stringify(p)).replace(/'/g, "\\'")}')">تعديل</button>
-                                <button class="delete-btn" style="margin:0;" onclick="deleteProduct('${id}')">حذف</button>
+                                <button class="delete-btn" style="margin:0; padding: 6px 12px;" onclick="deleteProduct('${id}')">حذف</button>
                             </div>
                         </div>
                     `;
                     productList.appendChild(card);
                 });
+            }, (error) => {
+                console.error("Firestore Products Listener Error:", error);
             });
         }
 
@@ -715,7 +717,7 @@
                     type: document.getElementById('p-type').value,
                     priceTag: document.getElementById('p-price-tag').value,
                     images: urls,
-                    image: urls[0],
+                    image: urls[0], // For backward compatibility or main image
                     updatedAt: new Date()
                 };
 
@@ -732,9 +734,11 @@
                 }
 
             } catch (error) {
-                console.error(error);
-                alert('حدث خطأ');
+                console.error("Error submitting product:", error);
+                alert('حدث خطأ أثناء حفظ المنتج: ' + error.message);
+            } finally {
                 btn.disabled = false;
+                btn.textContent = editingProductId ? 'تحديث المنتج' : 'إضافة المنتج';
             }
         };
 
@@ -743,8 +747,10 @@
 
         // --- Orders Management ---
         function loadOrders() {
+            console.log("Starting loadOrders real-time listener...");
             const list = document.getElementById('orders-list');
             onSnapshot(query(collection(db, "orders")), (snapshot) => {
+                console.log("New orders snapshot received. Size:", snapshot.size);
                 list.innerHTML = '';
                 if (snapshot.empty) {
                     list.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">لا يوجد رسائل أو طلبات حالياً.</p>';
@@ -766,7 +772,7 @@
                             </div>
                             <div style="text-align: left;">
                                 <div style="color: var(--primary); font-weight: 800;">${order.totalAmount}</div>
-                                <button class="delete-btn" onclick="deleteOrder('${orderId}')" style="margin-top: 5px; padding: 3px 8px; font-size: 0.7rem;">حذف</button>
+                                <button class="delete-btn" onclick="deleteOrder('${orderId}')" style="margin-top: 5px; padding: 4px 10px; font-size: 0.75rem;">حذف</button>
                             </div>
                         </div>
                         <div class="order-info">
@@ -783,6 +789,9 @@
                     `;
                     list.appendChild(card);
                 });
+            }, (error) => {
+                console.error("Firestore Orders Listener Error:", error);
+                list.innerHTML = `<p style="color:#ef4444; text-align:center; padding:20px;">خطأ في الاتصال بقاعدة البيانات: ${error.message}</p>`;
             });
         }
 

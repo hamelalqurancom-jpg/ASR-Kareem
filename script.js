@@ -193,7 +193,10 @@ async function confirmOrder(event) {
     };
 
     try {
-        await addDoc(collection(db, "orders"), orderData);
+        console.log("Saving order to Firestore...", orderData);
+        const docRef = await addDoc(collection(db, "orders"), orderData);
+        console.log("Order saved successfully with ID:", docRef.id);
+
         let message = `*طلب جديد من: ${name}*\n`;
         message += `📍 العنوان: ${gov} - ${city} - ${address}\n`;
         message += `📞 هواتف: ${phone1} / ${phone2}\n`;
@@ -204,16 +207,22 @@ async function confirmOrder(event) {
         });
         message += `\n*الإجمالي: ${orderData.totalAmount}*`;
         const encoded = encodeURIComponent(message);
+
+        // Success alert to confirm the data reached Firestore
+        alert('تم تسجيل طلبك بنجاح وسوف يتم تحويلك الآن للواتساب!');
+
         cart = [];
         localStorage.removeItem('aser_cart');
         updateCartUI();
         closeCheckoutModal();
         btn.disabled = false;
         btn.textContent = 'تأكيد وإرسال عبر واتساب';
+
+        // Open WhatsApp in a new tab
         window.open(`https://wa.me/201000539427?text=${encoded}`, '_blank');
     } catch (error) {
-        console.error("Error saving order: ", error);
-        alert('حدث خطأ أثناء حفظ الطلب.');
+        console.error("Critical error saving order: ", error);
+        alert('حدث خطأ أثناء حفظ الطلب: ' + error.message);
         btn.disabled = false;
         btn.textContent = 'تأكيد وإرسال عبر واتساب';
     }
