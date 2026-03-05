@@ -2348,13 +2348,27 @@ button {
 
 /* Checkout Modal */
 .checkout-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95%;
     max-width: 500px;
-    text-align: right;
     max-height: 90vh;
     padding: 30px;
-    z-index: 99999 !important;
     background-color: #ffffff !important;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    z-index: 99999 !important;
+    display: none;
+    overflow-y: auto;
+    text-align: right;
     border: 1px solid #eee;
+}
+
+.checkout-modal.show {
+    display: block !important;
+    animation: modalIn 0.3s ease-out;
 }
 
 .checkout-modal h3 {
@@ -2450,9 +2464,8 @@ button {
     max-height: 90vh;
     border-radius: 24px;
     z-index: 99999 !important;
-    /* Higher than drawer/overlay */
     display: none !important;
-    overflow: hidden;
+    overflow-y: auto;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
 }
 
