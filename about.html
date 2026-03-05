@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عن آسر كريم - شركة سيراميك وبورسلين معتمدة</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=1.4">
+    <style>
+        .about-page-container {
+            max-width: 1000px;
+            margin: 120px auto 60px;
+            padding: 0 20px;
+        }
+
+        .about-hero {
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 80px 40px;
+            border-radius: 32px;
+            color: white;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .about-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: #fbbf24;
+        }
+
+        .about-section-card {
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .about-section-card h2 {
+            font-size: 1.5rem;
+            color: #1e293b;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-right: 4px solid #fbbf24;
+            padding-right: 15px;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .partner-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .partner-tag {
+            background: #f8fafc;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: #fef3c7;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #d97706;
+            font-size: 1.2rem;
+        }
+
+        .feature-text h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #1e293b;
+        }
+
+        .feature-text p {
+            color: #64748b;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .stats-about {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            padding: 40px 0;
+            background: #fff;
+            border-radius: 20px;
+        }
+
+        .stat-box h3 {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #d97706;
+        }
+
+        .stat-box p {
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .about-page-container {
+                margin-top: 100px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="logo.png" alt="آسر كريم">
+                </a>
+            </div>
+            <a href="index.html" class="back-home-btn"
+                style="background:var(--gold); color:white; padding: 10px 20px; border-radius: 10px; font-weight:700; text-decoration:none;">العودة
+                للموقع</a>
+        </div>
+    </header>
+
+    <main class="about-page-container">
+        <div class="about-hero">
+            <h1>عن آسر كريم</h1>
+            <p style="font-size: 1.1rem; opacity: 0.9; line-height: 1.8;">شركة مصرية تأسست عام 2015، رائدة في مجال
+                السيراميك والبورسلين والأدوات الصحية. يقع مقرنا في مدينة العبور - الحي الثاني، ونفخر بكوننا وكيل وموزع
+                معتمد لكبرى الشركات في مصر.</p>
+        </div>
+
+        <div class="about-section-card">
+            <h2>شركاء النجاح (وكيل وموزع معتمد)</h2>
+            <div style="margin-bottom: 25px;">
+                <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: #64748b;">السيراميك والبورسلين:</h3>
+                <div class="partner-list">
+                    <span class="partner-tag">كليوباترا</span>
+                    <span class="partner-tag">ليجاسي</span>
+                    <span class="partner-tag">روندي</span>
+                    <span class="partner-tag">فيردي</span>
+                    <span class="partner-tag">رويال</span>
+                    <span class="partner-tag">آرت</span>
+                    <span class="partner-tag">سيراميكا اليجنت</span>
+                    <span class="partner-tag">كراميكا</span>
+                    <span class="partner-tag">بيرويا</span>
+                    <span class="partner-tag">بورسيلوكس</span>
+                </div>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: #64748b;">الأدوات الصحية:</h3>
+                <div class="partner-list">
+                    <span class="partner-tag">جروهي (Grohe)</span>
+                    <span class="partner-tag">ايديال ستاندرد</span>
+                    <span class="partner-tag">ديورافيت</span>
+                    <span class="partner-tag">سان بيور</span>
+                    <span class="partner-tag">الطيب</span>
+                    <span class="partner-tag">بيورا</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-section-card">
+            <h2>لماذا آسر كريم؟</h2>
+            <div class="about-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">✨</div>
+                    <div class="feature-text">
+                        <h3>تنوع الخيارات</h3>
+                        <p>تشكيلة واسعة تناسب كافة الأذواق والميزانيات، من التصاميم الكلاسيكية إلى الموديلات العصرية.
+                        </p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-text">
+                        <h3>الجودة والضمان</h3>
+                        <p>وكيل معتمد يضمن لك الحصول على المنتج الأصلي مع كفالة حقيقية من المصنع مباشرة.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎓</div>
+                    <div class="feature-text">
+                        <h3>الخبرة</h3>
+                        <p>نضع سنوات من الخبرة في خدمتك لنساعدك في اختيار الأفضل لمنزلك أو مشروعك باحترافية تامة.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-text">
+                        <h3>سرعة التنفيذ</h3>
+                        <p>نلتزم بتسليم العميل في مدة زمنية قياسية لضمان سير مشروعك دون تأخير، مع توفر مخزون دائم.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-section-card" style="text-align: center;">
+            <h2>سجل نجاحاتنا</h2>
+            <p style="margin-bottom: 30px; color: #64748b;">نفخر بكسب ثقة عملائنا في مختلف أنحاء الجمهورية.</p>
+            <div class="stats-about">
+                <div class="stat-box">
+                    <h3>3000+</h3>
+                    <p>عميل سعيد</p>
+                </div>
+                <div class="stat-box">
+                    <h3>50+</h3>
+                    <p>مشروع متكامل</p>
+                </div>
+                <div class="stat-box">
+                    <h3>10+</h3>
+                    <p>سنوات خبرة</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-bottom">
+            <p>© 2026 آسر كريم للسيراميك والأدوات الصحية. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
