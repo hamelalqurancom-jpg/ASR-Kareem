@@ -322,23 +322,40 @@ function initSearch() {
         if (input) {
             input.addEventListener('input', (e) => {
                 const term = e.target.value.toLowerCase().trim();
+
+                // Sync the other search input
+                searchInputs.forEach(otherId => {
+                    if (otherId !== id) {
+                        const otherInput = document.getElementById(otherId);
+                        if (otherInput && otherInput.value !== e.target.value) {
+                            otherInput.value = e.target.value;
+                        }
+                    }
+                });
+
                 if (term === '') {
+                    window.isSearching = false;
                     renderProducts(window.currentCategory || 'الكل');
                     return;
                 }
-                const results = userProducts.filter(p =>
-                    p.name.toLowerCase().includes(term) ||
-                    (p.category && p.category.toLowerCase().includes(term)) ||
-                    (p.type && p.type.toLowerCase().includes(term)) ||
-                    (p.brand && p.brand.toLowerCase().includes(term))
-                );
+
+                window.isSearching = true;
+                const results = userProducts.filter(p => {
+                    const name = (p.name || '').toLowerCase();
+                    const cat = (p.category || '').toLowerCase();
+                    const type = (p.type || '').toLowerCase();
+                    const brand = (p.brand || '').toLowerCase();
+                    return name.includes(term) || cat.includes(term) || type.includes(term) || brand.includes(term);
+                });
+
                 displaySearchResults(results);
 
-                if (id === 'hero-search-input' && term.length > 0) {
+                // Scroll to products if searching from Hero
+                if (id === 'hero-search-input' && term.length === 1) {
                     const productsSection = document.getElementById('products');
                     if (productsSection) {
-                        const headerH = document.getElementById('site-header')?.offsetHeight || 56;
-                        const top = productsSection.getBoundingClientRect().top + window.scrollY - headerH;
+                        const headerH = document.getElementById('site-header')?.offsetHeight || 70;
+                        const top = productsSection.getBoundingClientRect().top + window.scrollY - headerH - 10;
                         window.scrollTo({ top, behavior: 'smooth' });
                     }
                 }
@@ -369,7 +386,7 @@ function createProductCardHTML(p) {
                 <img src="${p.image}" alt="${p.name}" loading="lazy">
                 ${p.discount ? `<span class="discount-badge">${p.discount}</span>` : ''}
                 ${p.status === 'limited' ? `<span class="limited-badge">الكمية محدودة</span>` : ''}
-                ${p.status === 'new' ? `<span class="new-badge dark-green">جديد</span>` : ''}
+                ${p.status === 'new' ? `<span class="new-badge gold-badge">جديد</span>` : ''}
             </div>
             <div class="product-info" onclick="openProductModalById('${safeId}')">
                 ${p.type ? `<span class="product-type">${p.type}</span>` : ''}
@@ -600,7 +617,9 @@ function init() {
     onSnapshot(query(collection(db, "products")), (snapshot) => {
         userProducts = [];
         snapshot.forEach(docSnap => userProducts.push({ id: docSnap.id, ...docSnap.data() }));
-        renderProducts(window.currentCategory);
+        if (!window.isSearching) {
+            renderProducts(window.currentCategory);
+        }
     });
     initSearch();
     updateCartUI();

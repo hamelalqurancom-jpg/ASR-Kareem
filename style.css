@@ -22,44 +22,83 @@
     --font: 'Cairo', sans-serif;
     --text: #374151;
     --text-muted: #6b7280;
-    --green: #16a34a;
-    /* Added green variable */
+    --green: var(--gold);
+    /* Replaced green with gold as requested */
 }
 
-/* ... existing styles ... */
+/* ---- Loader Definitions ---- */
 
-.loader-logo-circle {
-    width: 80px;
-    height: 80px;
-    background: #fff;
-    /* White background for logo circle */
-    border: 2px solid var(--gold);
-    border-radius: 50%;
-    /* Circle */
+.loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    /* White background for loader */
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    z-index: 2;
+    z-index: 10000;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loader-wrapper.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-content {
+    text-align: center;
+}
+
+.loader-logo-wrap {
+    margin-bottom: 20px;
+}
+
+.loader-logo-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 30px;
+    background: #ffffff;
+    /* White background, no more green/dark brown */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 3px solid var(--gold);
     box-shadow: 0 10px 30px rgba(197, 160, 89, 0.2);
-    animation: pulseLogo 2s infinite ease-in-out;
 }
 
 .loader-logo-circle img {
-    width: 60px;
+    width: 150px;
+    /* Larger logo */
     height: auto;
+    object-fit: contain;
 }
 
 .loader-text {
-    font-size: 2.2rem;
+    font-size: 3.5rem;
     font-weight: 900;
-    color: #000000 !important;
-    margin: 0;
+    color: var(--gold) !important;
+    /* Solid Gold Color */
+    margin: 20px 0;
     display: flex;
-    gap: 8px;
+    gap: 15px;
+    justify-content: center;
     direction: rtl;
+}
+
+.loader-text span {
+    display: inline-block;
     opacity: 0;
-    animation: fadeInUp 0.8s ease forwards 0.5s;
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.loader-text span:last-child {
+    animation-delay: 0.4s;
 }
 
 @keyframes fadeInUp {
@@ -76,26 +115,22 @@
 
 .loader-bar {
     width: 200px;
-    height: 4px;
+    height: 6px;
     background: #f1f5f9;
     border-radius: 10px;
     overflow: hidden;
-    margin-top: 10px;
+    margin: 20px auto 0;
 }
 
 .loader-progress {
     width: 0%;
     height: 100%;
     background: var(--gold);
-    animation: progressLoad 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: progressLoad 4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 @keyframes progressLoad {
-    0% {
-        width: 0%;
-    }
-
-    100% {
+    to {
         width: 100%;
     }
 }
@@ -307,8 +342,8 @@ button {
 }
 
 #whatsapp-btn:hover {
-    background: #e8f5e9;
-    color: #25d366;
+    background: var(--gold-bg);
+    color: var(--gold);
 }
 
 .cart-badge {
@@ -448,8 +483,8 @@ button {
 .hero-section {
     min-height: 100svh;
     background:
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.5) 55%, rgba(0, 0, 0, 0.82) 100%),
-        url('https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.45) 55%, rgba(0, 0, 0, 0.75) 100%),
+        url('Screenshot 2026-03-06 015048.png') center/cover no-repeat;
     display: flex;
     align-items: flex-end;
     padding-top: 56px;
@@ -525,7 +560,7 @@ button {
 }
 
 .search-btn-hero {
-    background: var(--green);
+    background: var(--gold);
     width: 52px;
     height: 52px;
     display: flex;
@@ -580,115 +615,7 @@ button {
 /* =====================================================
    FEATURES GRID
    ===================================================== */
-.loader-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--dark-brown);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-.loader-wrapper.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-.loader-content {
-    text-align: center;
-}
-
-.loader-logo-wrap {
-    margin-bottom: 20px;
-}
-
-.loader-logo-circle {
-    width: 180px;
-    height: 180px;
-    border-radius: 30px;
-    background: #3d341f;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    overflow: hidden;
-    border: 3px solid var(--gold);
-    box-shadow: 0 0 30px rgba(197, 160, 89, 0.3);
-}
-
-.loader-logo-circle img {
-    width: 85%;
-    height: 85%;
-    object-fit: contain;
-}
-
-.loader-text {
-    color: var(--gold);
-    font-size: 3.5rem;
-    /* Larger */
-    font-weight: 900;
-    margin-top: 20px;
-    margin-bottom: 24px;
-    display: flex;
-    flex-direction: column;
-    /* Stacked for 'two halves' feel */
-    line-height: 1.1;
-    align-items: center;
-    background: linear-gradient(135deg, #fde047, #c5a059, #8a6d3b);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-}
-
-.loader-text span {
-    display: inline-block;
-    animation: fadeInDown 0.8s ease forwards;
-}
-
-.loader-text span:last-child {
-    animation-delay: 0.4s;
-}
-
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.loader-bar {
-    width: 140px;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-    margin: 0 auto;
-    overflow: hidden;
-}
-
-.loader-progress {
-    width: 0;
-    height: 100%;
-    background: var(--gold);
-    animation: loading 4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-}
-
-@keyframes loading {
-    to {
-        width: 100%;
-    }
-}
+/* Feature Grid Start */
 
 .features-section {
     background: #fff;
@@ -947,7 +874,7 @@ button {
 .cat-icon-wrap {
     width: 52px;
     height: 52px;
-    background: #f0fdf4;
+    background: var(--gold-bg);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -1053,6 +980,11 @@ button {
     gap: 6px;
 }
 
+.gold-badge {
+    background: var(--gold) !important;
+    color: white !important;
+}
+
 .product-type {
     font-size: 0.8rem;
     font-weight: 600;
@@ -1094,7 +1026,7 @@ button {
 .plus-btn {
     width: 45px;
     height: 45px;
-    background: #27c653;
+    background: var(--gold);
     color: white;
     border-radius: 50%;
     font-size: 2rem;
@@ -1106,19 +1038,19 @@ button {
     bottom: 20px;
     left: 20px;
     z-index: 5;
-    box-shadow: 0 4px 10px rgba(39, 198, 83, 0.4);
+    box-shadow: 0 4px 10px rgba(197, 160, 89, 0.4);
     transition: var(--transition);
     cursor: pointer;
 }
 
 .plus-btn:hover {
-    background: #1e9d40;
+    background: var(--gold-dark);
     transform: scale(1.1);
 }
 
 .plus-btn:active {
     transform: scale(0.9);
-    background: #15803d;
+    background: var(--gold-dark);
 }
 
 .plus-btn.added {
@@ -1371,7 +1303,7 @@ button {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: #25d366;
+    background: var(--gold);
     color: white;
     font-size: 1rem;
     font-weight: 800;
@@ -1382,7 +1314,7 @@ button {
 }
 
 .wa-cta-btn:hover {
-    background: #128c7e;
+    background: var(--dark-brown);
     transform: translateY(-2px);
 }
 
@@ -1635,30 +1567,30 @@ button {
     z-index: 999;
     width: 56px;
     height: 56px;
-    background: #25d366;
+    background: var(--gold);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(22, 163, 74, 0.45);
+    box-shadow: 0 4px 20px rgba(197, 160, 89, 0.45);
     transition: var(--transition);
     animation: pulseWa 2.5s infinite;
 }
 
 .floating-wa:hover {
     transform: scale(1.1);
-    background: #128c7e;
+    background: var(--dark-brown);
 }
 
 @keyframes pulseWa {
 
     0%,
     100% {
-        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.45);
+        box-shadow: 0 4px 20px rgba(197, 160, 89, 0.45);
     }
 
     50% {
-        box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7), 0 0 0 8px rgba(37, 211, 102, 0.12);
+        box-shadow: 0 4px 30px rgba(197, 160, 89, 0.7), 0 0 0 8px rgba(197, 160, 89, 0.12);
     }
 }
 
@@ -1817,121 +1749,7 @@ button {
     gap: 20px;
 }
 
-.loader-logo-wrap {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.loader-logo-circle {
-    width: 80px;
-    height: 80px;
-    background: var(--green);
-    color: white;
-    font-size: 2rem;
-    font-weight: 900;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 10px 30px rgba(22, 163, 74, 0.3);
-    animation: pulseLogo 2s infinite ease-in-out;
-}
-
-.loader-decor {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border: 3px solid var(--gold);
-    border-radius: 25px;
-    opacity: 0.3;
-    animation: rotateDecor 4s infinite linear;
-}
-
-.loader-text {
-    font-size: 2.2rem;
-    font-weight: 900;
-    color: var(--dark);
-    margin: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    border-left: 4px solid var(--green);
-    width: 0;
-    animation: typing 1.8s steps(10, end) 0.5s forwards;
-    padding-left: 10px;
-    direction: rtl;
-}
-
-.loader-bar {
-    width: 220px;
-    height: 5px;
-    background: #f1f1f1;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-top: 10px;
-}
-
-.loader-progress {
-    width: 0%;
-    height: 100%;
-    background: var(--green);
-    animation: progressLoad 3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-}
-
-@keyframes pulseLogo {
-
-    0%,
-    100% {
-        transform: scale(1);
-        box-shadow: 0 10px 30px rgba(22, 163, 74, 0.3);
-    }
-
-    50% {
-        transform: scale(1.08);
-        box-shadow: 0 15px 40px rgba(22, 163, 74, 0.4);
-    }
-}
-
-@keyframes rotateDecor {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes typing {
-    from {
-        width: 0;
-    }
-
-    to {
-        width: 100%;
-    }
-}
-
-@keyframes progressLoad {
-    0% {
-        width: 0%;
-    }
-
-    40% {
-        width: 60%;
-    }
-
-    100% {
-        width: 100%;
-    }
-}
+/* Cleaned up redundant styles */
 
 /* --- Category Detail View --- */
 .category-hero {
@@ -2237,43 +2055,7 @@ button {
 /* =====================================================
    PAYMENT METHODS SECTION
    ===================================================== */
-.payment-methods-section {
-    padding: 60px 20px;
-    background: #fff;
-    text-align: center;
-    border-top: 1px solid var(--border);
-}
-
-.payment-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 16px;
-    margin-top: 40px;
-}
-
-.payment-card {
-    background: #f9fafb;
-    border: 1.5px solid var(--border);
-    padding: 20px 10px;
-    border-radius: var(--radius);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    transition: var(--transition);
-    cursor: pointer;
-}
-
-.payment-card:hover {
-    border-color: var(--gold);
-    background: var(--gold-bg);
-}
-
-.payment-card img {
-    height: 48px;
-    width: auto;
-    object-fit: contain;
-}
+/* Removed payment-methods-section styles */
 
 /* Payment Modal */
 .payment-number-modal {
@@ -2439,7 +2221,7 @@ button {
 
 .btn-confirm {
     flex: 2;
-    background: #16a34a;
+    background: var(--gold);
     color: white;
     padding: 14px;
     border-radius: 10px;
@@ -2607,7 +2389,7 @@ button {
 
 .modal-wa-btn {
     flex: 1;
-    background: #16a34a;
+    background: var(--dark-brown);
     color: white;
     padding: 18px;
     border-radius: 12px;

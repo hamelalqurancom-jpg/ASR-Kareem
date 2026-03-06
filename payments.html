@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طرق الدفع - آسر كريم</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding-top: 100px;
+        }
+
+        .payments-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #3d341f;
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .payment-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f1f5f9;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .payment-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(197, 160, 89, 0.12);
+        }
+
+        .payment-logo {
+            width: 100%;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 25px;
+            transition: all 0.4s ease;
+        }
+
+        .payment-card:hover .payment-logo {
+            transform: scale(1.05);
+        }
+
+        .payment-name {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            color: var(--gold);
+            font-weight: 800;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(8px);
+        }
+
+        .cash-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--gold);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header" style="background: #3d341f !important;">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="آسر كريم" style="height: 52px; object-fit: contain;">
+            </a>
+        </div>
+    </header>
+
+    <main class="payments-container">
+        <a href="index.html" class="back-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+            </svg>
+            العودة للرئيسية
+        </a>
+
+        <div class="page-header">
+            <h1>طرق الدفع المتاحة</h1>
+            <p>نحن نوفر لك مجموعة متنوعة من طرق الدفع الآمنة والسهلة لتناسب احتياجاتك.</p>
+        </div>
+
+        <div class="payment-grid">
+            <!-- Cash -->
+            <div class="payment-card">
+                <div class="cash-icon">💵</div>
+                <div class="payment-name">دفع نقدي (كاش)</div>
+                <p style="color: #64748b;">الدفع عند الاستلام في المعرض أو عند التسليم.</p>
+            </div>
+
+            <!-- Vodafone Cash -->
+            <div class="payment-card">
+                <img src="Screenshot 2026-03-06 014458.png" alt="Vodafone Cash" class="payment-logo">
+                <div class="payment-name">فودافون كاش</div>
+            </div>
+
+            <!-- Aman -->
+            <div class="payment-card">
+                <img src="Screenshot 2026-03-06 014511.png" alt="Aman" class="payment-logo">
+                <div class="payment-name">أمان - Aman</div>
+            </div>
+
+            <!-- Souhoula -->
+            <div class="payment-card">
+                <img src="Screenshot 2026-03-06 014518.png" alt="Souhoula" class="payment-logo">
+                <div class="payment-name">سهولة</div>
+            </div>
+
+            <!-- Fawry -->
+            <div class="payment-card">
+                <img src="Screenshot 2026-03-06 014525.png" alt="Fawry" class="payment-logo">
+                <div class="payment-name">فوري - Fawry</div>
+            </div>
+
+            <!-- Contact -->
+            <div class="payment-card">
+                <img src="Screenshot 2026-03-06 014531.png" alt="Contact" class="payment-logo">
+                <div class="payment-name">كونتكت - Contact</div>
+            </div>
+
+            <!-- Valu -->
+            <div class="payment-card">
+                <img src="https://img.external-flat-icons-inmotus-design/67/external-V-alphabet-flat-icons-inmotus-design.png"
+                    alt="Valu" class="payment-logo">
+                <div class="payment-name">فاليو - Valu</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer" style="margin-top: 80px;">
+        <div class="footer-bottom">
+            <p>© 2026 آسر كريم للسيراميك والأدوات الصحية. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
