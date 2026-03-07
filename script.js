@@ -34,6 +34,7 @@ window.openProductModalById = openProductModalById;
 window.openProductModal = openProductModal;
 window.closeProductModal = closeProductModal;
 window.filterByAttr = filterByAttr;
+window.handleHeroSearch = handleHeroSearch;
 
 // --- Cart Logic ---
 function updateCartUI() {
@@ -364,6 +365,20 @@ function initSearch() {
     });
 }
 
+function handleHeroSearch() {
+    const input = document.getElementById('hero-search-input');
+    const term = input ? input.value.trim() : '';
+    if (term === '') return;
+
+    // Trigger scroll
+    const productsSection = document.getElementById('products');
+    if (productsSection) {
+        const headerH = document.getElementById('site-header')?.offsetHeight || 70;
+        const top = productsSection.getBoundingClientRect().top + window.scrollY - headerH - 10;
+        window.scrollTo({ top, behavior: 'smooth' });
+    }
+}
+
 function displaySearchResults(results) {
     const grid = document.getElementById('products-grid');
     if (!grid) return;
@@ -408,44 +423,92 @@ function renderProducts(categoryFilter = 'الكل') {
 
     if (categoryFilter !== undefined) window.currentCategory = categoryFilter;
 
-    let filtered = userProducts;
-    if (window.currentCategory !== 'الكل') {
-        filtered = filtered.filter(p => p.category === window.currentCategory);
-    }
-    if (window.currentType && window.currentType !== 'الكل') {
-        filtered = filtered.filter(p => p.type === window.currentType);
-    }
-    if (window.currentPriceTag && window.currentPriceTag !== 'الكل') {
-        filtered = filtered.filter(p => p.priceTag === window.currentPriceTag);
-    }
-
-    const titleEl = document.querySelector('#products .section-title');
-    const heroWrap = document.getElementById('category-hero-wrap');
+    let generalProducts = [];
+    let mostSoldProducts = [];
+    let newArrivalsProducts = [];
 
     if (window.currentCategory === 'الكل') {
-        if (titleEl) titleEl.textContent = 'الأكثر مبيعاً';
+        userProducts.forEach(p => {
+            if (p.section === 'most_sold') {
+                mostSoldProducts.push(p);
+            } else if (p.section === 'new_arrivals') {
+                newArrivalsProducts.push(p);
+            } else {
+                generalProducts.push(p);
+            }
+        });
+    } else {
+        // If a specific category is selected, we only show products matching the category in the general grid.
+        // And we don't show the most sold / new arrivals sections
+        generalProducts = userProducts.filter(p => p.category === window.currentCategory);
+    }
+
+    // Apply type and price filters only to generalProducts for now
+    if (window.currentType && window.currentType !== 'الكل') {
+        generalProducts = generalProducts.filter(p => p.type === window.currentType);
+    }
+    if (window.currentPriceTag && window.currentPriceTag !== 'الكل') {
+        generalProducts = generalProducts.filter(p => p.priceTag === window.currentPriceTag);
+    }
+
+    const generalGrid = document.getElementById('general-products-grid');
+    const mostSoldGrid = document.getElementById('most-sold-grid');
+    const newArrivalsGrid = document.getElementById('new-arrivals-grid');
+    const mostSoldSection = document.getElementById('most-sold');
+    const newArrivalsSection = document.querySelector('.new-arrivals-section');
+
+    if (generalGrid) generalGrid.innerHTML = '';
+    if (mostSoldGrid) mostSoldGrid.innerHTML = '';
+    if (newArrivalsGrid) newArrivalsGrid.innerHTML = '';
+
+
+    if (window.currentCategory === 'الكل') {
+        if (titleEl) titleEl.textContent = 'منتجاتنا';
         if (heroWrap) heroWrap.innerHTML = '';
         document.getElementById('about')?.style.setProperty('display', 'block');
         document.getElementById('hero')?.style.setProperty('display', 'flex');
+        if (mostSoldSection) mostSoldSection.style.display = 'block';
+        if (newArrivalsSection) newArrivalsSection.style.display = 'block';
     } else {
         if (titleEl) titleEl.textContent = 'منتجات ' + window.currentCategory;
         renderCategoryHero(window.currentCategory);
+        if (mostSoldSection) mostSoldSection.style.display = 'none';
+        if (newArrivalsSection) newArrivalsSection.style.display = 'none';
         if (window.innerWidth < 1024) {
             document.getElementById('hero')?.style.setProperty('display', 'none');
             document.getElementById('about')?.style.setProperty('display', 'none');
         }
     }
 
-    if (filtered.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666; font-weight: 700;">لا توجد منتجات في هذا القسم حالياً.</p>`;
-        return;
+    if (generalProducts.length === 0 && window.currentCategory !== 'الكل') {
+        if (generalGrid) {
+            generalGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666; font-weight: 700;">لا توجد منتجات في هذا القسم حالياً.</p>`;
+        }
+    } else {
+        generalProducts.forEach(p => {
+            if (generalGrid) generalGrid.insertAdjacentHTML('beforeend', createProductCardHTML(p));
+        });
     }
 
-    filtered.forEach(p => {
-        grid.insertAdjacentHTML('beforeend', createProductCardHTML(p));
-    });
+    if (window.currentCategory === 'الكل') {
+        if (mostSoldProducts.length === 0) {
+            if (mostSoldGrid) mostSoldGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666; font-weight: 700;">لا توجد منتجات مضافة لهذا القسم.</p>`;
+        } else {
+            mostSoldProducts.forEach(p => {
+                if (mostSoldGrid) mostSoldGrid.insertAdjacentHTML('beforeend', createProductCardHTML(p));
+            });
+        }
 
-    populateFilters(filtered);
+        if (newArrivalsProducts.length === 0) {
+            if (newArrivalsGrid) newArrivalsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666; font-weight: 700;">لا توجد منتجات مضافة لهذا القسم.</p>`;
+        } else {
+            newArrivalsProducts.forEach(p => {
+                if (newArrivalsGrid) newArrivalsGrid.insertAdjacentHTML('beforeend', createProductCardHTML(p));
+            });
+        }
+    }
+
+    populateFilters(generalProducts);
     observeFadeElements();
 }
 

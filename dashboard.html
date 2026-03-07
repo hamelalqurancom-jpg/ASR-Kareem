@@ -292,6 +292,15 @@
                         </div>
 
                         <div class="form-group">
+                            <label>مكان العرض (القسم الرئيسي)</label>
+                            <select id="p-section" required>
+                                <option value="general">المنتجات العامة</option>
+                                <option value="most_sold">الأكثر مبيعاً</option>
+                                <option value="new_arrivals">وصل حديثاً</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
                             <label>نوع المنتج (النوع/الماركة الفرعية)</label>
                             <input type="text" id="p-type" list="type-suggestions"
                                 placeholder="مثلاً: سيراميكا كليوباترا">
@@ -648,6 +657,7 @@
             document.getElementById('p-old-price').value = p.oldPrice || '';
             document.getElementById('p-discount').value = p.discount || '';
             document.getElementById('p-status').value = p.status || 'none';
+            document.getElementById('p-section').value = p.section || 'general';
             document.getElementById('p-type').value = p.type || '';
             document.getElementById('p-price-tag').value = p.priceTag || '';
 
@@ -743,6 +753,7 @@
                     oldPrice: document.getElementById('p-old-price').value,
                     discount: document.getElementById('p-discount').value,
                     status: document.getElementById('p-status').value,
+                    section: document.getElementById('p-section').value,
                     type: document.getElementById('p-type').value,
                     priceTag: document.getElementById('p-price-tag').value,
                     images: urls,

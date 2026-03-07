@@ -279,6 +279,29 @@ button {
     gap: 12px;
 }
 
+.desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.desktop-nav a {
+    color: white;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.desktop-nav a:hover {
+    color: var(--gold);
+}
+
+@media (max-width: 1024px) {
+    .desktop-nav {
+        display: none;
+    }
+}
+
 .icon-btn {
     width: 40px;
     height: 40px;
@@ -420,6 +443,7 @@ button {
     box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1);
 }
 
+/* Mobile menu definitions updated */
 .mobile-menu {
     display: none;
     flex-direction: column;
@@ -448,33 +472,6 @@ button {
 
 .mobile-menu a:last-child {
     border-bottom: none;
-}
-
-/* Search bar dropdown */
-.search-bar-drop {
-    display: none;
-    padding: 10px 16px 14px;
-    border-top: 1px solid var(--border);
-    background: #fff;
-}
-
-.search-bar-drop.open {
-    display: block;
-}
-
-.search-bar-drop input {
-    width: 100%;
-    padding: 10px 16px;
-    border: 1.5px solid var(--border);
-    border-radius: 24px;
-    font-family: var(--font);
-    font-size: 0.95rem;
-    outline: none;
-    transition: var(--transition);
-}
-
-.search-bar-drop input:focus {
-    border-color: var(--gold);
 }
 
 /* =====================================================
@@ -905,7 +902,9 @@ button {
 }
 
 .products-grid,
-.new-arrivals-grid {
+#general-products-grid,
+#most-sold-grid,
+#new-arrivals-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px;
@@ -1677,7 +1676,9 @@ button {
     }
 
     .products-grid,
-    .new-arrivals-grid {
+    #general-products-grid,
+    #most-sold-grid,
+    #new-arrivals-grid {
         grid-template-columns: repeat(4, 1fr);
     }
 
