@@ -447,8 +447,8 @@
                 <!-- General products will appear here -->
             </div>
 
-            <div class="view-more-wrap">
-                <a href="#" class="view-more-btn">عرض المزيد</a>
+            <div class="view-more-wrap" style="display: none;">
+                <button class="view-more-btn" onclick="loadMoreProducts()">عرض المزيد من المنتجات</button>
             </div>
         </section>
 
@@ -852,6 +852,7 @@
                         <strong>المقاس:</strong> <span id="modal-size"></span>
                     </div>
                 </div>
+                <div id="modal-description" style="margin-top: 15px; font-size: 0.9rem; color: #555; line-height: 1.6; border-top: 1px solid #eee; padding-top: 15px; display: none;"></div>
                 <div class="modal-actions">
                     <button class="modal-add-btn" id="modal-add-btn">أضف إلى السلة</button>
                     <a href="#" class="modal-wa-btn" id="modal-wa-link" target="_blank">طلب عبر واتساب</a>

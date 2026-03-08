@@ -16,9 +16,11 @@ try {
 }
 
 window.currentCategory = 'الكل';
-window.currentType = 'الكل';
-window.currentPriceTag = 'الكل';
-window.currentBrand = null;
+let currentFilterType = 'all';
+let currentPriceTag = 'all';
+let currentBrandFilter = 'all';
+let productLimit = 40; // Default limit for performance
+let allProducts = []; // To store all products for filtering and pagination
 
 // --- Global Function Exports (Important for HTML onclick events) ---
 window.addToCart = addToCart;
@@ -41,6 +43,7 @@ window.openAllBrandsModal = openAllBrandsModal;
 window.closeAllBrandsModal = closeAllBrandsModal;
 window.filterByBrand = filterByBrand;
 window.clearBrandFilter = clearBrandFilter;
+window.loadMoreProducts = loadMoreProducts; // Export loadMoreProducts
 
 // --- Cart Logic ---
 function updateCartUI() {
@@ -77,26 +80,35 @@ function updateCartUI() {
     localStorage.setItem('aser_cart', JSON.stringify(cart));
 }
 
-function addToCart(productData) {
-    if (!productData) return;
-    let finalData = productData;
+function isProductInCart(productId) {
+    return cart.some(item => item.id === productId);
+}
 
-    // Robust check for being called via onclick="addToCart(this)"
-    const isElement = productData.nodeType === 1;
+function addToCart(productDataOrId) {
+    let finalData;
+    let isElement = false;
 
-    if (isElement) {
-        const card = productData.closest('.product-card');
+    if (typeof productDataOrId === 'string') { // Called with ID
+        finalData = userProducts.find(p => p.id === productDataOrId);
+    } else if (productDataOrId && productDataOrId.nodeType === 1) { // Called with 'this' (element)
+        isElement = true;
+        const card = productDataOrId.closest('.product-card');
         if (card) {
-            const name = card.querySelector('.product-name')?.textContent || 'منتج';
-            const price = card.querySelector('.cur-price')?.textContent || '0';
-            const image = card.querySelector('img')?.src || '';
-            finalData = { name, price, image };
-        } else {
-            return;
+            const id = card.querySelector('.plus-btn').onclick.toString().match(/'([^']+)'/)[1]; // Extract ID from onclick
+            finalData = userProducts.find(p => p.id === id);
         }
+    } else { // Called with product object
+        finalData = productDataOrId;
     }
 
     if (!finalData) return;
+
+    // Check if product is already in cart
+    if (isProductInCart(finalData.id)) {
+        showToast(`"${finalData.name}" موجود بالفعل في السلة!`);
+        return;
+    }
+
     console.log('Adding to cart:', finalData.name);
     cart.push(finalData);
     updateCartUI();
@@ -104,12 +116,19 @@ function addToCart(productData) {
 
     // Visual feedback for the button
     if (isElement) {
-        productData.classList.add('added');
-        productData.textContent = '✓';
+        const button = productDataOrId;
+        button.classList.add('added');
+        button.textContent = '✓';
         setTimeout(() => {
-            productData.classList.remove('added');
-            productData.textContent = '+';
+            // button.classList.remove('added'); // Keep it added if it's in cart
+            // button.textContent = '+';
         }, 1500);
+    } else { // If added by ID, find the button and update it
+        const button = document.querySelector(`.plus-btn[onclick*="'${finalData.id}'"]`);
+        if (button) {
+            button.classList.add('added');
+            button.textContent = '✓';
+        }
     }
 
     // Automatically open cart to show "it is in front of" the user as requested
@@ -128,11 +147,19 @@ function addToCartById(id) {
     const p = userProducts.find(x => x.id === id);
     if (p) addToCart(p);
 }
-window.addToCartById = addToCartById;
+// window.addToCartById = addToCartById; // Already exported above
 
 function removeFromCart(index) {
+    const removedProductId = cart[index].id;
     cart.splice(index, 1);
     updateCartUI();
+
+    // Update the corresponding product card button
+    const button = document.querySelector(`.plus-btn[onclick*="'${removedProductId}'"]`);
+    if (button) {
+        button.classList.remove('added');
+        button.textContent = '+';
+    }
 }
 
 function toggleCart() {
@@ -401,11 +428,12 @@ function displaySearchResults(results) {
 // --- Product UI ---
 function createProductCardHTML(p) {
     const safeId = p.id;
+    const discount = p.oldPrice && p.price ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100) : 0;
     return `
         <div class="product-card">
             <div class="product-img-wrap" onclick="openProductModalById('${safeId}')">
+                ${discount > 0 ? `<span class="discount-badge">خصم ${discount}%</span>` : ''}
                 <img src="${p.image}" alt="${p.name}" loading="lazy">
-                ${p.discount ? `<span class="discount-badge">${p.discount}</span>` : ''}
                 ${p.status === 'limited' ? `<span class="limited-badge">الكمية محدودة</span>` : ''}
                 ${p.status === 'new' ? `<span class="new-badge gold-badge">جديد</span>` : ''}
             </div>
@@ -416,9 +444,6 @@ function createProductCardHTML(p) {
                 </div>
                 <h3 class="product-name">${p.name}</h3>
                 <div class="product-price-row">
-                    ${p.oldPrice ? `<span class="old-price">ج.م ${p.oldPrice}</span>` : ''}
-                    <span class="cur-price">جنيه ${p.price}</span>
-                </div>
             </div>
             <button class="plus-btn" onclick="addToCartById('${safeId}')" aria-label="أضف للسلة">+</button>
         </div>
@@ -734,6 +759,12 @@ function openProductModal(p) {
     document.getElementById('spec-brand-box').style.display = p.brand ? 'block' : 'none';
     document.getElementById('spec-grade-box').style.display = p.grade ? 'block' : 'none';
     document.getElementById('spec-size-box').style.display = p.size ? 'block' : 'none';
+
+    const descEl = document.getElementById('modal-description');
+    if (descEl) {
+        descEl.textContent = p.description || '';
+        descEl.style.display = p.description ? 'block' : 'none';
+    }
 
     const mainImg = document.getElementById('modal-main-img');
     const thumbsContainer = document.getElementById('modal-thumbs');

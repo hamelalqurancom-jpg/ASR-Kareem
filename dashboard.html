@@ -425,6 +425,11 @@
                         </div>
 
                         <div class="form-group full">
+                            <label>وصف المنتج (اختياري)</label>
+                            <textarea id="p-desc" placeholder="أدخل وصفاً تفصيلياً للمنتج مثل المميزات، المواد المصنعة، الضمان..." rows="4"></textarea>
+                        </div>
+
+                        <div class="form-group full">
                             <label>صور المنتج (يمكنك إضافة أكثر من صورة)</label>
                             <div id="image-inputs-container" style="display: flex; flex-direction: column; gap: 10px;">
                                 <div class="image-input-row" style="display: flex; gap: 10px; align-items: start;">
@@ -496,11 +501,14 @@
                     <div id="brand-img-preview" style="width:100px;height:100px;border-radius:10px;border:1px solid #ddd;overflow:hidden;display:none;">
                         <img id="brand-preview-img" style="width:100%;height:100%;object-fit:contain;">
                     </div>
-                    <button type="submit" class="btn-submit" style="max-width: 200px;">+ إضافة ماركة</button>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button type="submit" id="brand-submit-btn" class="btn-submit" style="max-width: 200px; margin: 0;">+ إضافة ماركة</button>
+                        <button type="button" id="brand-cancel-edit-btn" class="btn-cancel" style="display: none; background: #94a3b8; color: white; padding: 12px 20px; border-radius: 12px; font-weight: 800; cursor: pointer;" onclick="cancelBrandEdit()">إلغاء</button>
+                    </div>
                 </form>
 
                 <h3 style="margin-bottom: 15px; font-size: 1.1rem;">الماركات المضافة</h3>
-                <div id="brands-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                <div id="brands-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px;">
                     <!-- Brands appear here -->
                 </div>
 
@@ -545,6 +553,7 @@
         import { db, collection, addDoc, onSnapshot, query, deleteDoc, doc, updateDoc } from './firebase-config.js';
 
         let editingProductId = null;
+        let editingBrandId = null;
 
         window.switchTab = (tabId) => {
             console.log("Switching to tab:", tabId);
@@ -780,6 +789,7 @@
             document.getElementById('p-section').value = p.section || 'general';
             document.getElementById('p-type').value = p.type || '';
             document.getElementById('p-price-tag').value = p.priceTag || '';
+            document.getElementById('p-desc').value = p.description || '';
 
             // Handle image inputs reset and fill
             imageInputsContainer.innerHTML = '';
@@ -810,6 +820,7 @@
         document.getElementById('cancel-edit-btn').onclick = () => {
             editingProductId = null;
             form.reset();
+            document.getElementById('p-desc').value = '';
             imageInputsContainer.innerHTML = `
                 <div class="image-input-row" style="display: flex; gap: 10px; align-items: start;">
                     <div style="flex: 1;">
@@ -876,6 +887,7 @@
                     section: document.getElementById('p-section').value,
                     type: document.getElementById('p-type').value,
                     priceTag: document.getElementById('p-price-tag').value,
+                    description: document.getElementById('p-desc').value,
                     images: urls,
                     image: urls[0], // For main display
                     updatedAt: new Date()
@@ -901,6 +913,7 @@
                     }, 500);
 
                     form.reset();
+                    document.getElementById('p-desc').value = '';
                     // Clear previews
                     previewsContainer.innerHTML = '';
                     // Reset to one row with binding
@@ -1027,12 +1040,15 @@
                         const card = document.createElement('div');
                         card.style.cssText = 'background:#fff;border-radius:12px;padding:12px;text-align:center;border:1.5px solid #e2e8f0;box-shadow: 0 2px 4px rgba(0,0,0,0.02);transition:0.3s;';
                         card.innerHTML = `
-                            <div style="width:80px;height:80px;margin:0 auto 8px;border-radius:8px;overflow:hidden;background:#fff;border:1px solid #eee;display:flex;align-items:center;justify-content:center;">
+                            <div style="width:110px;height:110px;margin:0 auto 12px;border-radius:50%;overflow:hidden;background:#fff;border:2.5px solid #eee;display:flex;align-items:center;justify-content:center;padding:10px;box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                                 <img src="${b.image}" alt="${b.name}" style="width:100%;height:100%;object-fit:contain;">
                             </div>
-                            <div style="font-weight:800;font-size:0.9rem;">${b.name}</div>
-                            ${b.label ? `<div style="font-size:0.8rem;color:#666;">${b.label}</div>` : ''}
-                            <button onclick="deleteBrand('${id}')" style="margin-top:8px;background:#ef4444;color:white;padding:4px 10px;border-radius:6px;font-size:0.75rem;font-weight:700;">حذف</button>
+                            <div style="font-weight:900;font-size:1rem;margin-bottom:4px;">${b.name}</div>
+                            ${b.label ? `<div style="font-size:0.85rem;color:#666;font-weight:700;">${b.label}</div>` : ''}
+                            <div style="display: flex; gap: 5px; justify-content: center; margin-top: 12px;">
+                                <button onclick="editBrand('${id}', '${encodeURIComponent(JSON.stringify(b)).replace(/'/g, "\\'")}')" style="background:var(--primary);color:white;padding:4px 10px;border-radius:6px;font-size:0.75rem;font-weight:700;">تعديل</button>
+                                <button onclick="deleteBrand('${id}')" style="background:#ef4444;color:white;padding:4px 10px;border-radius:6px;font-size:0.75rem;font-weight:700;">حذف</button>
+                            </div>
                         `;
                         list.appendChild(card);
                     });
@@ -1182,10 +1198,12 @@
 
                 let imageUrl = urlVal;
 
+                const btn = document.getElementById('brand-submit-btn');
+                const originalText = btn.textContent;
+                btn.textContent = 'جاري المعالجة...';
+                btn.disabled = true;
+
                 if (file) {
-                    const btn = brandForm.querySelector('button[type="submit"]');
-                    btn.textContent = 'جاري الرفع...';
-                    btn.disabled = true;
                     const formData = new FormData();
                     formData.append('file', file);
                     formData.append('upload_preset', 'asr-kareem');
@@ -1197,31 +1215,70 @@
                         imageUrl = data.secure_url;
                     } catch (err) {
                         alert('فشل رفع الصورة: ' + err.message);
-                        btn.textContent = '+ إضافة ماركة';
+                        btn.textContent = originalText;
                         btn.disabled = false;
                         return;
                     }
-                    btn.textContent = '+ إضافة ماركة';
-                    btn.disabled = false;
                 }
 
-                if (!imageUrl) { alert('أضف صورة الماركة أو رابط صورة'); return; }
+                if (!imageUrl) { 
+                    alert('أضف صورة الماركة أو رابط صورة'); 
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    return; 
+                }
 
                 try {
-                    await addDoc(collection(db, 'brands'), {
+                    const brandData = {
                         name,
                         label: label || name,
                         image: imageUrl,
-                        createdAt: new Date()
-                    });
-                    alert('✅ تمت إضافة الماركة!');
-                    brandForm.reset();
-                    brandPreviewWrap.style.display = 'none';
+                        updatedAt: new Date()
+                    };
+
+                    if (editingBrandId) {
+                        await updateDoc(doc(db, 'brands', editingBrandId), brandData);
+                        alert('✅ تم تحديث الماركة بنجاح!');
+                        window.cancelBrandEdit();
+                    } else {
+                        brandData.createdAt = new Date();
+                        await addDoc(collection(db, 'brands'), brandData);
+                        alert('✅ تمت إضافة الماركة!');
+                        brandForm.reset();
+                        brandPreviewWrap.style.display = 'none';
+                    }
                 } catch (err) {
                     alert('خطأ: ' + err.message);
+                } finally {
+                    btn.textContent = editingBrandId ? 'تحديث الماركة' : '+ إضافة ماركة';
+                    btn.disabled = false;
                 }
             });
         }
+
+        window.editBrand = (id, bJson) => {
+            const b = JSON.parse(decodeURIComponent(bJson));
+            editingBrandId = id;
+            document.getElementById('brand-name').value = b.name;
+            document.getElementById('brand-label').value = b.label || '';
+            document.getElementById('brand-image-url').value = b.image || '';
+            if (b.image) {
+                document.getElementById('brand-preview-img').src = b.image;
+                brandPreviewWrap.style.display = 'block';
+            }
+            // Update UI
+            document.getElementById('brand-submit-btn').textContent = 'تحديث الماركة';
+            document.getElementById('brand-cancel-edit-btn').style.display = 'inline-block';
+            window.scrollTo({ top: document.getElementById('brand-form').offsetTop - 100, behavior: 'smooth' });
+        };
+
+        window.cancelBrandEdit = () => {
+            editingBrandId = null;
+            brandForm.reset();
+            brandPreviewWrap.style.display = 'none';
+            document.getElementById('brand-submit-btn').textContent = '+ إضافة ماركة';
+            document.getElementById('brand-cancel-edit-btn').style.display = 'none';
+        };
 
         window.deleteBrand = async (id) => {
             if (confirm('هل أنت متأكد من حذف هذه الماركة؟')) {
@@ -1262,6 +1319,9 @@
             window.print();
         };
 
+        // --- Initial Calls ---
+        loadBrandsManagement();
+        loadBrandsForSelect();
     </script>
 </body>
 

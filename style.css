@@ -1176,12 +1176,14 @@ button {
 
 .brands-scroll {
     display: flex;
-    gap: 16px;
+    gap: 20px;
     overflow-x: auto;
-    padding-bottom: 16px;
+    padding: 10px 10px 30px;
     scrollbar-width: none;
-    margin-bottom: 20px;
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    min-height: 140px;
+    align-items: flex-start;
 }
 
 .brands-scroll::-webkit-scrollbar {
@@ -1192,36 +1194,46 @@ button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
+    gap: 10px;
     cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
 }
 
-.brand-circle>span {
-    width: 62px;
-    height: 62px;
+.brand-circle:hover {
+    transform: translateY(-4px);
+}
+
+.brand-circle .brand-img-wrap {
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    border: 1.5px solid var(--border);
+    background: #fff;
+    border: 2.5px solid #e5e7eb;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
-    font-weight: 800;
-    color: var(--text-muted);
-    background: white;
-    transition: var(--transition);
+    overflow: hidden;
+    transition: all 0.2s ease;
+    padding: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-.brand-circle.active>span,
-.brand-circle:hover>span {
+.brand-circle.active .brand-img-wrap {
     border-color: var(--gold);
-    color: var(--gold);
-    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.25);
+}
+
+.brand-circle .brand-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .brand-label {
-    font-size: 0.7rem;
-    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
     text-align: center;
     white-space: nowrap;
 }
@@ -2461,162 +2473,84 @@ button {
 }
 
 /* =====================================================
-   BRANDS SECTION
-   ===================================================== */
-.brands-section {
-    padding: 60px 20px;
-    background: #f9fafb;
-    border-bottom: 8px solid #f3f4f6;
-}
-
-.brands-scroll {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    margin-bottom: 30px;
-}
-
-.brand-circle {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.brand-circle:hover {
-    transform: translateY(-4px);
-}
-
-.brand-circle.active .brand-img-wrap {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.25);
-}
-
-.brand-img-wrap {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: #fff;
-    border: 2.5px solid #e5e7eb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    padding: 10px;
-}
-
-.brand-img-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.brand-label {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--text);
-    text-align: center;
-    max-width: 100px;
-}
-
-/* Old style compatibility */
-.brand-circle img {
-    width: 80%;
-    height: 80%;
-    object-fit: contain;
-}
-
-/* =====================================================
    ALL BRANDS MODAL
    ===================================================== */
 .all-brands-modal {
     position: fixed;
     inset: 0;
     margin: auto;
-    width: min(90vw, 700px);
+    width: min(95vw, 700px);
     max-height: 80vh;
     background: #fff;
     border-radius: 20px;
-    padding: 40px 30px 30px;
-    z-index: 3010;
+    padding: 50px 20px 30px;
+    z-index: 30000;
     overflow-y: auto;
     display: none;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
 
 .all-brands-modal.show {
-    display: block;
+    display: block !important;
+    animation: modalIn 0.3s ease-out;
 }
 
 .all-brands-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 20px;
-    justify-items: center;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 15px;
+    padding: 10px;
 }
 
 .all-brand-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 16px;
+    transition: all 0.2s;
     cursor: pointer;
-    padding: 12px;
-    border-radius: 12px;
-    border: 2px solid transparent;
-    transition: all 0.2s ease;
-    width: 100%;
 }
 
 .all-brand-item:hover {
-    border-color: var(--gold);
     background: var(--gold-bg);
     transform: translateY(-3px);
 }
 
 .all-brand-item img {
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     object-fit: contain;
-    border-radius: 8px;
-    background: #f9fafb;
-    padding: 6px;
-    border: 1px solid #e5e7eb;
 }
 
 .all-brand-item span {
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-align: center;
-    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 800;
 }
 
-/* Brand filtered banner */
+/* Brand Filter Banner */
 .brand-filter-banner {
     background: var(--gold-bg);
-    border: 1.5px solid var(--gold);
-    border-radius: 12px;
-    padding: 12px 20px;
+    border: 2px solid var(--gold);
+    padding: 15px 25px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 20px;
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: var(--gold-dark);
+    margin-bottom: 25px;
+}
+
+.brand-filter-banner span {
+    font-weight: 800;
+    color: var(--dark-brown);
 }
 
 .brand-filter-banner button {
     background: var(--gold);
     color: white;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 800;
 }
