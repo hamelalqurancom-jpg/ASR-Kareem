@@ -91,7 +91,7 @@
                 <a href="#products">المنتجات</a>
                 <a href="about.html">من نحن</a>
                 <a href="#brands">الماركات</a>
-                <a href="#contact">تواصل معنا</a>
+                <a href="https://wa.me/201000539427" target="_blank">تواصل معنا</a>
             </nav>
 
             <a href="index.html" class="logo">
@@ -109,7 +109,7 @@
             <a href="#brands" onclick="toggleMenu()">الماركات</a>
             <a href="shipping.html" onclick="toggleMenu()">معلومات الشحن</a>
             <a href="terms.html" onclick="toggleMenu()">الشروط والأحكام</a>
-            <a href="#contact" onclick="toggleMenu()">تواصل معنا</a>
+            <a href="https://wa.me/201000539427" target="_blank" onclick="toggleMenu()">تواصل معنا</a>
         </nav>
 
         <!-- Search Bar Dropdown -->
@@ -491,37 +491,25 @@
         <!-- ===== BRANDS SECTION ===== -->
         <section id="brands" class="brands-section">
             <h2 class="section-title">الماركات العالمية المتاحة</h2>
+            <p class="section-subtitle">اضغط على أي ماركة لعرض منتجاتها</p>
             <div class="brands-scroll" id="brands-scroll">
-                <div class="brand-circle active">
-                    <img src="alamir_logo.png" alt="Alamir" style="width: 80%; height: 80%; object-fit: contain;">
-                    <div class="brand-label">Alamir</div>
-                </div>
-                <div class="brand-circle">
-                    <img src="akgur_logo.png" alt="Akgur" style="width: 80%; height: 80%; object-fit: contain;">
-                    <div class="brand-label">Akgur</div>
-                </div>
-                <div class="brand-circle">
-                    <img src="grohe_logo.png" alt="Grohe" style="width: 80%; height: 80%; object-fit: contain;">
-                    <div class="brand-label">Grohe</div>
-                </div>
-                <div class="brand-circle">
-                    <img src="ideal_standard_logo.png" alt="Ideal Standard"
-                        style="width: 80%; height: 80%; object-fit: contain;">
-                    <div class="brand-label">Ideal Standard</div>
-                </div>
-                <div class="brand-circle">
-                    <img src="duravit_logo.png" alt="Duravit" style="width: 80%; height: 80%; object-fit: contain;">
-                    <div class="brand-label">Duravit</div>
-                </div>
-                <div class="brand-circle">
-                    <img src="cleopatra_logo.png" alt="Cleopatra" style="width: 80%; height: 80%; object-fit: contain;">
-                    <div class="brand-label">Cleopatra</div>
-                </div>
+                <!-- Brands loaded dynamically from Firestore -->
+                <div class="brands-loader" style="width:100%;text-align:center;padding:20px;color:#888;">جاري تحميل الماركات...</div>
             </div>
             <div class="view-more-wrap">
-                <a href="#" class="view-more-btn outline">عرض كل الماركات</a>
+                <button class="view-more-btn outline" onclick="openAllBrandsModal()">عرض كل الماركات</button>
             </div>
         </section>
+
+        <!-- ===== ALL BRANDS MODAL ===== -->
+        <div class="payment-overlay cart-overlay" id="all-brands-overlay" onclick="closeAllBrandsModal()"></div>
+        <div class="all-brands-modal" id="all-brands-modal">
+            <button class="close-modal" onclick="closeAllBrandsModal()">&times;</button>
+            <h2 style="margin-bottom: 20px; text-align: center;">جميع الماركات المتاحة</h2>
+            <div id="all-brands-grid" class="all-brands-grid">
+                <!-- All brands appear here -->
+            </div>
+        </div>
 
         <!-- ===== SERVICES CARDS ===== -->
         <section class="services-section">

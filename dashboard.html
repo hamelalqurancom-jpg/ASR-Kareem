@@ -9,6 +9,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=1.3">
     <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
             --primary: #c5a059;
@@ -189,6 +190,60 @@
             display: none;
             border: 1px solid #ddd;
         }
+
+        /* QR Modal Styles */
+        .qr-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            z-index: 2000;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .qr-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1999;
+        }
+        .qr-code-canvas {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+        }
+        .qr-code-canvas img {
+            border: 10px solid white;
+        }
+        
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #qr-print-area, #qr-print-area * {
+                visibility: visible;
+            }
+            #qr-print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                text-align: center;
+                display: flex !important;
+                flex-direction: column;
+                align-items: center;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -205,6 +260,7 @@
 
         <div class="dash-tabs">
             <button class="tab-btn active" id="tab-products" onclick="switchTab('products-section')">المنتجات</button>
+            <button class="tab-btn" id="tab-brands" onclick="switchTab('brands-section')">الماركات</button>
             <button class="tab-btn" id="tab-orders" onclick="switchTab('orders-section')">رسائل الصفحة</button>
             <button class="tab-btn" style="background:#f1f5f9; color:#64748b; margin-right:auto;"
                 onclick="location.reload()">تحديث الصفحة ↻</button>
@@ -254,7 +310,9 @@
 
                         <div class="form-group">
                             <label>العلامة التجارية (الماركة)</label>
-                            <input type="text" id="p-brand" placeholder="مثلاً: ديورافيت">
+                            <select id="p-brand">
+                                <option value="">-- اختر الماركة --</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -410,6 +468,44 @@
             </div>
         </div> <!-- End products-section -->
 
+        <!-- ===== BRANDS SECTION ===== -->
+        <div id="brands-section" style="display: none;">
+            <div class="dash-card">
+                <h2 style="margin-bottom: 10px;">إدارة الماركات</h2>
+                <p style="font-size: 0.85rem; color: #666; margin-bottom: 20px;">أضف ماركة جديدة بصورتها واسمها. الاسم هو نفس الاسم الذي يُربط بالمنتجات عند الإضافة.</p>
+
+                <form id="brand-form" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>اسم الماركة</label>
+                            <input type="text" id="brand-name" placeholder="مثلاً: Grohe" required>
+                        </div>
+                        <div class="form-group">
+                            <label>اسم الماركة بالعربي (للعرض)</label>
+                            <input type="text" id="brand-label" placeholder="مثلاً: جروهي">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>صورة الماركة (رفع ملف)</label>
+                        <input type="file" id="brand-image-file" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label>أو رابط الصورة</label>
+                        <input type="text" id="brand-image-url" placeholder="https://...">
+                    </div>
+                    <div id="brand-img-preview" style="width:100px;height:100px;border-radius:10px;border:1px solid #ddd;overflow:hidden;display:none;">
+                        <img id="brand-preview-img" style="width:100%;height:100%;object-fit:contain;">
+                    </div>
+                    <button type="submit" class="btn-submit" style="max-width: 200px;">+ إضافة ماركة</button>
+                </form>
+
+                <h3 style="margin-bottom: 15px; font-size: 1.1rem;">الماركات المضافة</h3>
+                <div id="brands-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
+                    <!-- Brands appear here -->
+                </div>
+            </div>
+        </div> <!-- End brands-section -->
+
         <div id="orders-section" style="display: none;">
             <h2 class="section-title">رسائل الصفحة</h2>
             <div id="orders-list">
@@ -418,6 +514,22 @@
         </div>
     </div> <!-- End dashboard-container -->
 
+    <!-- QR Modal -->
+    <div class="qr-overlay" id="qr-overlay" onclick="closeQRModal()"></div>
+    <div class="qr-modal" id="qr-modal">
+        <h3 id="qr-product-name" style="margin-bottom: 5px;"></h3>
+        <p style="font-size: 0.85rem; color: #666;">كود المنتج للطباعة والمسح</p>
+        <div id="qr-print-area" style="padding: 20px; display: flex; flex-direction: column; align-items: center;">
+            <div id="qrcode-container" class="qr-code-canvas"></div>
+            <div id="qr-product-label" style="font-weight: 800; font-size: 1.1rem; margin-top: 8px;"></div>
+            <div style="font-size: 0.8rem; color: #555;">آسر كريم للسيراميك</div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;" class="no-print">
+            <button class="btn-submit" style="flex: 1; margin: 0;" onclick="printQRCode()">طباعة الكود</button>
+            <button class="btn-submit" style="flex: 1; margin: 0; background: #94a3b8;" onclick="closeQRModal()">إغلاق</button>
+        </div>
+    </div>
+
     <script type="module">
         import { db, collection, addDoc, onSnapshot, query, deleteDoc, doc, updateDoc } from './firebase-config.js';
 
@@ -425,22 +537,17 @@
 
         window.switchTab = (tabId) => {
             console.log("Switching to tab:", tabId);
-            const products = document.getElementById('products-section');
-            const orders = document.getElementById('orders-section');
-            const tabProducts = document.getElementById('tab-products');
-            const tabOrders = document.getElementById('tab-orders');
+            const sections = ['products-section', 'brands-section', 'orders-section'];
+            const tabs = ['tab-products', 'tab-brands', 'tab-orders'];
 
-            if (tabId === 'products-section') {
-                if (products) products.style.display = 'block';
-                if (orders) orders.style.display = 'none';
-                if (tabProducts) tabProducts.classList.add('active');
-                if (tabOrders) tabOrders.classList.remove('active');
-            } else {
-                if (products) products.style.display = 'none';
-                if (orders) orders.style.display = 'block';
-                if (tabProducts) tabProducts.classList.remove('active');
-                if (tabOrders) tabOrders.classList.add('active');
-            }
+            sections.forEach(sid => {
+                const el = document.getElementById(sid);
+                if (el) el.style.display = sid === tabId ? 'block' : 'none';
+            });
+            tabs.forEach(tid => {
+                const el = document.getElementById(tid);
+                if (el) el.classList.toggle('active', tid === 'tab-' + tabId.replace('-section', ''));
+            });
         }
 
         // --- Tag Management ---
@@ -629,9 +736,11 @@
                             <div class="product-price-row">
                                 <span class="cur-price">جنيه ${p.price}</span>
                             </div>
-                            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                            <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
                                 <button class="btn-submit" style="padding: 6px 12px; font-size: 0.8rem; margin:0;" 
                                     onclick="editProduct('${id}', '${encodeURIComponent(JSON.stringify(p)).replace(/'/g, "\\'")}')">تعديل</button>
+                                <button class="btn-submit" style="padding: 6px 12px; font-size: 0.8rem; margin:0; background: #334155;" 
+                                    onclick="generateQR('${id}', '${p.name.replace(/'/g, "\\'")}')">باركد (QR)</button>
                                 <button class="delete-btn" style="margin:0; padding: 6px 12px;" onclick="deleteProduct('${id}')">حذف</button>
                             </div>
                         </div>
@@ -774,6 +883,12 @@
                     const docRef = await addDoc(collection(db, "products"), productData);
                     console.log("Product added successfully with ID:", docRef.id);
                     alert('✅ تمت إضافة المنتج بنجاح إلى قاعدة البيانات!');
+                    
+                    // Automatically show QR code for the new product
+                    setTimeout(() => {
+                        window.generateQR(docRef.id, productData.name);
+                    }, 500);
+
                     form.reset();
                     // Clear previews
                     previewsContainer.innerHTML = '';
@@ -803,6 +918,8 @@
 
         loadTags();
         loadProducts();
+        loadBrandsForSelect();
+        loadBrandsManagement();
 
         // --- Orders Management ---
         function loadOrders() {
@@ -861,6 +978,176 @@
         };
 
         loadOrders();
+
+        // ========================
+        // BRANDS MANAGEMENT
+        // ========================
+
+        function loadBrandsForSelect() {
+            const select = document.getElementById('p-brand');
+            if (!select) return;
+            onSnapshot(query(collection(db, "brands")), (snapshot) => {
+                const currentVal = select.value;
+                select.innerHTML = '<option value="">-- اختر الماركة --</option>';
+                snapshot.forEach(docSnap => {
+                    const b = docSnap.data();
+                    const opt = document.createElement('option');
+                    opt.value = b.name;
+                    opt.textContent = b.label ? `${b.name} (${b.label})` : b.name;
+                    select.appendChild(opt);
+                });
+                if (currentVal) select.value = currentVal;
+            });
+        }
+
+        function loadBrandsManagement() {
+            const list = document.getElementById('brands-list');
+            if (!list) return;
+            onSnapshot(query(collection(db, "brands")), (snapshot) => {
+                list.innerHTML = '';
+                if (snapshot.empty) {
+                    list.innerHTML = '<p style="color:#666;">لا توجد ماركات مضافة حتى الآن.</p>';
+                    return;
+                }
+                snapshot.forEach(docSnap => {
+                    const b = docSnap.data();
+                    const id = docSnap.id;
+                    const card = document.createElement('div');
+                    card.style.cssText = 'background:#f8fafc;border-radius:12px;padding:12px;text-align:center;border:1.5px solid #e2e8f0;';
+                    card.innerHTML = `
+                        <div style="width:80px;height:80px;margin:0 auto 8px;border-radius:8px;overflow:hidden;background:#fff;border:1px solid #eee;display:flex;align-items:center;justify-content:center;">
+                            <img src="${b.image}" alt="${b.name}" style="width:100%;height:100%;object-fit:contain;">
+                        </div>
+                        <div style="font-weight:800;font-size:0.9rem;">${b.name}</div>
+                        ${b.label ? `<div style="font-size:0.8rem;color:#666;">${b.label}</div>` : ''}
+                        <button onclick="deleteBrand('${id}')" style="margin-top:8px;background:#ef4444;color:white;padding:4px 10px;border-radius:6px;font-size:0.75rem;font-weight:700;">حذف</button>
+                    `;
+                    list.appendChild(card);
+                });
+            });
+        }
+
+        // Brand image preview
+        const brandFileInput = document.getElementById('brand-image-file');
+        const brandUrlInput = document.getElementById('brand-image-url');
+        const brandPreviewWrap = document.getElementById('brand-img-preview');
+        const brandPreviewImg = document.getElementById('brand-preview-img');
+
+        if (brandFileInput) {
+            brandFileInput.addEventListener('change', () => {
+                const file = brandFileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        brandPreviewImg.src = e.target.result;
+                        brandPreviewWrap.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        if (brandUrlInput) {
+            brandUrlInput.addEventListener('input', () => {
+                if (brandUrlInput.value) {
+                    brandPreviewImg.src = brandUrlInput.value;
+                    brandPreviewWrap.style.display = 'block';
+                }
+            });
+        }
+
+        const brandForm = document.getElementById('brand-form');
+        if (brandForm) {
+            brandForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('brand-name').value.trim();
+                const label = document.getElementById('brand-label').value.trim();
+                const file = brandFileInput.files[0];
+                const urlVal = brandUrlInput.value.trim();
+
+                if (!name) { alert('أدخل اسم الماركة'); return; }
+
+                let imageUrl = urlVal;
+
+                if (file) {
+                    const btn = brandForm.querySelector('button[type="submit"]');
+                    btn.textContent = 'جاري الرفع...';
+                    btn.disabled = true;
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('upload_preset', 'asr-kareem');
+                    try {
+                        const res = await fetch('https://api.cloudinary.com/v1_1/dwrhl6gjf/image/upload', {
+                            method: 'POST', body: formData
+                        });
+                        const data = await res.json();
+                        imageUrl = data.secure_url;
+                    } catch (err) {
+                        alert('فشل رفع الصورة: ' + err.message);
+                        btn.textContent = '+ إضافة ماركة';
+                        btn.disabled = false;
+                        return;
+                    }
+                    btn.textContent = '+ إضافة ماركة';
+                    btn.disabled = false;
+                }
+
+                if (!imageUrl) { alert('أضف صورة الماركة أو رابط صورة'); return; }
+
+                try {
+                    await addDoc(collection(db, 'brands'), {
+                        name,
+                        label: label || name,
+                        image: imageUrl,
+                        createdAt: new Date()
+                    });
+                    alert('✅ تمت إضافة الماركة!');
+                    brandForm.reset();
+                    brandPreviewWrap.style.display = 'none';
+                } catch (err) {
+                    alert('خطأ: ' + err.message);
+                }
+            });
+        }
+
+        window.deleteBrand = async (id) => {
+            if (confirm('هل أنت متأكد من حذف هذه الماركة؟')) {
+                await deleteDoc(doc(db, 'brands', id));
+            }
+        };
+
+        // --- QR Code Logic ---
+        window.generateQR = (id, name) => {
+            const container = document.getElementById('qrcode-container');
+            container.innerHTML = '';
+            
+            const origin = window.location.origin;
+            const path = window.location.pathname.replace('dashboard.html', 'index.html');
+            const url = `${origin}${path}?product=${id}`;
+            
+            new QRCode(container, {
+                text: url,
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            document.getElementById('qr-product-name').textContent = name;
+            document.getElementById('qr-product-label').textContent = name;
+            document.getElementById('qr-modal').style.display = 'block';
+            document.getElementById('qr-overlay').style.display = 'block';
+        };
+
+        window.closeQRModal = () => {
+            document.getElementById('qr-modal').style.display = 'none';
+            document.getElementById('qr-overlay').style.display = 'none';
+        };
+
+        window.printQRCode = () => {
+            window.print();
+        };
+
     </script>
 </body>
 

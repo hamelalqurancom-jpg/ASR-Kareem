@@ -5,6 +5,7 @@ import { db, collection, addDoc, onSnapshot, query, doc, getDocs } from './fireb
 
 // --- Global State ---
 let userProducts = [];
+let allBrands = [];
 let cart = [];
 try {
     const saved = localStorage.getItem('aser_cart');
@@ -17,6 +18,7 @@ try {
 window.currentCategory = 'الكل';
 window.currentType = 'الكل';
 window.currentPriceTag = 'الكل';
+window.currentBrand = null;
 
 // --- Global Function Exports (Important for HTML onclick events) ---
 window.addToCart = addToCart;
@@ -35,6 +37,10 @@ window.openProductModal = openProductModal;
 window.closeProductModal = closeProductModal;
 window.filterByAttr = filterByAttr;
 window.handleHeroSearch = handleHeroSearch;
+window.openAllBrandsModal = openAllBrandsModal;
+window.closeAllBrandsModal = closeAllBrandsModal;
+window.filterByBrand = filterByBrand;
+window.clearBrandFilter = clearBrandFilter;
 
 // --- Cart Logic ---
 function updateCartUI() {
@@ -380,7 +386,7 @@ function handleHeroSearch() {
 }
 
 function displaySearchResults(results) {
-    const grid = document.getElementById('products-grid');
+    const grid = document.getElementById('general-products-grid');
     if (!grid) return;
     grid.innerHTML = '';
     if (results.length === 0) {
@@ -417,7 +423,7 @@ function createProductCardHTML(p) {
 }
 
 function renderProducts(categoryFilter = 'الكل') {
-    const grid = document.getElementById('products-grid');
+    const grid = document.getElementById('general-products-grid');
     if (!grid) return;
     grid.innerHTML = '';
 
@@ -427,8 +433,14 @@ function renderProducts(categoryFilter = 'الكل') {
     let mostSoldProducts = [];
     let newArrivalsProducts = [];
 
+    // Apply brand filter first if active
+    let sourceProducts = userProducts;
+    if (window.currentBrand) {
+        sourceProducts = userProducts.filter(p => (p.brand || '').toLowerCase() === window.currentBrand.toLowerCase());
+    }
+
     if (window.currentCategory === 'الكل') {
-        userProducts.forEach(p => {
+        sourceProducts.forEach(p => {
             if (p.section === 'most_sold') {
                 mostSoldProducts.push(p);
             } else if (p.section === 'new_arrivals') {
@@ -439,8 +451,7 @@ function renderProducts(categoryFilter = 'الكل') {
         });
     } else {
         // If a specific category is selected, we only show products matching the category in the general grid.
-        // And we don't show the most sold / new arrivals sections
-        generalProducts = userProducts.filter(p => p.category === window.currentCategory);
+        generalProducts = sourceProducts.filter(p => p.category === window.currentCategory);
     }
 
     // Apply type and price filters only to generalProducts for now
@@ -462,13 +473,22 @@ function renderProducts(categoryFilter = 'الكل') {
     if (newArrivalsGrid) newArrivalsGrid.innerHTML = '';
 
 
+    const titleEl = document.querySelector('#products .section-title');
+    const heroWrap = document.getElementById('category-hero-wrap');
+
     if (window.currentCategory === 'الكل') {
-        if (titleEl) titleEl.textContent = 'منتجاتنا';
+        if (titleEl) {
+            if (window.currentBrand) {
+                titleEl.textContent = `منتجات ${window.currentBrand}`;
+            } else {
+                titleEl.textContent = 'منتجاتنا';
+            }
+        }
         if (heroWrap) heroWrap.innerHTML = '';
         document.getElementById('about')?.style.setProperty('display', 'block');
         document.getElementById('hero')?.style.setProperty('display', 'flex');
-        if (mostSoldSection) mostSoldSection.style.display = 'block';
-        if (newArrivalsSection) newArrivalsSection.style.display = 'block';
+        if (mostSoldSection) mostSoldSection.style.display = window.currentBrand ? 'none' : 'block';
+        if (newArrivalsSection) newArrivalsSection.style.display = window.currentBrand ? 'none' : 'block';
     } else {
         if (titleEl) titleEl.textContent = 'منتجات ' + window.currentCategory;
         renderCategoryHero(window.currentCategory);
@@ -480,7 +500,10 @@ function renderProducts(categoryFilter = 'الكل') {
         }
     }
 
-    if (generalProducts.length === 0 && window.currentCategory !== 'الكل') {
+    // Show brand filter banner
+    renderBrandBanner();
+
+    if (generalProducts.length === 0 && (window.currentCategory !== 'الكل' || window.currentBrand)) {
         if (generalGrid) {
             generalGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666; font-weight: 700;">لا توجد منتجات في هذا القسم حالياً.</p>`;
         }
@@ -490,7 +513,7 @@ function renderProducts(categoryFilter = 'الكل') {
         });
     }
 
-    if (window.currentCategory === 'الكل') {
+    if (window.currentCategory === 'الكل' && !window.currentBrand) {
         if (mostSoldProducts.length === 0) {
             if (mostSoldGrid) mostSoldGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666; font-weight: 700;">لا توجد منتجات مضافة لهذا القسم.</p>`;
         } else {
@@ -510,6 +533,26 @@ function renderProducts(categoryFilter = 'الكل') {
 
     populateFilters(generalProducts);
     observeFadeElements();
+}
+
+function renderBrandBanner() {
+    // Remove any existing banner
+    const existingBanner = document.getElementById('brand-filter-banner');
+    if (existingBanner) existingBanner.remove();
+
+    if (!window.currentBrand) return;
+
+    const productsSection = document.getElementById('products');
+    if (!productsSection) return;
+
+    const banner = document.createElement('div');
+    banner.id = 'brand-filter-banner';
+    banner.className = 'brand-filter-banner';
+    banner.innerHTML = `
+        <span>📌 عرض منتجات ماركة: <strong>${window.currentBrand}</strong></span>
+        <button onclick="clearBrandFilter()">إلغاء الفلتر ✕</button>
+    `;
+    productsSection.insertBefore(banner, productsSection.querySelector('.filter-controls') || productsSection.querySelector('.products-grid'));
 }
 
 function renderCategoryHero(catName) {
@@ -568,6 +611,106 @@ function filterByAttr(attr, value) {
     renderProducts();
 }
 window.filterByAttr = filterByAttr;
+
+// --- Brand Filter Functions ---
+function filterByBrand(brandName) {
+    window.currentBrand = brandName;
+    window.currentCategory = 'الكل';
+    window.currentType = 'الكل';
+    window.currentPriceTag = 'الكل';
+
+    // Highlight the active brand
+    document.querySelectorAll('.brand-circle, .all-brand-item').forEach(el => {
+        el.classList.toggle('active', el.dataset.brand === brandName);
+    });
+
+    renderProducts('الكل');
+
+    // Close modal if open
+    closeAllBrandsModal();
+
+    // Scroll to products section
+    const productsSection = document.getElementById('products');
+    if (productsSection) {
+        const headerH = document.getElementById('site-header')?.offsetHeight || 64;
+        const top = productsSection.getBoundingClientRect().top + window.scrollY - headerH - 10;
+        window.scrollTo({ top, behavior: 'smooth' });
+    }
+}
+
+function clearBrandFilter() {
+    window.currentBrand = null;
+    document.querySelectorAll('.brand-circle, .all-brand-item').forEach(el => el.classList.remove('active'));
+    renderProducts('الكل');
+}
+
+// --- Brands Loading ---
+function loadBrands() {
+    const brandsScroll = document.getElementById('brands-scroll');
+    const allBrandsGrid = document.getElementById('all-brands-grid');
+    if (!brandsScroll) return;
+
+    onSnapshot(query(collection(db, "brands")), (snapshot) => {
+        allBrands = [];
+        snapshot.forEach(docSnap => {
+            allBrands.push({ id: docSnap.id, ...docSnap.data() });
+        });
+
+        // Render first 6 in homepage
+        brandsScroll.innerHTML = '';
+        if (allBrands.length === 0) {
+            brandsScroll.innerHTML = '<p style="color:#888;text-align:center;width:100%;padding:20px;">لا توجد ماركات مضافة حتى الآن.</p>';
+            return;
+        }
+
+        const previewBrands = allBrands.slice(0, 6);
+        previewBrands.forEach(b => {
+            const div = document.createElement('div');
+            div.className = 'brand-circle';
+            div.dataset.brand = b.name;
+            div.onclick = () => filterByBrand(b.name);
+            div.innerHTML = `
+                <div class="brand-img-wrap">
+                    <img src="${b.image}" alt="${b.name}" loading="lazy">
+                </div>
+                <div class="brand-label">${b.label || b.name}</div>
+            `;
+            brandsScroll.appendChild(div);
+        });
+
+        // Update all brands modal grid
+        if (allBrandsGrid) {
+            allBrandsGrid.innerHTML = '';
+            allBrands.forEach(b => {
+                const item = document.createElement('div');
+                item.className = 'all-brand-item';
+                item.dataset.brand = b.name;
+                item.onclick = () => filterByBrand(b.name);
+                item.innerHTML = `
+                    <img src="${b.image}" alt="${b.name}" loading="lazy">
+                    <span>${b.label || b.name}</span>
+                `;
+                allBrandsGrid.appendChild(item);
+            });
+        }
+
+        observeFadeElements();
+    });
+}
+
+function openAllBrandsModal() {
+    const modal = document.getElementById('all-brands-modal');
+    const overlay = document.getElementById('all-brands-overlay');
+    if (modal) modal.classList.add('show');
+    if (overlay) overlay.classList.add('show');
+}
+
+function closeAllBrandsModal() {
+    const modal = document.getElementById('all-brands-modal');
+    const overlay = document.getElementById('all-brands-overlay');
+    if (modal) modal.classList.remove('show');
+    if (overlay) overlay.classList.remove('show');
+}
 
 // --- Product Modal Logic ---
 function openProductModal(p) {
@@ -655,7 +798,7 @@ document.querySelectorAll('.category-card').forEach(card => {
 
 // --- Effects ---
 function observeFadeElements() {
-    const fadeElements = document.querySelectorAll('.feature-card, .category-card, .product-card, .stat-item, .service-card, .brand-circle');
+    const fadeElements = document.querySelectorAll('.feature-card, .category-card, .product-card, .stat-item, .service-card, .brand-circle, .all-brand-item');
     const fadeObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -675,13 +818,28 @@ function observeFadeElements() {
 
 // --- Initialize ---
 
+let productOpenedFromURL = false;
 function init() {
     loadHeroTags();
+    loadBrands();
     onSnapshot(query(collection(db, "products")), (snapshot) => {
         userProducts = [];
         snapshot.forEach(docSnap => userProducts.push({ id: docSnap.id, ...docSnap.data() }));
         if (!window.isSearching) {
             renderProducts(window.currentCategory);
+        }
+
+        // Check for product ID in URL and open modal (only once)
+        if (!productOpenedFromURL) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('product');
+            if (productId) {
+                console.log("Found product ID in URL:", productId);
+                setTimeout(() => {
+                    openProductModalById(productId);
+                    productOpenedFromURL = true;
+                }, 800);
+            }
         }
     });
     initSearch();
