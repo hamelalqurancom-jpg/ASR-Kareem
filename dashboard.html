@@ -500,8 +500,19 @@
                 </form>
 
                 <h3 style="margin-bottom: 15px; font-size: 1.1rem;">الماركات المضافة</h3>
-                <div id="brands-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
+                <div id="brands-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px;">
                     <!-- Brands appear here -->
+                </div>
+
+                <!-- Quick Import from Local Folder (New Feature) -->
+                <div id="quick-import-brands" style="background: #f1f5f9; padding: 20px; border-radius: 12px; border: 1.5px dashed var(--primary);">
+                    <h3 style="margin-bottom: 10px; font-size: 1rem; color: var(--logo-brown);">✨ استيراد سريع للماركات الجديدة</h3>
+                    <p style="font-size: 0.8rem; color: #666; margin-bottom: 15px;">تم العثور على صور ماركات جديدة في مجلد المشروع. يمكنك إضافتها بضغطة واحدة:</p>
+                    <div id="suggested-brands-grid" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                        <!-- Suggested brands will be injected here -->
+                    </div>
+                    <button id="import-all-suggested" class="btn-submit" style="background: var(--logo-brown); margin: 0; padding: 10px 20px; font-size: 0.9rem;">+ استيراد الماركات المحددة</button>
+                    <div id="import-status" style="margin-top: 10px; font-size: 0.8rem; font-weight: 700; color: #16a34a; display: none;">✅ تم الاستيراد بنجاح!</div>
                 </div>
             </div>
         </div> <!-- End brands-section -->
@@ -1004,28 +1015,112 @@
             const list = document.getElementById('brands-list');
             if (!list) return;
             onSnapshot(query(collection(db, "brands")), (snapshot) => {
+                const existingNames = [];
                 list.innerHTML = '';
                 if (snapshot.empty) {
                     list.innerHTML = '<p style="color:#666;">لا توجد ماركات مضافة حتى الآن.</p>';
-                    return;
+                } else {
+                    snapshot.forEach(docSnap => {
+                        const b = docSnap.data();
+                        existingNames.push(b.name.toLowerCase());
+                        const id = docSnap.id;
+                        const card = document.createElement('div');
+                        card.style.cssText = 'background:#fff;border-radius:12px;padding:12px;text-align:center;border:1.5px solid #e2e8f0;box-shadow: 0 2px 4px rgba(0,0,0,0.02);transition:0.3s;';
+                        card.innerHTML = `
+                            <div style="width:80px;height:80px;margin:0 auto 8px;border-radius:8px;overflow:hidden;background:#fff;border:1px solid #eee;display:flex;align-items:center;justify-content:center;">
+                                <img src="${b.image}" alt="${b.name}" style="width:100%;height:100%;object-fit:contain;">
+                            </div>
+                            <div style="font-weight:800;font-size:0.9rem;">${b.name}</div>
+                            ${b.label ? `<div style="font-size:0.8rem;color:#666;">${b.label}</div>` : ''}
+                            <button onclick="deleteBrand('${id}')" style="margin-top:8px;background:#ef4444;color:white;padding:4px 10px;border-radius:6px;font-size:0.75rem;font-weight:700;">حذف</button>
+                        `;
+                        list.appendChild(card);
+                    });
                 }
-                snapshot.forEach(docSnap => {
-                    const b = docSnap.data();
-                    const id = docSnap.id;
-                    const card = document.createElement('div');
-                    card.style.cssText = 'background:#f8fafc;border-radius:12px;padding:12px;text-align:center;border:1.5px solid #e2e8f0;';
-                    card.innerHTML = `
-                        <div style="width:80px;height:80px;margin:0 auto 8px;border-radius:8px;overflow:hidden;background:#fff;border:1px solid #eee;display:flex;align-items:center;justify-content:center;">
-                            <img src="${b.image}" alt="${b.name}" style="width:100%;height:100%;object-fit:contain;">
-                        </div>
-                        <div style="font-weight:800;font-size:0.9rem;">${b.name}</div>
-                        ${b.label ? `<div style="font-size:0.8rem;color:#666;">${b.label}</div>` : ''}
-                        <button onclick="deleteBrand('${id}')" style="margin-top:8px;background:#ef4444;color:white;padding:4px 10px;border-radius:6px;font-size:0.75rem;font-weight:700;">حذف</button>
-                    `;
-                    list.appendChild(card);
-                });
+                updateSuggestedBrands(existingNames);
             });
         }
+
+        function updateSuggestedBrands(existingNames) {
+            const suggestions = [
+                { name: 'Ideal Standard', label: 'ايديال ستاندرد', image: 'اديل استندر.jpeg' },
+                { name: 'Porcelux', label: 'بورسليوكس', image: 'بورسليوكس.jpeg' },
+                { name: 'Beroia', label: 'بيرويا', image: 'ريروي.jpeg' },
+                { name: 'Keramica', label: 'كيراميكا', image: 'كرماكا.jpeg' },
+                { name: 'Cyril', label: 'سارل / Cyril', image: 'سارل.jpeg' },
+                { name: 'Micavit', label: 'ماكافايت', image: 'ماكافايت.jpeg' },
+                { name: 'Houses', label: 'هاوسز', image: 'هاوسز.jpeg' },
+                { name: 'Tib', label: 'الطيب - Tib', image: 'الطيب.jpeg' },
+                { name: 'Abiura', label: 'ابيورا', image: 'ابيورا.jpeg' },
+                { name: 'Kevano', label: 'كيفانو', image: 'كيفانو.jpeg' },
+                { name: 'Cleopatra', label: 'كليوباترا', image: 'كيلوبترا .jpeg' },
+                { name: 'Duravit', label: 'ديورافيت', image: 'دورفات.jpeg' },
+                { name: 'Elegant', label: 'الجانت', image: 'الجانت.jpeg' },
+                { name: 'Rondy', label: 'روندا', image: 'روندا .jpeg' },
+                { name: 'Royal', label: 'رويال', image: 'رويال.jpeg' },
+                { name: 'Remas', label: 'ريماس', image: 'ريماس .jpeg' },
+                { name: 'Art Ceramic', label: 'سيراميكا ارت', image: 'سيراميكا ارت .jpeg' },
+                { name: 'Sanipure', label: 'صان بيور', image: 'صان بيور .jpeg' },
+                { name: 'Verdi', label: 'فيديا / Verdi', image: 'فيديا .jpeg' },
+                { name: 'Legacy', label: 'لجاسا / Legacy', image: 'لجاسا.jpeg' },
+                { name: 'Grohe', label: 'جروهي', image: 'grohe_logo.png' },
+                { name: 'Akgur', label: 'أكجور', image: 'akgur_logo.png' },
+                { name: 'Al-Amir', label: 'الأمير', image: 'alamir_logo.png' }
+            ];
+
+            const grid = document.getElementById('suggested-brands-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const toShow = suggestions.filter(s => !existingNames.includes(s.name.toLowerCase()));
+            
+            if (toShow.length === 0) {
+                document.getElementById('quick-import-brands').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('quick-import-brands').style.display = 'block';
+
+            toShow.forEach(s => {
+                const item = document.createElement('div');
+                item.style.cssText = 'display:flex;align-items:center;gap:10px;background:#fff;padding:8px 12px;border-radius:8px;border:1px solid #cbd5e1;';
+                item.innerHTML = `
+                    <img src="${s.image}" style="width:30px;height:30px;object-fit:contain;">
+                    <span style="font-size:0.85rem;font-weight:700;">${s.label}</span>
+                    <input type="checkbox" class="import-check" checked data-brand='${JSON.stringify(s)}'>
+                `;
+                grid.appendChild(item);
+            });
+        }
+
+        document.getElementById('import-all-suggested').onclick = async () => {
+            const checks = document.querySelectorAll('.import-check:checked');
+            if (checks.length === 0) return;
+
+            const btn = document.getElementById('import-all-suggested');
+            btn.disabled = true;
+            btn.textContent = 'جاري الاستيراد...';
+
+            for (const chk of checks) {
+                const b = JSON.parse(chk.dataset.brand);
+                try {
+                    await addDoc(collection(db, 'brands'), {
+                        name: b.name,
+                        label: b.label,
+                        image: b.image, // Use local path as image source
+                        createdAt: new Date()
+                    });
+                } catch (e) { console.error("Import failed for", b.name, e); }
+            }
+
+            document.getElementById('import-status').style.display = 'block';
+            btn.textContent = 'تم الاستيراد ✅';
+            setTimeout(() => {
+                document.getElementById('import-status').style.display = 'none';
+                btn.disabled = false;
+                btn.textContent = '+ استيراد الماركات المحددة';
+            }, 3000);
+        };
 
         // Brand image preview
         const brandFileInput = document.getElementById('brand-image-file');
@@ -1054,6 +1149,25 @@
                 }
             });
         }
+
+        // --- Automatic Price Calculation ---
+        const oldPriceInput = document.getElementById('p-old-price');
+        const discountInput = document.getElementById('p-discount');
+        const currentPriceInput = document.getElementById('p-price');
+
+        function calculateCurrentPrice() {
+            const oldPrice = parseFloat(oldPriceInput.value) || 0;
+            let discount = discountInput.value.replace('%', '').trim();
+            discount = parseFloat(discount) || 0;
+
+            if (oldPrice > 0) {
+                const finalPrice = oldPrice * (1 - discount / 100);
+                currentPriceInput.value = Math.round(finalPrice);
+            }
+        }
+
+        oldPriceInput.addEventListener('input', calculateCurrentPrice);
+        discountInput.addEventListener('input', calculateCurrentPrice);
 
         const brandForm = document.getElementById('brand-form');
         if (brandForm) {

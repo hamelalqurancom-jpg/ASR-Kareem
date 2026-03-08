@@ -410,7 +410,10 @@ function createProductCardHTML(p) {
                 ${p.status === 'new' ? `<span class="new-badge gold-badge">جديد</span>` : ''}
             </div>
             <div class="product-info" onclick="openProductModalById('${safeId}')">
-                ${p.type ? `<span class="product-type">${p.type}</span>` : ''}
+                <div class="product-pills">
+                    ${p.brand ? `<span class="product-brand">${p.brand}</span>` : ''}
+                    ${p.type ? `<span class="product-type">${p.type}</span>` : ''}
+                </div>
                 <h3 class="product-name">${p.name}</h3>
                 <div class="product-price-row">
                     ${p.oldPrice ? `<span class="old-price">ج.م ${p.oldPrice}</span>` : ''}
@@ -663,16 +666,16 @@ function loadBrands() {
             return;
         }
 
-        const previewBrands = allBrands.slice(0, 6);
+        const previewBrands = allBrands.slice(0, 12);
         previewBrands.forEach(b => {
             const div = document.createElement('div');
             div.className = 'brand-circle';
             div.dataset.brand = b.name;
             div.onclick = () => filterByBrand(b.name);
             div.innerHTML = `
-                <div class="brand-img-wrap">
+                <span class="brand-img-wrap">
                     <img src="${b.image}" alt="${b.name}" loading="lazy">
-                </div>
+                </span>
                 <div class="brand-label">${b.label || b.name}</div>
             `;
             brandsScroll.appendChild(div);

@@ -493,8 +493,47 @@
             <h2 class="section-title">الماركات العالمية المتاحة</h2>
             <p class="section-subtitle">اضغط على أي ماركة لعرض منتجاتها</p>
             <div class="brands-scroll" id="brands-scroll">
-                <!-- Brands loaded dynamically from Firestore -->
-                <div class="brands-loader" style="width:100%;text-align:center;padding:20px;color:#888;">جاري تحميل الماركات...</div>
+                <!-- Hardcoded Main Brands for fast loading -->
+                <div class="brand-circle" onclick="filterByBrand('Ideal Standard')">
+                    <span class="brand-img-wrap"><img src="اديل استندر.jpeg" loading="lazy"></span>
+                    <div class="brand-label">ايديال ستاندرد</div>
+                </div>
+                <div class="brand-circle" onclick="filterByBrand('Porcelux')">
+                    <span class="brand-img-wrap"><img src="بورسليوكس.jpeg" loading="lazy"></span>
+                    <div class="brand-label">بورسليوكس</div>
+                </div>
+                <div class="brand-circle" onclick="filterByBrand('Beroia')">
+                    <span class="brand-img-wrap"><img src="ريروي.jpeg" loading="lazy"></span>
+                    <div class="brand-label">بيرويا</div>
+                </div>
+                <div class="brand-circle" onclick="filterByBrand('Keramica')">
+                    <span class="brand-img-wrap"><img src="كرماكا.jpeg" loading="lazy"></span>
+                    <div class="brand-label">كيراميكا</div>
+                </div>
+                <div class="brand-circle" onclick="filterByBrand('Tib')">
+                    <span class="brand-img-wrap"><img src="الطيب.jpeg" loading="lazy"></span>
+                    <div class="brand-label">الطيب</div>
+                </div>
+                <div class="brand-circle" onclick="filterByBrand('Cyril')">
+                    <span class="brand-img-wrap"><img src="سارل.jpeg" loading="lazy"></span>
+                    <div class="brand-label">سارل</div>
+                </div>
+                <div class="brand-circle" onclick="filterByBrand('Houses')">
+                    <span class="brand-img-wrap"><img src="هاوسز.jpeg" loading="lazy"></span>
+                    <div class="brand-label">هاوسز</div>
+                </div>
+                <div class="brand-circle" onclick="filterByBrand('Micavit')">
+                    <span class="brand-img-wrap"><img src="ماكافايت.jpeg" loading="lazy"></span>
+                    <div class="brand-label">ماكافايت</div>
+                </div>
+                <div class="brand-circle" onclick="filterByBrand('Cleopatra')">
+                    <span class="brand-img-wrap"><img src="كيلوبترا .jpeg" loading="lazy"></span>
+                    <div class="brand-label">كليوباترا</div>
+                </div>
+                <div class="brand-circle" onclick="filterByBrand('Duravit')">
+                    <span class="brand-img-wrap"><img src="دورفات.jpeg" loading="lazy"></span>
+                    <div class="brand-label">ديورافيت</div>
+                </div>
             </div>
             <div class="view-more-wrap">
                 <button class="view-more-btn outline" onclick="openAllBrandsModal()">عرض كل الماركات</button>
