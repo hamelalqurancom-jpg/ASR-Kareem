@@ -238,27 +238,28 @@ async function confirmOrder(event) {
         message += `*المنتجات:*\n`;
         cart.forEach((item, idx) => {
             message += `${idx + 1}. ${item.name} (${item.price} ج.م)\n`;
+            if (item.image) message += `🔗 صورة المنتج: ${item.image}\n`;
         });
         message += `\n*الإجمالي: ${orderData.totalAmount}*`;
         const encoded = encodeURIComponent(message);
 
-        // Success alert to confirm the data reached Firestore
-        alert('تم تسجيل طلبك بنجاح وسوف يتم تحويلك الآن للواتساب!');
+        // Success alert
+        alert('تم تأكيد طلبك بنجاح. شكراً لك، سنتواصل معك قريباً!');
 
         cart = [];
         localStorage.removeItem('aser_cart');
         updateCartUI();
         closeCheckoutModal();
         btn.disabled = false;
-        btn.textContent = 'تأكيد وإرسال عبر واتساب';
+        btn.textContent = 'تأكيد الطلب';
 
-        // Open WhatsApp in a new tab
+        // Open WhatsApp
         window.open(`https://wa.me/201000539427?text=${encoded}`, '_blank');
     } catch (error) {
         console.error("Critical error saving order: ", error);
         alert('حدث خطأ أثناء حفظ الطلب: ' + error.message);
         btn.disabled = false;
-        btn.textContent = 'تأكيد وإرسال عبر واتساب';
+        btn.textContent = 'تأكيد الطلب';
     }
 }
 
