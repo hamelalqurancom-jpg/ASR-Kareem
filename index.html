@@ -114,7 +114,10 @@
 
         <!-- Search Bar Dropdown -->
         <div class="search-bar-drop" id="search-bar-drop">
-            <input type="text" id="header-search" placeholder="ابحث عن منتج، ماركة، أو قسم..." autocomplete="off">
+            <div class="search-results-container">
+                <input type="text" id="header-search" placeholder="ابحث عن منتج، ماركة، أو قسم..." autocomplete="off">
+                <div id="header-search-results" class="live-search-results"></div>
+            </div>
         </div>
     </header>
 
@@ -138,8 +141,11 @@
                             <line x1="21" y1="21" x2="16.65" y2="16.65" />
                         </svg>
                     </button>
-                    <input type="text" id="hero-search-input" placeholder="ابحث عن منتج، ماركة، أو قسم..."
-                        autocomplete="off">
+                    <div class="search-results-container" style="flex:1;">
+                        <input type="text" id="hero-search-input" placeholder="ابحث عن منتج، ماركة، أو قسم..."
+                            autocomplete="off">
+                        <div id="hero-search-results" class="live-search-results"></div>
+                    </div>
                 </div>
 
                 <div class="hero-tags" id="hero-tags-container">

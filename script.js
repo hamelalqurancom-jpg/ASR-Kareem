@@ -350,17 +350,23 @@ function handleHeroTag(tagName) {
 
 // --- Search Logic ---
 function initSearch() {
-    const searchInputs = ['header-search', 'hero-search-input'];
-    searchInputs.forEach(id => {
-        const input = document.getElementById(id);
+    const searchConfigs = [
+        { inputId: 'header-search', resultsId: 'header-search-results' },
+        { inputId: 'hero-search-input', resultsId: 'hero-search-results' }
+    ];
+
+    searchConfigs.forEach(config => {
+        const input = document.getElementById(config.inputId);
+        const resultsContainer = document.getElementById(config.resultsId);
+
         if (input) {
             input.addEventListener('input', (e) => {
                 const term = e.target.value.toLowerCase().trim();
 
                 // Sync the other search input
-                searchInputs.forEach(otherId => {
-                    if (otherId !== id) {
-                        const otherInput = document.getElementById(otherId);
+                searchConfigs.forEach(other => {
+                    if (other.inputId !== config.inputId) {
+                        const otherInput = document.getElementById(other.inputId);
                         if (otherInput && otherInput.value !== e.target.value) {
                             otherInput.value = e.target.value;
                         }
@@ -368,6 +374,8 @@ function initSearch() {
                 });
 
                 if (term === '') {
+                    resultsContainer.classList.remove('active');
+                    resultsContainer.innerHTML = '';
                     window.isSearching = false;
                     renderProducts(window.currentCategory || 'الكل');
                     return;
@@ -382,20 +390,55 @@ function initSearch() {
                     return name.includes(term) || cat.includes(term) || type.includes(term) || brand.includes(term);
                 });
 
-                displaySearchResults(results);
+                renderLiveResults(results, resultsContainer);
+                displaySearchResults(results); // Keep existing grid filtering as well
+            });
 
-                // Scroll to products if searching from Hero
-                if (id === 'hero-search-input' && term.length === 1) {
-                    const productsSection = document.getElementById('products');
-                    if (productsSection) {
-                        const headerH = document.getElementById('site-header')?.offsetHeight || 70;
-                        const top = productsSection.getBoundingClientRect().top + window.scrollY - headerH - 10;
-                        window.scrollTo({ top, behavior: 'smooth' });
-                    }
-                }
+            // Close results on blur after small delay
+            input.addEventListener('blur', () => {
+                setTimeout(() => resultsContainer.classList.remove('active'), 200);
+            });
+            input.addEventListener('focus', () => {
+                if (input.value.trim().length > 0) resultsContainer.classList.add('active');
             });
         }
     });
+
+    // Handle generic clicks to close search
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-results-container')) {
+            document.querySelectorAll('.live-search-results').forEach(el => el.classList.remove('active'));
+        }
+    });
+}
+
+function renderLiveResults(results, container) {
+    if (!container) return;
+    container.innerHTML = '';
+    
+    if (results.length === 0) {
+        container.innerHTML = `<div class="no-results-msg">لا توجد نتائج مطابقة لبحثك.</div>`;
+    } else {
+        const limitedResults = results.slice(0, 15); // Show more results
+        limitedResults.forEach(p => {
+            const div = document.createElement('div');
+            div.className = 'search-item';
+            div.onclick = (e) => {
+                e.stopPropagation();
+                openProductModalById(p.id);
+                container.classList.remove('active');
+            };
+            div.innerHTML = `
+                <img src="${p.image}" alt="${p.name}">
+                <div class="search-item-info">
+                    <h4>${p.name}</h4>
+                    <p>${Number(p.price).toLocaleString()} جنيه</p>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+    container.classList.add('active');
 }
 
 function handleHeroSearch() {
@@ -474,7 +517,7 @@ function renderProducts(categoryFilter = undefined) {
     let mostSoldProducts = [];
     let newArrivalsProducts = [];
 
-    if (window.currentCategory === 'الكل') {
+    if (window.currentCategory === 'الكل' && !window.currentBrand) {
         sourceProducts.forEach(p => {
             if (p.section === 'most_sold') {
                 mostSoldProducts.push(p);
@@ -484,6 +527,9 @@ function renderProducts(categoryFilter = undefined) {
                 generalProducts.push(p);
             }
         });
+    } else if (window.currentCategory === 'الكل' && window.currentBrand) {
+        // If brand is active, show everything in general grid
+        generalProducts = sourceProducts;
     } else {
         generalProducts = sourceProducts.filter(p => p.category === window.currentCategory);
     }
@@ -571,7 +617,7 @@ function renderProducts(categoryFilter = undefined) {
     }
 
     renderBrandBanner();
-    populateFilters(generalProducts);
+    populateFilters(window.currentCategory === 'الكل' && !window.currentBrand ? sourceProducts : generalProducts);
     observeFadeElements();
 }
 
@@ -633,12 +679,13 @@ function populateFilters(products) {
     const priceRow = document.getElementById('price-filters');
     if (!typeRow || !priceRow) return;
 
-    const categoryProducts = window.currentCategory === 'الكل' ? userProducts : userProducts.filter(p => p.category === window.currentCategory);
-    const types = [...new Set(categoryProducts.filter(p => p.type).map(p => p.type))];
-    const priceTags = [...new Set(categoryProducts.filter(p => p.priceTag).map(p => p.priceTag))];
+    // Use the passed 'products' which are already filtered by category/brand
+    const currentProducts = products || []; 
+    const types = [...new Set(currentProducts.filter(p => p.type).map(p => p.type))];
+    const priceTags = [...new Set(currentProducts.filter(p => p.priceTag).map(p => p.priceTag))];
 
     if (types.length > 0) {
-        typeRow.innerHTML = `<span class="filter-label">الماركة:</span>` +
+        typeRow.innerHTML = `<span class="filter-label">النوع:</span>` +
             `<span class="filter-pill ${window.currentType === 'الكل' ? 'active' : ''}" onclick="filterByAttr('type', 'الكل', this)">الكل</span>` +
             types.map(t => `<span class="filter-pill ${window.currentType === t ? 'active' : ''}" onclick="filterByAttr('type', '${t}', this)">${t}</span>`).join('');
     } else { typeRow.innerHTML = ''; }
