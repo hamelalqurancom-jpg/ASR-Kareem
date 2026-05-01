@@ -11,9 +11,15 @@ const firebaseConfig = {
 
 // Initialize Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, deleteDoc, doc, getDocs, updateDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, deleteDoc, doc, getDocs, updateDoc, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export { db, collection, addDoc, onSnapshot, query, deleteDoc, doc, getDocs, updateDoc, orderBy };
+// Cloudinary Configuration
+const cloudinaryConfig = {
+    cloudName: 'dwrhl6gjf',
+    uploadPreset: 'asr-kareem'
+};
+
+export { db, collection, addDoc, onSnapshot, query, deleteDoc, doc, getDocs, updateDoc, orderBy, where, cloudinaryConfig };

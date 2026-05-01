@@ -12,7 +12,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=1.4">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#c5a059">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="آسر كريم">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    
+    <!-- WhatsApp / Social Media / Search Results -->
+    <meta property="og:title" content="آسر كريم للسيراميك والبورسلين والأدوات الصحية">
+    <meta property="og:description" content="وكيل معتمد لكبرى الشركات العالمية والمحلية في مصر. جودة وتميز منذ 2015.">
+    <meta property="og:image" content="https://aserkarim.com/logo.png">
+    <meta property="og:url" content="https://aserkarim.com">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="آسر كريم للسيراميك والبورسلين">
+    <meta name="twitter:image" content="https://aserkarim.com/logo.png">
     <style>
         .site-header .icon-btn {
             color: white !important;
@@ -50,6 +70,16 @@
     <header class="site-header" id="site-header" style="background: #3d341f !important;">
         <div class="header-inner" style="background: transparent;">
             <div class="header-icons">
+                <button id="pwa-header-install-btn"
+                    style="display: none; align-items: center; gap: 8px; background: rgba(255,255,255,0.12); border: 1.5px solid rgba(255,255,255,0.2); color: white; padding: 6px 14px; border-radius: 12px; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s; margin-left: 10px; height: 38px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        style="transform: rotate(0deg);">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>تثبيت</span>
+                </button>
                 <button class="icon-btn" id="whatsapp-btn" aria-label="واتساب"
                     onclick="window.open('https://wa.me/201000539427','_blank')">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -68,6 +98,15 @@
                         <span class="cart-badge" id="cart-count">0</span>
                     </div>
                     <span class="cart-text">سلة المشتريات</span>
+                </button>
+                <button class="icon-btn" id="scanner-btn" aria-label="ماسح الباركود" onclick="openScanner()">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                        <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                        <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                        <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                        <line x1="7" y1="12" x2="17" y2="12" />
+                    </svg>
                 </button>
                 <button class="icon-btn" id="search-toggle" aria-label="بحث" onclick="toggleSearch()">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -129,10 +168,10 @@
             <div class="hero-content">
                 <div class="hero-rating">
                     <span class="rating-stars">★★★★★</span>
-                    <span class="rating-text">5.0 (5,000+)</span>
+                    <span class="rating-text">5.0 (2,500+)</span>
                 </div>
                 <h1 class="hero-title">آسر كريم للسيراميك<br>والبورسلين والأدوات الصحية</h1>
-                <p class="hero-subtitle">شقتك الجديدة تستاهل الأفضل — احنا بنوفرهولك بسعر عادل</p>
+                <p class="hero-subtitle">آسر كريم _ اختيارك سليم</p>
 
                 <div class="hero-search">
                     <button class="search-btn-hero" onclick="handleHeroSearch()">
@@ -279,17 +318,17 @@
             <h2 class="section-title">تسوق حسب القسم</h2>
             <div class="categories-grid">
 
-                <a href="#" class="category-card">
+                <div class="category-card" onclick="handleCategoryClick('سيراميك')">
                     <div class="cat-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8">
                             <rect x="3" y="3" width="18" height="18" rx="1" />
                         </svg>
                     </div>
                     <div class="cat-name">سيراميك</div>
-                    <div class="cat-price">من 78 جنيه/م²</div>
-                </a>
+                    <div class="cat-price">شاهد الكل</div>
+                </div>
 
-                <a href="#" class="category-card">
+                <div class="category-card" onclick="handleCategoryClick('بورسلين')">
                     <div class="cat-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                             stroke-width="1.8">
@@ -300,10 +339,10 @@
                         </svg>
                     </div>
                     <div class="cat-name">بورسلين</div>
-                    <div class="cat-price">من 150 جنيه/م²</div>
-                </a>
+                    <div class="cat-price">شاهد الكل</div>
+                </div>
 
-                <a href="#" class="category-card">
+                <div class="category-card" onclick="handleCategoryClick('أدوات صحية')">
                     <div class="cat-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                             stroke-width="1.8">
@@ -313,10 +352,10 @@
                         </svg>
                     </div>
                     <div class="cat-name">أدوات صحية</div>
-                    <div class="cat-price">من 616 جنيه</div>
-                </a>
+                    <div class="cat-price">شاهد الكل</div>
+                </div>
 
-                <a href="#" class="category-card">
+                <div class="category-card" onclick="handleCategoryClick('خلاطات مياه')">
                     <div class="cat-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                             stroke-width="1.8">
@@ -328,10 +367,10 @@
                         </svg>
                     </div>
                     <div class="cat-name">خلاطات مياه</div>
-                    <div class="cat-price">من 490 جنيه</div>
-                </a>
+                    <div class="cat-price">شاهد الكل</div>
+                </div>
 
-                <a href="#" class="category-card">
+                <div class="category-card" onclick="handleCategoryClick('وحدات حمام')">
                     <div class="cat-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                             stroke-width="1.8">
@@ -342,10 +381,10 @@
                         </svg>
                     </div>
                     <div class="cat-name">وحدات حمام</div>
-                    <div class="cat-price">من 3,665 جنيه</div>
-                </a>
+                    <div class="cat-price">شاهد الكل</div>
+                </div>
 
-                <a href="#" class="category-card">
+                <div class="category-card" onclick="handleCategoryClick('أحواض مطبخ')">
                     <div class="cat-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                             stroke-width="1.8">
@@ -355,10 +394,10 @@
                         </svg>
                     </div>
                     <div class="cat-name">أحواض مطبخ</div>
-                    <div class="cat-price">من 975 جنيه</div>
-                </a>
+                    <div class="cat-price">شاهد الكل</div>
+                </div>
 
-                <a href="#" class="category-card">
+                <div class="category-card" onclick="handleCategoryClick('بانيوهات')">
                     <div class="cat-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                             stroke-width="1.8">
@@ -368,9 +407,9 @@
                     </div>
                     <div class="cat-name">بانيوهات</div>
                     <div class="cat-price">شاهد الكل</div>
-                </a>
+                </div>
 
-                <a href="#" class="category-card">
+                <div class="category-card" onclick="handleCategoryClick('أبواب مصفحة')">
                     <div class="cat-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                             stroke-width="1.8">
@@ -380,9 +419,9 @@
                     </div>
                     <div class="cat-name">أبواب مصفحة</div>
                     <div class="cat-price">شاهد الكل</div>
-                </a>
+                </div>
 
-                <a href="#" class="category-card">
+                <div class="category-card" onclick="handleCategoryClick('باركيه')">
                     <div class="cat-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                             stroke-width="1.8">
@@ -392,9 +431,9 @@
                     </div>
                     <div class="cat-name">باركيه</div>
                     <div class="cat-price">شاهد الكل</div>
-                </a>
+                </div>
 
-                <a href="#" class="category-card">
+                <div class="category-card" onclick="handleCategoryClick('ديكورات المنزل')">
                     <div class="cat-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                             stroke-width="1.8">
@@ -404,9 +443,9 @@
                     </div>
                     <div class="cat-name">ديكورات المنزل</div>
                     <div class="cat-price">شاهد الكل</div>
-                </a>
+                </div>
 
-                <a href="#" class="category-card">
+                <div class="category-card" onclick="handleCategoryClick('إكسسوارات')">
                     <div class="cat-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                             stroke-width="1.8">
@@ -417,13 +456,14 @@
                     </div>
                     <div class="cat-name">إكسسوارات</div>
                     <div class="cat-price">شاهد الكل</div>
-                </a>
+                </div>
 
             </div>
         </section>
 
         <!-- Dynamic Category Hero -->
         <div id="category-hero-wrap"></div>
+
 
         <!-- ===== MOST SOLD SECTION ===== -->
         <section id="most-sold" class="products-section">
@@ -788,6 +828,17 @@
         </svg>
     </a>
 
+    <!-- Scanner Modal -->
+    <div class="payment-overlay cart-overlay" id="scanner-overlay" onclick="closeScanner()"></div>
+    <div class="scanner-modal" id="scanner-modal">
+        <div class="scanner-header">
+            <h3 style="margin: 0;">مسح باركود المنتج</h3>
+            <button class="close-modal" style="position: static;" onclick="closeScanner()">&times;</button>
+        </div>
+        <div id="reader"></div>
+        <p style="text-align: center; margin-top: 15px; font-size: 0.85rem; color: #666;">وجه الكاميرا نحو الكود لفتحه تلقائياً</p>
+    </div>
+
     <!-- Cart Toast -->
     <div class="cart-toast" id="cart-toast">تم إضافة المنتج لسلة المشتريات بنجاح</div>
 
@@ -847,6 +898,44 @@
                     <span class="modal-old-price" id="modal-old-price"></span>
                     <span class="modal-cur-price" id="modal-cur-price"></span>
                 </div>
+
+                <div id="grade-selection-container" style="margin-bottom: 25px; display: none;">
+                    <label
+                        style="display: block; font-weight: 800; font-size: 0.9rem; margin-bottom: 12px; color: #1e293b;">اختر
+                        الفرز:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="btn-grade-1" class="grade-btn" onclick="selectModalGrade(1)">فرز أول</button>
+                        <button id="btn-grade-2" class="grade-btn" onclick="selectModalGrade(2)">فرز ثاني</button>
+                        <button id="btn-grade-3" class="grade-btn" onclick="selectModalGrade(3)">فرز ثالث</button>
+                    </div>
+                </div>
+
+                <div id="color-selection-container" style="margin-bottom: 25px; display: none;">
+                    <label
+                        style="display: block; font-weight: 800; font-size: 0.9rem; margin-bottom: 12px; color: #1e293b;">اختر
+                        اللون:</label>
+                    <div id="modal-color-list" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <!-- Color buttons injected here -->
+                    </div>
+                </div>
+
+                <div id="calculator-container"
+                    style="margin-bottom: 25px; display: none; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1.5px dashed #cbd5e1;">
+                    <label
+                        style="display: block; font-weight: 800; font-size: 0.9rem; margin-bottom: 12px; color: #1e293b;">أدخل
+                        عدد الأمتار المطلوبة:</label>
+                    <input type="number" id="calc-meters" placeholder="مثلاً: 1.5" step="0.01"
+                        oninput="calculateCartons()"
+                        style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 10px; font-weight: bold; text-align: center;">
+                    <div id="calc-result-box"
+                        style="background: #dcfce7; color: #166534; padding: 12px; border-radius: 10px; text-align: center; font-weight: bold; display: none;">
+                        <span id="calc-cartons">0</span> كرتونة = <span id="calc-actual-meters">0</span> متر
+                    </div>
+                    <div style="text-align: center; margin-top: 10px; font-size: 0.8rem; color: #64748b;">
+                        السعر <span id="calc-price-per-meter">0</span> جنيه للمتر | الكرتونة = <span
+                            id="calc-factor">0</span> متر
+                    </div>
+                </div>
                 <div class="modal-specs">
                     <div class="spec-item" id="spec-brand-box">
                         <strong>الماركة:</strong> <span id="modal-brand"></span>
@@ -854,11 +943,17 @@
                     <div class="spec-item" id="spec-grade-box">
                         <strong>الفرز:</strong> <span id="modal-grade"></span>
                     </div>
+                    <div class="spec-item" id="spec-carton-box" style="display: none;">
+                        <strong>الكرتونة:</strong> <span id="modal-carton-info"></span>
+                    </div>
                     <div class="spec-item" id="spec-size-box">
                         <strong>المقاس:</strong> <span id="modal-size"></span>
                     </div>
+                    <div class="spec-item" id="modal-description" style="display: none;">
+                        <strong>الوصف:</strong>
+                        <div id="modal-desc-text" style="margin-top: 5px; color: #64748b; font-size: 0.95rem;"></div>
+                    </div>
                 </div>
-                <div id="modal-description" style="margin-top: 15px; font-size: 0.9rem; color: #555; line-height: 1.6; border-top: 1px solid #eee; padding-top: 15px; display: none;"></div>
                 <div class="modal-actions">
                     <button class="modal-add-btn" id="modal-add-btn">أضف إلى السلة</button>
                     <a href="#" class="modal-wa-btn" id="modal-wa-link" target="_blank">طلب عبر واتساب</a>
@@ -949,7 +1044,9 @@
             </div>
         </form>
     </div>
-    </div>
+
+
+
 
     <script>
         // --- Loader Handling (Separate from Module for reliability) ---
@@ -964,7 +1061,27 @@
         window.onerror = hideLoader;
         setTimeout(hideLoader, 6000); // Safety fallback
     </script>
+    <!-- PWA Install Banner -->
+    <div id="pwa-install-banner"
+        style="position: fixed; bottom: -200px; left: 0; width: 100%; background: #ffffff; padding: 20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.15); z-index: 10002; display: flex; align-items: center; justify-content: space-between; transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1); border-top: 3px solid var(--gold); border-radius: 24px 24px 0 0;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <img src="logo.png" alt="آسر كريم"
+                style="width: 55px; height: 55px; border-radius: 12px; object-fit: contain;">
+            <div style="text-align: right;">
+                <strong style="display: block; font-size: 1rem; color: #000;">ثبّت تطبيق آسر كريم</strong>
+                <span style="font-size: 0.8rem; color: #666;">تسوّق أسرع وبدون انقطاع!</span>
+            </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button id="pwa-install-btn"
+                style="background: var(--gold); color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer;">تثبيت</button>
+            <button id="pwa-close-btn"
+                style="background: #f1f5f9; color: #64748b; border: none; padding: 10px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer;">&times;</button>
+        </div>
+    </div>
+
     <script type="module" src="script.js?v=1.4"></script>
+    <script src="pwa-handler.js?v=1.0"></script>
 </body>
 
 </html>
